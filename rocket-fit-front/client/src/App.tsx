@@ -8,6 +8,7 @@ import ChooseWorkoutPage from "./pages/ChooseWorkoutPage";
 import Navbar from "./components/Navbar";
 import styled from "styled-components";
 import WorkoutsPage from "./pages/WorkoutsPage";
+import Base from "./components/Base";
 
 const Border = styled.div`
   padding: 1em;
@@ -34,6 +35,7 @@ function App() {
         <Router>
           <Navbar sendDataToParent={handleLogoutData} />
           <Routes>
+            <Route path="/" Component={Base} />
             <Route
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
