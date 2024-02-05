@@ -1,8 +1,10 @@
 package org.taboralemu.RocketFitJavaOfficial.Services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -72,7 +74,9 @@ public class WorkoutExerciseService {
 		}
 		List<List<WorkoutExerciseDTO>> returnedList = new ArrayList<List<WorkoutExerciseDTO>>();
 		Map<Integer, List<WorkoutExerciseDTO>> groupedByDay = dtos.stream().collect(Collectors.groupingBy(WorkoutExerciseDTO::getDay));
-		for (int key : groupedByDay.keySet()) {
+		List<Integer> temp2 = new ArrayList<>(groupedByDay.keySet());
+		Collections.sort(temp2);
+		for (int key : temp2) {
 			List<WorkoutExerciseDTO> temp = new ArrayList<WorkoutExerciseDTO>();
 			for (WorkoutExerciseDTO item : groupedByDay.get(key)) {
 				temp.add(item);
