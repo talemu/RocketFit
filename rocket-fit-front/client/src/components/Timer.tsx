@@ -125,7 +125,6 @@ const Timer = ({
       day: workout.day,
       workoutNum: workoutNum,
     };
-    console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), false);
     const { request } = exerciseRecordService.postItem("/save", exerciseRecord);

@@ -57,11 +57,12 @@ const DayTable = ({ item, workoutNum }: Props) => {
     );
     request
       .then((response) => {
+        console.log(response.data);
         const returned_weight = response.data as unknown as number;
         if (returned_weight === "NaN") {
           setInitial(0);
         } else {
-          setInitial(returned_weight * (1 - 0.0225 * item.reps));
+          setInitial(returned_weight * (1 - 0.02 * item.reps));
         }
       })
       .catch((err) => console.log(err));
