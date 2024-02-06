@@ -1,12 +1,23 @@
 import create from "./http-service";
 
 export interface WorkoutTemplate {
-  id: number;
-  day: number;
+  workoutTemplateID: number;
+  workoutName: string;
+  day: string;
   exercises: string;
-  sets: number;
-  reps: number;
-  rest: number;
+  sets: string;
+  reps: string;
+  rest: string;
+}
+
+export interface StandardizedWorkoutTemplate {
+  workoutTemplateID: number;
+  workoutName: string;
+  day: number[];
+  exercises: number[];
+  sets: number[];
+  reps: number[];
+  rest: number[];
 }
 
 //.NET create
