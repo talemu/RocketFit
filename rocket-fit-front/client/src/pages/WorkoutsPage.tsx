@@ -5,6 +5,13 @@ import workoutTemplateService, {
 } from "../services/workoutTemplateService";
 import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
+import { Link } from "react-router-dom";
+
+const HeaderOne = styled.h1``;
+
+const HeaderTwo = styled.h2``;
+
+const StyledTable = styled.table``;
 
 const TableBody = styled.tbody``;
 
@@ -16,24 +23,19 @@ const TableColumn = styled.td`
   text-align: center;
 `;
 
-const TableInput = styled.input`
-  text-align: center;
-`;
+const TableRecord = styled.tr``;
 
-const TableWeightArray = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const TableHead = styled.thead``;
 
-const TableWeightArrayItems = styled.div`
-  display: flex;
-`;
+const FlipButton = styled.button``;
 
-const TableWeightArrayItem = styled.div``;
+const CustomizeButton = styled.button``;
 
 const WorkoutsPage = () => {
   const [templates, setTemplates] = useState<StandardizedWorkoutTemplate[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [dropdowns, setDropdowns] = useState<boolean[]>([]);
+  const [trigger, setTrigger] = useState<boolean>(false);
 
   useEffect(() => {
     const { request } = workoutTemplateService.getAll("");
@@ -51,10 +53,11 @@ const WorkoutsPage = () => {
         setExercises(response.data);
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   const standardizeWorkoutTemplates = (item: WorkoutTemplate[]) => {
     setTemplates([]);
+    setDropdowns([]);
     item.forEach((element) => {
       const standardWT = {
         workoutTemplateID: element.workoutTemplateID,
@@ -64,6 +67,7 @@ const WorkoutsPage = () => {
         sets: [-1],
         reps: [-1],
         rest: [-1],
+        weeks: element.weeks,
       };
       standardWT.day = element.day.split(",").map((item) => parseInt(item, 10));
       standardWT.exercises = element.exercises
@@ -79,53 +83,80 @@ const WorkoutsPage = () => {
         .split(",")
         .map((item) => parseInt(item, 10));
       setTemplates((templates) => [...templates, standardWT]);
+      setDropdowns([...dropdowns, false]);
     });
   };
+
+  useState(() => {}, [trigger]);
+
+  const FlipDrop = (count: number) => {
+    setTrigger(!trigger);
+    dropdowns[count] = !dropdowns[count];
+  };
+
+  const BackButton = styled.button``;
 
   // return <>{data[0].day}</>;
   return (
     <>
-      {templates.map((item) => (
+      <BackButton>
+        <Link to="/myworkouts">Back</Link>
+      </BackButton>
+      {templates.map((item, count) => (
         <>
-          <h1>{item.workoutName}</h1>
-          <table>
-            <thead>
-              <tr>
-                <TableHeader>Day</TableHeader>
-                <TableHeader>Exercise</TableHeader>
-                <TableHeader>Sets</TableHeader>
-                <TableHeader>Reps</TableHeader>
-                <TableHeader>Rest</TableHeader>
-              </tr>
-            </thead>
-            {item.day.map((day, count) => (
-              <>
-                <TableBody>
-                  <tr>
-                    {item.day[count] !== item.day[count - 1] ? (
-                      <TableColumn>{day}</TableColumn>
-                    ) : (
-                      <TableColumn></TableColumn>
-                    )}
+          <HeaderOne>{item.workoutName}</HeaderOne>
+          <FlipButton onClick={() => FlipDrop(count)}>flip</FlipButton>
+          {dropdowns[count] ? (
+            <>
+              <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
+              <StyledTable>
+                <TableHead>
+                  <TableRecord>
+                    <TableHeader>Day</TableHeader>
+                    <TableHeader>Exercise</TableHeader>
+                    <TableHeader>Sets</TableHeader>
+                    <TableHeader>Reps</TableHeader>
+                    <TableHeader>Rest</TableHeader>
+                  </TableRecord>
+                </TableHead>
+                {item.day.map((day, count) => (
+                  <>
+                    <TableBody>
+                      <TableRecord>
+                        {item.day[count] !== item.day[count - 1] ? (
+                          <TableColumn>{day}</TableColumn>
+                        ) : (
+                          <TableColumn></TableColumn>
+                        )}
 
-                    {
-                      <TableColumn>
                         {
-                          exercises.find(
-                            (element: Exercise) =>
-                              element.exerciseID === item.exercises[count]
-                          )?.exerciseName
+                          <TableColumn>
+                            {
+                              exercises.find(
+                                (element: Exercise) =>
+                                  element.exerciseID === item.exercises[count]
+                              )?.exerciseName
+                            }
+                          </TableColumn>
                         }
-                      </TableColumn>
-                    }
-                    {<TableColumn>{item.sets[count]}</TableColumn>}
-                    {<TableColumn>{item.reps[count]}</TableColumn>}
-                    {<TableColumn>{item.rest[count]}</TableColumn>}
-                  </tr>
-                </TableBody>
-              </>
-            ))}
-          </table>
+                        {<TableColumn>{item.sets[count]}</TableColumn>}
+                        {<TableColumn>{item.reps[count]}</TableColumn>}
+                        {<TableColumn>{item.rest[count]}</TableColumn>}
+                      </TableRecord>
+                    </TableBody>
+                  </>
+                ))}
+              </StyledTable>
+              <CustomizeButton>
+                <Link to="/customize" state={[item, exercises]}>
+                  {" "}
+                  Customize Workout{" "}
+                </Link>
+              </CustomizeButton>
+            </>
+          ) : (
+            <div></div>
+          )}
         </>
       ))}
     </>

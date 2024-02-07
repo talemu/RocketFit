@@ -8,6 +8,7 @@ export interface WorkoutTemplate {
   sets: string;
   reps: string;
   rest: string;
+  weeks: number;
 }
 
 export interface StandardizedWorkoutTemplate {
@@ -18,6 +19,7 @@ export interface StandardizedWorkoutTemplate {
   sets: number[];
   reps: number[];
   rest: number[];
+  weeks: number;
 }
 
 //.NET create
