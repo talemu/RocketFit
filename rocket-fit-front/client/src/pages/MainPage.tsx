@@ -2,6 +2,9 @@ import styled from "styled-components";
 import Content from "../components/Content";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import workoutExerciseService, {
+  Workout,
+} from "../services/workoutExerciseService";
 
 interface Props {
   authId: number;
@@ -36,29 +39,32 @@ const MainPage = ({ authId }: Props) => {
   const location = useLocation();
   const [show, setShow] = useState<boolean>(true);
   const [show2, setShow2] = useState<boolean>(false);
-  const [workoutNum] = useState(
-    location.state != null
-      ? location.state
-      : JSON.parse(localStorage.getItem("savedWorkoutNum") || "{}")
-  );
+  const workout = (location.state != null
+    ? location.state
+    : JSON.parse(
+        localStorage.getItem("savedWorkout") || "{}"
+      )) as unknown as Workout;
 
-  const [day, setDay] = useState<number>(1);
+  const [week, setWeek] = useState<number>(1);
 
   const [isPreviousButtonDisabled, setIsPreviousButtonDisabled] =
     useState<boolean>(false);
-  const [isNextButtonDisabled, setIsNextButtonDisabled] =
-    useState<boolean>(false);
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState<boolean>(
+    week >= workout.weeks
+  );
+
+  console.log(week);
 
   useEffect(() => {
-    setDay(
-      JSON.parse(localStorage.getItem("savedDayNumber") || "{}") == "{}"
+    setWeek(
+      JSON.parse(localStorage.getItem("savedWeekNumber") || "{}") == "{}"
         ? 1
-        : JSON.parse(localStorage.getItem("savedDayNumber") || "{}")
+        : JSON.parse(localStorage.getItem("savedWeekNumber") || "{}")
     );
 
     setShow2(true);
 
-    if (day >= 7) {
+    if (week >= 2) {
       setIsPreviousButtonDisabled(false);
     } else {
       setIsPreviousButtonDisabled(true);
@@ -68,34 +74,42 @@ const MainPage = ({ authId }: Props) => {
       setShow(false);
     } else {
       if (!show) {
-        setDay(day);
+        setWeek(week);
       }
       setShow(true);
     }
-    localStorage.setItem("savedWorkoutNum", JSON.stringify(workoutNum));
-  }, [day, workoutNum]);
+    localStorage.setItem("savedWorkout", JSON.stringify(location.state));
+  }, [week, workout]);
+
+  useEffect(() => {
+    if (week >= workout.weeks) {
+      setIsNextButtonDisabled(true);
+    } else {
+      setIsNextButtonDisabled(false);
+    }
+  }, [week, isNextButtonDisabled]);
 
   const PreviousButtonClick = () => {
-    localStorage.setItem("savedDayNumber", JSON.stringify(day - 7));
-    setDay(day - 7);
+    localStorage.setItem("savedWeekNumber", JSON.stringify(week - 1));
+    setWeek(week - 1);
   };
 
   const NextButtonClick = () => {
-    localStorage.setItem("savedDayNumber", JSON.stringify(day + 7));
-    setDay(day + 7);
+    localStorage.setItem("savedWeekNumber", JSON.stringify(week + 1));
+    setWeek(week + 1);
   };
 
   const ExitWorkoutClick = () => {
     Navigate("/myworkouts");
   };
 
-  const handleNextButton = (next: boolean) => {
-    if (next) {
-      setIsNextButtonDisabled(true);
-    } else {
-      setIsNextButtonDisabled(false);
-    }
-  };
+  // const handleNextButton = (next: boolean) => {
+  //   if (next) {
+  //     setIsNextButtonDisabled(true);
+  //   } else {
+  //     setIsNextButtonDisabled(false);
+  //   }
+  // };
 
   return (
     <>
@@ -105,16 +119,7 @@ const MainPage = ({ authId }: Props) => {
           {" "}
           {show ? (
             <>
-              {" "}
-              <WeekHeader>Week {Math.ceil(day / 7)}</WeekHeader>
-              <WeekContent>
-                <Content
-                  authId={authId}
-                  workoutNumber={workoutNum}
-                  startOfTheWeek={day}
-                  nextWeekData={handleNextButton}
-                />
-              </WeekContent>
+              <WeekHeader>Week {week}</WeekHeader>{" "}
               <WeekButtonDiv>
                 <PreviousWeekButton
                   onClick={PreviousButtonClick}

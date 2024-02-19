@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import styled from "styled-components";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import Base from "./components/Base";
+import CustomizeWorkout from "./pages/CustomizeWorkout";
 
 const Border = styled.div`
   padding: 1em;
@@ -52,6 +53,7 @@ function App() {
               }
             />
             <Route path="/workouts" Component={WorkoutsPage} />
+            <Route path="customize" Component={CustomizeWorkout} />
             <Route path="/workout" Component={WorkoutPage} />
           </Routes>
         </Router>

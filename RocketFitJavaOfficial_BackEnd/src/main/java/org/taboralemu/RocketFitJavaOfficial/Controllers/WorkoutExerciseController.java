@@ -58,25 +58,25 @@ public class WorkoutExerciseController {
 //    	}
 //     }
     
-    @GetMapping(value = "/async")
-    public List<List<WorkoutExerciseDTO>> getAllWorkoutsAsync() {
-    	return _weService.findAllWorkoutsAsync();
-    }
-    
-    @GetMapping(value = "/async/{id}")
-    public List<List<WorkoutExerciseDTO>> getAllWorkoutsById(@PathVariable int id, @RequestParam int day, @RequestParam int workoutNum) {
-    	return _weService.findWorkoutBasedOnId(id, day, workoutNum);
-    }
-    
     @GetMapping(value = "/")
-    public List<WorkoutExercise> getAllWorkouts() {
+    public List<WorkoutExercise> getAllWorkoutsAsync() {
     	return _weService.findAllWorkouts();
     }
     
-    @GetMapping(value = "/async/workouts")
-    public List<Integer> getAllDistictWorkouts() {
-    	return _weService.findAllDistinctWorkouts();
-    }
-    
+//    @GetMapping(value = "/async/{id}")
+//    public List<List<WorkoutExerciseDTO>> getAllWorkoutsById(@PathVariable int id, @RequestParam int day, @RequestParam int workoutNum) {
+//    	return _weService.findWorkoutBasedOnId(id, day, workoutNum);
+//    }
+//    
+//    @GetMapping(value = "/")
+//    public List<WorkoutExercise> getAllWorkouts() {
+//    	return _weService.findAllWorkouts();
+//    }
+//    
+//    @GetMapping(value = "/async/workouts")
+//    public List<Integer> getAllDistictWorkouts() {
+//    	return _weService.findAllDistinctWorkouts();
+//    }
+//    
     
 }

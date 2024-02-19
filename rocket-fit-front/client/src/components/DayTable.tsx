@@ -9,6 +9,8 @@ interface Props {
   workoutNum: number;
 }
 
+const StyledTable = styled.table``;
+
 const TableBody = styled.tbody``;
 
 const TableHeader = styled.th`
@@ -18,6 +20,10 @@ const TableHeader = styled.th`
 const TableColumn = styled.td`
   text-align: center;
 `;
+
+const TableRecord = styled.tr``;
+
+const TableHead = styled.thead``;
 
 const TableInput = styled.input`
   text-align: center;
@@ -72,19 +78,19 @@ const DayTable = ({ item, workoutNum }: Props) => {
 
   return (
     <>
-      <table>
-        <thead>
-          <tr>
+      <StyledTable>
+        <TableHead>
+          <TableRecord>
             <TableHeader>Exercise</TableHeader>
             <TableHeader>Sets</TableHeader>
             <TableHeader>Reps</TableHeader>
             <TableHeader>Target Weight</TableHeader>
             <TableHeader>Weight(lbs)</TableHeader>
             <TableHeader>Rest</TableHeader>
-          </tr>
-        </thead>
+          </TableRecord>
+        </TableHead>
         <TableBody>
-          <tr>
+          <TableRecord>
             {<TableColumn>{item.exercise}</TableColumn>}
             {<TableColumn>{item.sets}</TableColumn>}
             {<TableColumn>{item.reps}</TableColumn>}
@@ -127,9 +133,9 @@ const DayTable = ({ item, workoutNum }: Props) => {
                 workoutNum={workoutNum}
               />
             </TableColumn>
-          </tr>
+          </TableRecord>
         </TableBody>
-      </table>
+      </StyledTable>
     </>
   );
 };
