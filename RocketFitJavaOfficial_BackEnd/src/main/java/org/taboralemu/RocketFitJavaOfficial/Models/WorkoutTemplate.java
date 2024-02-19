@@ -16,6 +16,7 @@ public class WorkoutTemplate {
 	private String Reps ;
 	private String Rest ;
 	private String Day;
+	private int Weeks;
 	
 	
 	public WorkoutTemplate() {
@@ -43,6 +44,9 @@ public class WorkoutTemplate {
 	public String getDay() {
 		return Day;
 	}
+	public int getWeeks() {
+		return Weeks;
+	}
 	public void setWorkoutTemplateID(int workoutTemplateID) {
 		WorkoutTemplateID = workoutTemplateID;
 	}
@@ -64,6 +68,10 @@ public class WorkoutTemplate {
 	public void setDay(String day) {
 		Day = day;
 	}
+	public void setWeeks(int weeks) {
+		Weeks = weeks;
+	}
+	
 	
 	
 }

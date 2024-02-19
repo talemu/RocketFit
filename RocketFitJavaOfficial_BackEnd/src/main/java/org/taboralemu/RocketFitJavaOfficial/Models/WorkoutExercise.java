@@ -11,76 +11,49 @@ import jakarta.persistence.Table;
 public class WorkoutExercise {
 	@Id
 	private int WorkoutExerciseID;
-//		private int WorkoutID;
-//		private int ExerciseID;
-	private int Sets;
-	private int Reps;
-	private int Rest;
-	private double Weight;
-	private int auth_id;
+	private String Days;
+	private String Exercises ;
+	private String Sets;
+	private String Reps;
+	private String Rest;
+	private int Weeks;
+	private int AuthID;
 	private int WorkoutNumber;
-
-	@ManyToOne
-	@JoinColumn(name = "WorkoutID")
-	private Workout workout;
-	@ManyToOne
-	@JoinColumn(name = "ExerciseID")
-	private Exercise exercise;
 
 	private WorkoutExercise() {
 
 	}
 
-//		private WorkoutExercise(int weID, int wID, int eID, int s, int r, int res, double w, Workout wo, Exercise e) {
-//			setWorkoutExerciseID(weID);
-//			setWorkoutID(wID);
-//			setExerciseID(eID);
-//			setSets(s);
-//			setReps(r);
-//			setRest(res);
-//			setWeight(w);
-//			setWorkout(wo);
-//			setExercise(e);
-//		}
-
 	public int getWorkoutExerciseID() {
 		return WorkoutExerciseID;
 	}
 
-//		private int getWorkoutID() {
-//			return WorkoutID;
-//		}
-//
-//		private int getExerciseID() {
-//			return ExerciseID;
-//		}
+	public String getDays() {
+		return Days;
+	}
 
-	public int getSets() {
+	public String getExercises() {
+		return Exercises;
+	}
+
+	public String getSets() {
 		return Sets;
 	}
 
-	public int getReps() {
+	public String getReps() {
 		return Reps;
 	}
 
-	public int getRest() {
+	public String getRest() {
 		return Rest;
 	}
 
-	public double getWeight() {
-		return Weight;
+	public int getWeeks() {
+		return Weeks;
 	}
 
-	public Workout getWorkout() {
-		return workout;
-	}
-
-	public Exercise getExercise() {
-		return exercise;
-	}
-	
-	public int getAuthId() {
-		return auth_id;
+	public int getAuthID() {
+		return AuthID;
 	}
 
 	public int getWorkoutNumber() {
@@ -91,50 +64,36 @@ public class WorkoutExercise {
 		WorkoutExerciseID = workoutExerciseID;
 	}
 
-//		private void setWorkoutID(int workoutID) {
-//			WorkoutID = workoutID;
-//		}
-//
-//		private void setExerciseID(int exerciseID) {
-//			ExerciseID = exerciseID;
-//		}
+	public void setDays(String days) {
+		Days = days;
+	}
 
-	public void setSets(int sets) {
+	public void setExercises(String exercises) {
+		Exercises = exercises;
+	}
+
+	public void setSets(String sets) {
 		Sets = sets;
 	}
 
-	public void setReps(int reps) {
+	public void setReps(String reps) {
 		Reps = reps;
 	}
 
-	public void setRest(int rest) {
+	public void setRest(String rest) {
 		Rest = rest;
 	}
 
-	public void setWeight(double weight) {
-		Weight = weight;
+	public void setWeeks(int weeks) {
+		Weeks = weeks;
 	}
 
-	public void setWorkout(Workout workout) {
-		this.workout = workout;
-	}
-
-	public void setExercise(Exercise exercise) {
-		this.exercise = exercise;
-	}
-	
-	public void setAuthId(int id) {
-		this.auth_id = id;
-		}
-
-	public void setAuth_id(int auth_id) {
-		this.auth_id = auth_id;
+	public void setAuthID(int authID) {
+		AuthID = authID;
 	}
 
 	public void setWorkoutNumber(int workoutNumber) {
 		WorkoutNumber = workoutNumber;
 	}
-	
-	
 
 }
