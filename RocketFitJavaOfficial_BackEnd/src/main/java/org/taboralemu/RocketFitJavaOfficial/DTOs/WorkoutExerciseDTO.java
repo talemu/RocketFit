@@ -1,98 +1,114 @@
 package org.taboralemu.RocketFitJavaOfficial.DTOs;
 
+import jakarta.persistence.Id;
+
 public class WorkoutExerciseDTO {
 
-	 private int ID;
+	@Id
+	private int WorkoutExerciseID;
+	private String Days;
+	private String Exercises ;
+	private String Sets;
+	private String Reps;
+	private String Rest;
+	private int Weeks;
+	private int AuthID;
+	private int WorkoutNumber;
+	private String WorkoutName;
 	 
-	 private int Day; 
-
-	 private String Exercise; 
-
-	 private int Sets;
-
-	 private int Reps;
-
-	 private int Rest;
-
-	 private double Weight;
-	 
-	 private int AuthID;
-	 
-	 public WorkoutExerciseDTO(int i, int d, String e, int s, int r, int res, double w, int auId) {
-		 setID(i);
-		 setDay(d);
-		 setExercise(e);
+	 public WorkoutExerciseDTO(int weID, String d, String e, String s, String rs, String rt, int w, int aId, int wn, String wNa) {
+		 setWorkoutExerciseID(weID);
+		 setDays(d);
+		 setExercises(e);
 		 setSets(s);
-		 setReps(r);
-		 setRest(res);
-		 setWeight(w);
-		 setAuthID(auId);
+		 setReps(rs);
+		 setRest(rt);
+		 setWeeks(w);
+		 setAuthID(aId);
+		 setWorkoutNumber(wn);
+		 setWorkoutName(wNa);
 	 }
 
-	public int getID() {
-		return ID;
+	public int getWorkoutExerciseID() {
+		return WorkoutExerciseID;
 	}
 
-	public int getDay() {
-		return Day;
+	public String getDays() {
+		return Days;
 	}
 
-	public String getExercise() {
-		return Exercise;
+	public String getExercises() {
+		return Exercises;
 	}
 
-	public int getSets() {
+	public String getSets() {
 		return Sets;
 	}
 
-	public int getReps() {
+	public String getReps() {
 		return Reps;
 	}
 
-	public int getRest() {
+	public String getRest() {
 		return Rest;
 	}
-	
+
+	public int getWeeks() {
+		return Weeks;
+	}
+
 	public int getAuthID() {
 		return AuthID;
 	}
 
-	public double getWeight() {
-		return Weight;
+	public int getWorkoutNumber() {
+		return WorkoutNumber;
 	}
 
-	public void setID(int iD) {
-		ID = iD;
+	public String getWorkoutName() {
+		return WorkoutName;
 	}
 
-	public void setDay(int day) {
-		Day = day;
+	public void setWorkoutExerciseID(int workoutExerciseID) {
+		WorkoutExerciseID = workoutExerciseID;
 	}
 
-	public void setExercise(String exercise) {
-		Exercise = exercise;
+	public void setDays(String days) {
+		Days = days;
 	}
 
-	public void setSets(int sets) {
+	public void setExercises(String exercises) {
+		Exercises = exercises;
+	}
+
+	public void setSets(String sets) {
 		Sets = sets;
 	}
 
-	public void setReps(int reps) {
+	public void setReps(String reps) {
 		Reps = reps;
 	}
 
-	public void setRest(int rest) {
+	public void setRest(String rest) {
 		Rest = rest;
 	}
 
-	public void setWeight(double weight) {
-		Weight = weight;
+	public void setWeeks(int weeks) {
+		Weeks = weeks;
 	}
 
 	public void setAuthID(int authID) {
 		AuthID = authID;
 	}
-	
+
+	public void setWorkoutNumber(int workoutNumber) {
+		WorkoutNumber = workoutNumber;
+	}
+
+	public void setWorkoutName(String workoutName) {
+		WorkoutName = workoutName;
+	}
+
 	
 	 
 	 

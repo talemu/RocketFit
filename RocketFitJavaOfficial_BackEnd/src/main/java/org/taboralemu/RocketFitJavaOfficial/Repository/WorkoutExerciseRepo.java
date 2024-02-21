@@ -13,9 +13,14 @@ import org.taboralemu.RocketFitJavaOfficial.Models.WorkoutExercise;
 
 public interface WorkoutExerciseRepo extends JpaRepository<WorkoutExercise, Integer> {
 	
-//	@Query("SELECT we FROM WorkoutExercise we JOIN Workout w ON we.workout.WorkoutID = w.WorkoutID WHERE we.auth_id = :id AND we.WorkoutNumber = :workoutNum AND we.workout.WorkoutDay >= :day AND we.workout.WorkoutDay < :day + 7")
-//	List<WorkoutExercise> findWorkoutsBasedOnId(@Param("id") int id, @Param ("day") int day, @Param ("workoutNum") int workoutNum);
-//	
+	@Query("Select we From WorkoutExercise we Where we.AuthID = :id")
+	List<WorkoutExercise> findWorkoutsBasedOnAuthId(@Param("id") int id);
+	
+//findWorkoutBasedOnId Copy minus days
+	@Query("SELECT we FROM WorkoutExercise we WHERE we.AuthID = :id AND we.WorkoutNumber = :workoutNum")
+	List<WorkoutExercise> findWorkoutsBasedOnIdandDay(@Param("id") int id, @Param ("workoutNum") int workoutNum);
+	
+	
 //	@Query("SELECT DISTINCT we.WorkoutNumber From WorkoutExercise we")
 //	List<Integer> findAllTheDistinctWorkouts();
 	

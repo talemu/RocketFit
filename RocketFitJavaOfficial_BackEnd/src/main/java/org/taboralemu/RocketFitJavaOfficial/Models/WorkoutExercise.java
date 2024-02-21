@@ -19,6 +19,7 @@ public class WorkoutExercise {
 	private int Weeks;
 	private int AuthID;
 	private int WorkoutNumber;
+	private String WorkoutName;
 
 	private WorkoutExercise() {
 
@@ -60,6 +61,10 @@ public class WorkoutExercise {
 		return WorkoutNumber;
 	}
 
+	public String getWorkoutName() {
+		return WorkoutName;
+	}
+
 	public void setWorkoutExerciseID(int workoutExerciseID) {
 		WorkoutExerciseID = workoutExerciseID;
 	}
@@ -94,6 +99,10 @@ public class WorkoutExercise {
 
 	public void setWorkoutNumber(int workoutNumber) {
 		WorkoutNumber = workoutNumber;
+	}
+	
+	public void setWorkoutName(String workoutName) {
+		WorkoutName = workoutName;
 	}
 
 }

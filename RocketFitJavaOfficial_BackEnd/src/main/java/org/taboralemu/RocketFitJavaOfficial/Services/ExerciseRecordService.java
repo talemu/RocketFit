@@ -26,6 +26,9 @@ public class ExerciseRecordService {
 	public double retrieveExerciseRecord(String exerciseName, int day, int workoutNum, int auth) {
 		try {
 			ExerciseRecord record = _erRepo.findRecord(exerciseName, day, workoutNum, auth);
+			if (record == null) {
+				return -1;
+			}
 			return record.getWeight();
 		}
 		catch (Exception e) {

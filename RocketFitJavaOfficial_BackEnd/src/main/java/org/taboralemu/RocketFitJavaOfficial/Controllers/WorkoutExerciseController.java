@@ -58,15 +58,20 @@ public class WorkoutExerciseController {
 //    	}
 //     }
     
-    @GetMapping(value = "/")
-    public List<WorkoutExercise> getAllWorkoutsAsync() {
+    @GetMapping(value = "")
+    public List<WorkoutExercise> getAllWorkouts() {
     	return _weService.findAllWorkouts();
     }
     
-//    @GetMapping(value = "/async/{id}")
-//    public List<List<WorkoutExerciseDTO>> getAllWorkoutsById(@PathVariable int id, @RequestParam int day, @RequestParam int workoutNum) {
-//    	return _weService.findWorkoutBasedOnId(id, day, workoutNum);
-//    }
+    @GetMapping(value = "/id/{authid}")
+    public List<WorkoutExercise> getWorkoutsById(@PathVariable int authid) {
+    	return _weService.findWorkoutExerciseByAuthID(authid);
+    }
+    
+    @GetMapping(value = "/{id}")
+    public List<WorkoutExerciseDTO> getAllWorkoutsByIdandDay(@PathVariable int id, @RequestParam int workoutNum) {
+    	return _weService.findWorkoutBasedOnIdandDay(id, workoutNum);
+    }
 //    
 //    @GetMapping(value = "/")
 //    public List<WorkoutExercise> getAllWorkouts() {

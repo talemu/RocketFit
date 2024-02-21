@@ -43,6 +43,7 @@ public class ExerciseRecordController {
     
     @GetMapping(value = "")
     public double retrieveRecord(@RequestParam String exercise, @RequestParam int day, @RequestParam int workoutNum, @RequestParam int auth) {
+    	
     	return _erService.retrieveExerciseRecord(exercise, day, workoutNum, auth);
     }
     
