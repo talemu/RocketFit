@@ -5,21 +5,23 @@ import workoutExerciseService, {
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+interface Props {
+  authId: number;
+}
+
 const WorkoutButton = styled.button`
   margin: 1em;
 `;
 
 const ButtonBreak = styled.br``;
 
-const ChooseWorkoutPage = () => {
+const ChooseWorkoutPage = ({ authId }: Props) => {
   const [workoutNums, setWorkoutsNums] = useState<number[]>([]);
   const [workoutArray, setWorkouts] = useState<Workout[]>([]);
 
   useEffect(() => {
-    const { request } = workoutExerciseService.getAll("/");
-
+    const { request } = workoutExerciseService.getAll("/id/" + authId);
     request.then((response) => {
-      console.log(response.data);
       const workouts = response.data as unknown[] as Workout[];
       setWorkouts(workouts);
       setWorkoutsNums(workouts.map((item: Workout) => item.workoutNumber));

@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import Content from "../components/Content";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import workoutExerciseService, {
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  StandardizedWorkoutExercise,
   Workout,
+  WorkoutItem,
 } from "../services/workoutExerciseService";
 
 interface Props {
@@ -39,6 +41,7 @@ const MainPage = ({ authId }: Props) => {
   const location = useLocation();
   const [show, setShow] = useState<boolean>(true);
   const [show2, setShow2] = useState<boolean>(false);
+  const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
   const workout = (location.state != null
     ? location.state
     : JSON.parse(
@@ -53,16 +56,12 @@ const MainPage = ({ authId }: Props) => {
     week >= workout.weeks
   );
 
-  console.log(week);
-
   useEffect(() => {
     setWeek(
       JSON.parse(localStorage.getItem("savedWeekNumber") || "{}") == "{}"
         ? 1
         : JSON.parse(localStorage.getItem("savedWeekNumber") || "{}")
     );
-
-    setShow2(true);
 
     if (week >= 2) {
       setIsPreviousButtonDisabled(false);
@@ -79,7 +78,12 @@ const MainPage = ({ authId }: Props) => {
       setShow(true);
     }
     localStorage.setItem("savedWorkout", JSON.stringify(location.state));
+    StandardizeWorkouts(workout);
   }, [week, workout]);
+
+  useEffect(() => {
+    setShow2(true);
+  }, [workoutArray]);
 
   useEffect(() => {
     if (week >= workout.weeks) {
@@ -88,6 +92,51 @@ const MainPage = ({ authId }: Props) => {
       setIsNextButtonDisabled(false);
     }
   }, [week, isNextButtonDisabled]);
+
+  const StandardizeWorkouts = (item: Workout) => {
+    const standardWE = {
+      workoutTemplateID: item.workoutExerciseID,
+      workoutName: item.workoutName,
+      day: [-1],
+      exercises: [-1],
+      sets: [-1],
+      reps: [-1],
+      rest: [-1],
+      weeks: item.weeks,
+    };
+    standardWE.day = item.days
+      .split(",")
+      .map((element) => parseInt(element, 10));
+    standardWE.exercises = item.exercises
+      .split(",")
+      .map((item) => parseInt(item, 10));
+    standardWE.sets = item.sets
+      .split(",")
+      .map((element) => parseInt(element, 10));
+    standardWE.reps = item.reps
+      .split(",")
+      .map((element) => parseInt(element, 10));
+    standardWE.rest = item.rest
+      .split(",")
+      .map((element) => parseInt(element, 10));
+    setWorkoutArray(MapStandardWEToWorkoutItems(standardWE));
+  };
+
+  const MapStandardWEToWorkoutItems = (
+    StandardWE: StandardizedWorkoutExercise
+  ) => {
+    const newWorkoutItems = StandardWE.day.map(
+      (item: number, index: number) => ({
+        day: StandardWE.day[index],
+        exercise: StandardWE.exercises[index],
+        sets: StandardWE.sets[index],
+        reps: StandardWE.reps[index],
+        rest: StandardWE.rest[index],
+      })
+    );
+
+    return newWorkoutItems;
+  };
 
   const PreviousButtonClick = () => {
     localStorage.setItem("savedWeekNumber", JSON.stringify(week - 1));
@@ -103,14 +152,6 @@ const MainPage = ({ authId }: Props) => {
     Navigate("/myworkouts");
   };
 
-  // const handleNextButton = (next: boolean) => {
-  //   if (next) {
-  //     setIsNextButtonDisabled(true);
-  //   } else {
-  //     setIsNextButtonDisabled(false);
-  //   }
-  // };
-
   return (
     <>
       {" "}
@@ -120,6 +161,21 @@ const MainPage = ({ authId }: Props) => {
           {show ? (
             <>
               <WeekHeader>Week {week}</WeekHeader>{" "}
+              {[...new Set(workoutArray.map((item) => item.day))].map(
+                (item) => (
+                  <Link
+                    to="/workout"
+                    state={[
+                      workout,
+                      workoutArray.filter((item2) => item2.day === item),
+                      authId,
+                      workout.workoutNumber,
+                    ]}
+                  >
+                    <WeekContent> Day {item} </WeekContent>
+                  </Link>
+                )
+              )}
               <WeekButtonDiv>
                 <PreviousWeekButton
                   onClick={PreviousButtonClick}
