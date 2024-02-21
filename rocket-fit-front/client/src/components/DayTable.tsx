@@ -1,11 +1,13 @@
-import { Workout } from "../services/workoutExerciseService";
+import { Workout, WorkoutItem } from "../services/workoutExerciseService";
 import styled from "styled-components";
 import Timer from "./Timer";
 import { ChangeEvent, useEffect, useState } from "react";
 import exerciseRecordService from "../services/exerciseRecordService";
+import exerciseService, { Exercise } from "../services/exerciseService";
 
 interface Props {
-  item: Workout;
+  item: WorkoutItem;
+  id: number;
   workoutNum: number;
 }
 
@@ -40,11 +42,44 @@ const TableWeightArrayItems = styled.div`
 
 const TableWeightArrayItem = styled.div``;
 
-const DayTable = ({ item, workoutNum }: Props) => {
+const DayTable = ({ item, id, workoutNum }: Props) => {
   const [weight, setWeight] = useState<number>(-1);
   const [initial, setInitial] = useState<number>(-1);
   const [weightArray, setWeightArray] = useState<number[]>([]);
   const [isInputDisabled, setInputDisabled] = useState<boolean>(false);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+
+  useEffect(() => {}, [isInputDisabled]);
+
+  useEffect(() => {
+    const { request } = exerciseService.getAll("/all");
+
+    request.then((response) => {
+      setExercises(response.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const { request } = exerciseRecordService.getAll(
+      "/averageweight?exercise=" +
+        exercises.find((element) => element.exerciseID === item.exercise)
+          ?.exerciseName +
+        "&auth_id=" +
+        id
+    );
+    request
+      .then((response) => {
+        const returned_weight = response.data as unknown as number;
+        if (returned_weight === "NaN") {
+          setInitial(0);
+        } else {
+          setInitial(returned_weight * (1 - 0.02 * item.reps));
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [exercises]);
+
+  useEffect(() => {}, [weightArray]);
 
   const UpdateWeightArray = (data: number, start: boolean) => {
     if (start == false) {
@@ -54,27 +89,6 @@ const DayTable = ({ item, workoutNum }: Props) => {
       setWeightArray([...weightArray, data]);
     }
   };
-
-  useEffect(() => {}, [isInputDisabled]);
-
-  useEffect(() => {
-    const { request } = exerciseRecordService.getAll(
-      "/averageweight?exercise=" + item.exercise + "&auth_id=" + item.authID
-    );
-    request
-      .then((response) => {
-        console.log(response.data);
-        const returned_weight = response.data as unknown as number;
-        if (returned_weight === "NaN") {
-          setInitial(0);
-        } else {
-          setInitial(returned_weight * (1 - 0.02 * item.reps));
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  useEffect(() => {}, [weightArray]);
 
   return (
     <>
@@ -91,7 +105,15 @@ const DayTable = ({ item, workoutNum }: Props) => {
         </TableHead>
         <TableBody>
           <TableRecord>
-            {<TableColumn>{item.exercise}</TableColumn>}
+            {
+              <TableColumn>
+                {
+                  exercises.find(
+                    (element) => element.exerciseID === item.exercise
+                  )?.exerciseName
+                }
+              </TableColumn>
+            }
             {<TableColumn>{item.sets}</TableColumn>}
             {<TableColumn>{item.reps}</TableColumn>}
             {<TableColumn>{initial.toFixed(1)}</TableColumn>}
@@ -100,7 +122,6 @@ const DayTable = ({ item, workoutNum }: Props) => {
                 type="number"
                 placeholder={weight == -1 || isNaN(weight) ? "Enter" : weight}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  console.log(e.target.value == "");
                   setWeight(parseInt(e.target.value));
                 }}
                 disabled={isInputDisabled}
@@ -124,13 +145,14 @@ const DayTable = ({ item, workoutNum }: Props) => {
             </TableWeightArray>
             <TableColumn>
               <Timer
+                id={id}
                 initialTimeInSec={2}
                 weight={weight}
                 sets={item.sets}
                 reps={item.reps}
                 workout={item}
-                sendDataToParent={UpdateWeightArray}
                 workoutNum={workoutNum}
+                sendDataToParent={UpdateWeightArray}
               />
             </TableColumn>
           </TableRecord>

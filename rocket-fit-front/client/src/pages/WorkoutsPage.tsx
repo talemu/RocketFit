@@ -87,8 +87,6 @@ const WorkoutsPage = () => {
     });
   };
 
-  useState(() => {}, [trigger]);
-
   const FlipDrop = (count: number) => {
     setTrigger(!trigger);
     dropdowns[count] = !dropdowns[count];

@@ -41,7 +41,16 @@ function App() {
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
             />
-            <Route path="/myworkouts" Component={ChooseWorkoutPage} />
+            <Route
+              path="/myworkouts"
+              element={
+                <ChooseWorkoutPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
             <Route
               path="/main"
               element={
