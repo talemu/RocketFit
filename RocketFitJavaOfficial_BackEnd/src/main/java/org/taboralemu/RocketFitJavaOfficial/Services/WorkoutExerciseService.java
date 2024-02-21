@@ -27,7 +27,13 @@ public class WorkoutExerciseService {
 	}
 	
 	public List<WorkoutExercise> findAllWorkouts() {
-		return _weRepo.findAll();
+		CompletableFuture<List<WorkoutExercise>> workouts = CompletableFuture.completedFuture(_weRepo.findAll());
+		return workouts.join();
+	}
+	
+	public List<WorkoutExercise> findWorkoutExerciseByAuthID(int id) {
+		CompletableFuture<List<WorkoutExercise>> workouts = CompletableFuture.completedFuture(_weRepo.findWorkoutsBasedOnAuthId(id));
+		return workouts.join();
 	}
 	
 //	public List<List<WorkoutExerciseDTO>> findAllWorkoutsAsync() {
@@ -59,23 +65,28 @@ public class WorkoutExerciseService {
 //		return returnedList;
 //	}
 //	
-//	public List<List<WorkoutExerciseDTO>> findWorkoutBasedOnId(int id, int day, int workoutNum) {
-//		CompletableFuture<List<WorkoutExercise>> exercises = CompletableFuture.completedFuture(_weRepo.findWorkoutsBasedOnId(id, day, workoutNum));
-//		List<WorkoutExercise> workoutExercises = exercises.join();
-//		List<WorkoutExerciseDTO> dtos = new ArrayList<WorkoutExerciseDTO>();
-//		for (int i = 0; i < workoutExercises.size(); i ++) {
-//			WorkoutExercise current = workoutExercises.get(i);
-//			dtos.add(new WorkoutExerciseDTO(
-//					current.getWorkoutExerciseID(),
-//					current.getWorkout().getWorkoutDay(),
-//					 current.getExercise().getExerciseName(),
-//					 current.getSets(),
-//					 current.getReps(),
-//					 current.getRest(),
-//					 current.getWeight(),
-//					 current.getAuthId()
-//					));
-//		}
+	
+	
+
+	public List<WorkoutExerciseDTO> findWorkoutBasedOnIdandDay(int id, int workoutNum) {
+		CompletableFuture<List<WorkoutExercise>> exercises = CompletableFuture.completedFuture(_weRepo.findWorkoutsBasedOnIdandDay(id, workoutNum));
+		List<WorkoutExercise> workoutExercises = exercises.join();
+		List<WorkoutExerciseDTO> dtos = new ArrayList<WorkoutExerciseDTO>();
+		for (int i = 0; i < workoutExercises.size(); i ++) {
+			WorkoutExercise current = workoutExercises.get(i);
+			dtos.add(new WorkoutExerciseDTO(
+					current.getWorkoutExerciseID(),
+					 current.getDays(),
+					 current.getExercises(),
+					 current.getSets(),
+					 current.getReps(),
+					 current.getRest(),
+					 current.getWeeks(),
+					 current.getAuthID(),
+					 current.getWorkoutNumber(),
+					 current.getWorkoutName()
+					));
+		}
 //		List<List<WorkoutExerciseDTO>> returnedList = new ArrayList<List<WorkoutExerciseDTO>>();
 //		Map<Integer, List<WorkoutExerciseDTO>> groupedByDay = dtos.stream().collect(Collectors.groupingBy(WorkoutExerciseDTO::getDay));
 //		List<Integer> temp2 = new ArrayList<>(groupedByDay.keySet());
@@ -87,8 +98,9 @@ public class WorkoutExerciseService {
 //			}
 //			returnedList.add(temp);
 //		}
-//		return returnedList;
-//	}
+		return dtos;
+	}
+
 //	
 //	public List<WorkoutExercise> findAllWorkouts() {
 //		return _weRepo.findAll();
