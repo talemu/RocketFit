@@ -1,12 +1,12 @@
 from ..repositories.rfAuthUserRepository import RfauthUserRepo
 
 class RfauthUserService:
-    @staticmethod
-    def get_all_exercise_records():
+    def get_all_auth_users():
         return RfauthUserRepo.get_all()
     
-    def get_user(username, password):
-        try:
-            return RfauthUserRepo.authenticate_user
-        except Exception as e:
-            return -1
+    def get_user(loginKey, password):
+        user = RfauthUserRepo.authenticate_user(loginKey, password)
+        if type(user) is not int:
+            return user.id
+        else:
+            return -10

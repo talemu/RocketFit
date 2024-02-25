@@ -20,6 +20,7 @@ from RFApp.views.workoutExerciseView import WorkoutExerciseView
 from RFApp.views.exerciseRecordView import ExerciseRecordView
 from RFApp.views.workoutTemplateView import WorkoutTemplateView
 from RFApp.views.rfAuthUserView import RFAuthUserView
+from RFApp.views.exerciseView import ExerciseView
 
 urlpatterns = [
     #WorkoutExercise
@@ -37,5 +38,10 @@ urlpatterns = [
     path('api/workouttemplate', WorkoutTemplateView.retrieve_all_workout_templates, name = 'retrieve_all_workout_templates'),
 
     #RFAuthUser
-    path('api/auth/users', RFAuthUserView.retrieve_all_auth_users, name = 'retrieve_all_auth_users')
+    path('api/auth/users', RFAuthUserView.retrieve_all_auth_users, name = 'retrieve_all_auth_users'),
+    path('api/auth/login', RFAuthUserView.authenticate_potential_rf_user, name = 'authenticate_potential_rf_user'),
+
+    #Exercise
+    path('api/exercises/all', ExerciseView.retrieve_all_exercises, name = 'retrieve_all_exercises'),
+    path('api/exercises', ExerciseView.retrieve_exercise_given_id, name = 'retrieve_exercise_given_id')
 ]

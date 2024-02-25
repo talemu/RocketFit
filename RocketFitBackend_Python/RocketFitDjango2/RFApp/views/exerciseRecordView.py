@@ -7,8 +7,6 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
-
-
 class ExerciseRecordView(APIView):
     def retrieve_all_exercise_records(request):
         if request.method == 'GET':
@@ -37,10 +35,8 @@ class ExerciseRecordView(APIView):
         if request.method == 'POST':
             serializedER = ExerciserecordSerializer(data=request.data)
             if (serializedER.is_valid()):
-                print("hello")
                 ExerciseRecordService.exerciseRecord_track_workout(serializedER)
                 return Response(serializedER.data, status=status.HTTP_201_CREATED)
             else:
-                print("hello2")
                 return Response(serializedER.errors, status=400)
         return JsonResponse({'message': 'Invalid method'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
