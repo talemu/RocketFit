@@ -4,17 +4,33 @@ from .models import Workoutexercise, Workouttemplate, Rfauthuser, Workout, Exerc
 class WorkoutexerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workoutexercise
-        fields = '__all__'
+        fields = [
+            "days",
+            "exercises",
+            "sets",
+            "reps",
+            "rest",
+            "weeks",
+            "workoutnumber",
+            "workoutname"]
 
 class WorkouttemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workouttemplate
-        fields = '__all__'
+        fields = ["workoutname",
+                "exercises",
+                "sets",
+                "reps",
+                "rest",
+                "day",
+                "weeks"]
 
 class RfauthuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rfauthuser
-        fields = '__all__'
+        fields = ['password',
+                'username', 
+                'email_address' ]
 
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,10 +40,15 @@ class WorkoutSerializer(serializers.ModelSerializer):
 class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exercise
-        fields = '__all__'
+        fields = ['exercisename']
 
 class ExerciserecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exerciserecord
-        fields = '__all__'
+        fields = ['exercise_name', 
+                    'sets', 
+                    "reps",
+                    "weight",
+                    "day",
+                    "workout_number"]
 

@@ -69,7 +69,7 @@ const MainPage = ({ authId }: Props) => {
       setIsPreviousButtonDisabled(true);
     }
 
-    if (authId == -1) {
+    if (authId == -10) {
       setShow(false);
     } else {
       if (!show) {

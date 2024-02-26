@@ -15,33 +15,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from RFApp.views.workoutExerciseView import WorkoutExerciseView
-from RFApp.views.exerciseRecordView import ExerciseRecordView
-from RFApp.views.workoutTemplateView import WorkoutTemplateView
-from RFApp.views.rfAuthUserView import RFAuthUserView
-from RFApp.views.exerciseView import ExerciseView
+from django.urls import include, path
+from RFApp.views.workoutExerciseView import WorkoutExerciseViewSet
+from RFApp.views.exerciseRecordView import ExerciseRecordViewSet
+from RFApp.views.workoutTemplateView import WorkoutTemplateViewSet
+from RFApp.views.rfAuthUserView import RFAuthUserViewSet
+from RFApp.views.exerciseView import ExerciseViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r"workoutexercises", WorkoutExerciseViewSet)
+router.register(r"exerciserecord", ExerciseRecordViewSet)
+router.register(r"workouttemplate", WorkoutTemplateViewSet)
+router.register(r"auth",RFAuthUserViewSet )
+router.register(r"exercises", ExerciseViewSet)
 
 urlpatterns = [
     #WorkoutExercise
     path('admin/', admin.site.urls),
-    path('api/workoutexercises/', WorkoutExerciseView.retrieve_all_workout_exercises, name='retrieve_all_workout_exercises'),
-    path('api/workoutexercises/id/<int:id>', WorkoutExerciseView.retrieve_workout_exercises_by_id, name = 'retrieve_all_workout_exercises'),
-    
+    path('api/', include(router.urls)),
+
     #ExerciseRecords
-    path('api/exerciserecord/', ExerciseRecordView.retrieve_all_exercise_records, name = 'retrieve_all_exercise_records'),
-    path('api/exerciserecord', ExerciseRecordView.retrieve_exercise_records_based_on_name_day_wn_id, name='retrieve_exercise_records_based_on_name_day_wn_id'),
-    path('api/exerciserecord/averageweight', ExerciseRecordView.retrieve_exercise_record_average_based_on_name_id, name = 'retrieve_exercise_record_average_based_on_name_id'),
-    path('api/exerciserecord/save', ExerciseRecordView.track_workout, name='track_workout'),
-
-    #WorkoutTemplate
-    path('api/workouttemplate', WorkoutTemplateView.retrieve_all_workout_templates, name = 'retrieve_all_workout_templates'),
-
-    #RFAuthUser
-    path('api/auth/users', RFAuthUserView.retrieve_all_auth_users, name = 'retrieve_all_auth_users'),
-    path('api/auth/login', RFAuthUserView.authenticate_potential_rf_user, name = 'authenticate_potential_rf_user'),
+    #url changed
+    # path('api/exerciserecord', ExerciseRecordView.retrieve_exercise_records_based_on_name_day_wn_id, name='retrieve_exercise_records_based_on_name_day_wn_id'),
+    #http://127.0.0.1:8000/api/exerciserecord/retrieveer/
 
     #Exercise
-    path('api/exercises/all', ExerciseView.retrieve_all_exercises, name = 'retrieve_all_exercises'),
-    path('api/exercises', ExerciseView.retrieve_exercise_given_id, name = 'retrieve_exercise_given_id')
+    # path('api/exercises/all', ExerciseView.retrieve_all_exercises, name = 'retrieve_all_exercises'),
+    # path('api/exercises', ExerciseView.retrieve_exercise_given_id, name = 'retrieve_exercise_given_id')
 ]

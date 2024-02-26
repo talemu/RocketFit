@@ -28,7 +28,7 @@ const Navbar = ({ sendDataToParent }: Props) => {
   });
 
   const Logout = () => {
-    sendDataToParent(-1);
+    sendDataToParent(-10);
     navigate("/login");
   };
   return (
