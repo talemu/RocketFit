@@ -46,25 +46,14 @@ public class WorkoutExerciseController {
     private String getLocalHostRunning() {
     	return "LocalHost Running";
     }
-
-//     @GetMapping(value = "/api/workouts")
-//     private List<WorkoutExercise> getAllWorkoutsExer() throws Exception {
-//    	CompletableFuture<List<WorkoutExercise>> returnedList = _weService.getAllWorkoutsExer();
-//    	try {
-//			return returnedList.get();
-//		} catch (Exception e)
-//    	{
-//			throw e;
-//    	}
-//     }
     
     @GetMapping(value = "")
-    public List<WorkoutExercise> getAllWorkouts() {
+    public List<WorkoutExerciseDTO> getAllWorkouts() {
     	return _weService.findAllWorkouts();
     }
     
     @GetMapping(value = "/id/{authid}")
-    public List<WorkoutExercise> getWorkoutsById(@PathVariable int authid) {
+    public List<WorkoutExerciseDTO> getWorkoutsById(@PathVariable int authid) {
     	return _weService.findWorkoutExerciseByAuthID(authid);
     }
     
@@ -72,16 +61,5 @@ public class WorkoutExerciseController {
     public List<WorkoutExerciseDTO> getAllWorkoutsByIdandDay(@PathVariable int id, @RequestParam int workoutNum) {
     	return _weService.findWorkoutBasedOnIdandDay(id, workoutNum);
     }
-//    
-//    @GetMapping(value = "/")
-//    public List<WorkoutExercise> getAllWorkouts() {
-//    	return _weService.findAllWorkouts();
-//    }
-//    
-//    @GetMapping(value = "/async/workouts")
-//    public List<Integer> getAllDistictWorkouts() {
-//    	return _weService.findAllDistinctWorkouts();
-//    }
-//    
     
 }

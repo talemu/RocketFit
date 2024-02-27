@@ -26,46 +26,45 @@ public class WorkoutExerciseService {
 		_weRepo = repo;
 	}
 	
-	public List<WorkoutExercise> findAllWorkouts() {
+	public List<WorkoutExerciseDTO> findAllWorkouts() {
 		CompletableFuture<List<WorkoutExercise>> workouts = CompletableFuture.completedFuture(_weRepo.findAll());
-		return workouts.join();
+		List<WorkoutExerciseDTO> weDTOList = new ArrayList<WorkoutExerciseDTO>();
+		for (WorkoutExercise x : workouts.join()) {
+			WorkoutExerciseDTO weTemp = new WorkoutExerciseDTO(
+					x.getDays(),
+					x.getExercises(),
+					x.getSets(),
+					x.getReps(),
+					x.getRest(),
+					x.getWeeks(),
+					x.getAuthID(),
+					x.getWorkoutNumber(),
+					x.getWorkoutName()
+					);
+			weDTOList.add(weTemp);
+		}
+		return weDTOList;
 	}
 	
-	public List<WorkoutExercise> findWorkoutExerciseByAuthID(int id) {
+	public List<WorkoutExerciseDTO> findWorkoutExerciseByAuthID(int id) {
 		CompletableFuture<List<WorkoutExercise>> workouts = CompletableFuture.completedFuture(_weRepo.findWorkoutsBasedOnAuthId(id));
-		return workouts.join();
+		List<WorkoutExerciseDTO> weDTOList = new ArrayList<WorkoutExerciseDTO>();
+		for (WorkoutExercise x : workouts.join()) {
+			WorkoutExerciseDTO weTemp = new WorkoutExerciseDTO(
+					x.getDays(),
+					x.getExercises(),
+					x.getSets(),
+					x.getReps(),
+					x.getRest(),
+					x.getWeeks(),
+					x.getAuthID(),
+					x.getWorkoutNumber(),
+					x.getWorkoutName()
+					);
+			weDTOList.add(weTemp);
+		}
+		return weDTOList;
 	}
-	
-//	public List<List<WorkoutExerciseDTO>> findAllWorkoutsAsync() {
-//		CompletableFuture<List<WorkoutExercise>> exercises = CompletableFuture.completedFuture(_weRepo.findAll());
-//		List<WorkoutExercise> workoutExercises = exercises.join();
-//		List<WorkoutExerciseDTO> dtos = new ArrayList<WorkoutExerciseDTO>();
-//		for (int i = 0; i < workoutExercises.size(); i ++) {
-//			WorkoutExercise current = workoutExercises.get(i);
-//			dtos.add(new WorkoutExerciseDTO(
-//					current.getWorkoutExerciseID(),
-//					current.getWorkout().getWorkoutDay(),
-//					 current.getExercise().getExerciseName(),
-//					 current.getSets(),
-//					 current.getReps(),
-//					 current.getRest(),
-//					 current.getWeight(),
-//					 current.getAuthId()
-//					));
-//		}
-//		List<List<WorkoutExerciseDTO>> returnedList = new ArrayList<List<WorkoutExerciseDTO>>();
-//		Map<Integer, List<WorkoutExerciseDTO>> groupedByDay = dtos.stream().collect(Collectors.groupingBy(WorkoutExerciseDTO::getDay));
-//		for (int key : groupedByDay.keySet()) {
-//			List<WorkoutExerciseDTO> temp = new ArrayList<WorkoutExerciseDTO>();
-//			for (WorkoutExerciseDTO item : groupedByDay.get(key)) {
-//				temp.add(item);
-//			}
-//			returnedList.add(temp);
-//		}
-//		return returnedList;
-//	}
-//	
-	
 	
 
 	public List<WorkoutExerciseDTO> findWorkoutBasedOnIdandDay(int id, int workoutNum) {
@@ -75,7 +74,6 @@ public class WorkoutExerciseService {
 		for (int i = 0; i < workoutExercises.size(); i ++) {
 			WorkoutExercise current = workoutExercises.get(i);
 			dtos.add(new WorkoutExerciseDTO(
-					current.getWorkoutExerciseID(),
 					 current.getDays(),
 					 current.getExercises(),
 					 current.getSets(),
@@ -87,31 +85,6 @@ public class WorkoutExerciseService {
 					 current.getWorkoutName()
 					));
 		}
-//		List<List<WorkoutExerciseDTO>> returnedList = new ArrayList<List<WorkoutExerciseDTO>>();
-//		Map<Integer, List<WorkoutExerciseDTO>> groupedByDay = dtos.stream().collect(Collectors.groupingBy(WorkoutExerciseDTO::getDay));
-//		List<Integer> temp2 = new ArrayList<>(groupedByDay.keySet());
-//		Collections.sort(temp2);
-//		for (int key : temp2) {
-//			List<WorkoutExerciseDTO> temp = new ArrayList<WorkoutExerciseDTO>();
-//			for (WorkoutExerciseDTO item : groupedByDay.get(key)) {
-//				temp.add(item);
-//			}
-//			returnedList.add(temp);
-//		}
 		return dtos;
 	}
-
-//	
-//	public List<WorkoutExercise> findAllWorkouts() {
-//		return _weRepo.findAll();
-//	}
-//	
-//	public List<Integer> findAllDistinctWorkouts() {
-//		CompletableFuture<List<Integer>> workouts = CompletableFuture.completedFuture(_weRepo.findAllTheDistinctWorkouts());
-//		return workouts.join();
-//	}
-
-//	private List<WorkoutExercise> getAllWorkoutsExer() {
-//		return _weRepo.findAll();
-//	}
 }

@@ -25,6 +25,21 @@ public class WorkoutExercise {
 
 	}
 
+	public WorkoutExercise(String days, String exercises, String sets, String reps, String rest, int weeks, int authID,
+			int workoutNumber, String workoutName) {
+		Days = days;
+		Exercises = exercises;
+		Sets = sets;
+		Reps = reps;
+		Rest = rest;
+		Weeks = weeks;
+		AuthID = authID;
+		WorkoutNumber = workoutNumber;
+		WorkoutName = workoutName;
+	}
+
+
+
 	public int getWorkoutExerciseID() {
 		return WorkoutExerciseID;
 	}

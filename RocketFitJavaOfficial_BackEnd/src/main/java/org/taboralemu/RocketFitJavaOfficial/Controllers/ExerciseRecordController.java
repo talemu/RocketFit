@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.taboralemu.RocketFitJavaOfficial.DTOs.ExerciseRecordDTO;
 import org.taboralemu.RocketFitJavaOfficial.Models.ExerciseRecord;
 import org.taboralemu.RocketFitJavaOfficial.Services.ExerciseRecordService;
 
@@ -20,31 +21,20 @@ public class ExerciseRecordController {
 	@Autowired
     public ExerciseRecordService _erService;
 	
-	@PostMapping(value= "/save")
-    public void trackUpdatedWorkout(@RequestBody Map<String, Object> exerciseRecord) {
-//    	_erService.trackWorkout(exerciseRecord);
-		String s = (String) exerciseRecord.get("exercise_name");
-		ExerciseRecord er = new ExerciseRecord(
-				(int) exerciseRecord.get("auth_id"), 
-				(String) exerciseRecord.get("exercise_name"),
-				(int) exerciseRecord.get("reps"),
-				(int) exerciseRecord.get("sets"),
-				((Integer) exerciseRecord.get("weight")).doubleValue(),
-				(int) exerciseRecord.get("day"),
-				(int) exerciseRecord.get("workoutNum")
-				);
-		_erService.trackWorkout(er);
+	@PostMapping(value= "")
+    public void trackUpdatedWorkout(@RequestBody ExerciseRecordDTO exerciseRecord) {
+		_erService.trackWorkout(exerciseRecord);
     }
     
     @GetMapping(value = "/")
-    public List<ExerciseRecord> retrieveAllRecord() {
+    public List<ExerciseRecordDTO> retrieveAllRecord() {
     	return _erService.retrieveExerciseRecords();
     }
     
     @GetMapping(value = "")
-    public double retrieveRecord(@RequestParam String exercise, @RequestParam int day, @RequestParam int workoutNum, @RequestParam int auth) {
+    public double retrieveRecord(@RequestParam String exercise, @RequestParam int day, @RequestParam int workoutNum, @RequestParam int auth_id) {
     	
-    	return _erService.retrieveExerciseRecord(exercise, day, workoutNum, auth);
+    	return _erService.retrieveExerciseRecord(exercise, day, workoutNum, auth_id);
     }
     
     @GetMapping(value= "/averageweight")

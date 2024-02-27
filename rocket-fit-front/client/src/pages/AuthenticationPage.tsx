@@ -43,11 +43,11 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
     request
       .then((response) => {
         const returned_id: number = response.data as unknown as number;
-        if (returned_id === -1 && authId === -1) {
+        if (returned_id === -10 && authId === -10) {
           setInvalidLogin(true);
-          setAuthId(-1);
-        } else if (returned_id === -1 && authId === 0) {
-          setAuthId(-1);
+          setAuthId(-10);
+        } else if (returned_id === -10 && authId === 0) {
+          setAuthId(-10);
         } else {
           setAuthId(returned_id);
           sendDataToParent(returned_id);

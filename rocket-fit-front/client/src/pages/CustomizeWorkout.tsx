@@ -46,7 +46,7 @@ const CustomizeWorkout = () => {
   };
 
   const AddWorkoutToUser = () => {
-    console.log(workoutData[0]);
+    
   };
 
   return (

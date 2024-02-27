@@ -1,4 +1,4 @@
-import { Workout, WorkoutItem } from "../services/workoutExerciseService";
+import { WorkoutItem } from "../services/workoutExerciseService";
 import styled from "styled-components";
 import Timer from "./Timer";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -109,7 +109,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
               <TableColumn>
                 {
                   exercises.find(
-                    (element) => element.exerciseID === item.exercise
+                    (element) => element.exerciseId === item.exercise
                   )?.exerciseName
                 }
               </TableColumn>
