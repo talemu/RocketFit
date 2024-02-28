@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class AuthUser {
+public class RFAuthUser {
 	
 	@Id
 	public int id;
@@ -13,7 +13,7 @@ public class AuthUser {
 	public String email_address;
 	
 
-	public AuthUser() {
+	public RFAuthUser() {
 		
 	}
 

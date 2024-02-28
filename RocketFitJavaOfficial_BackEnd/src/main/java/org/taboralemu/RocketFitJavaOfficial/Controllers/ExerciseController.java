@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.taboralemu.RocketFitJavaOfficial.DTOs.ExerciseDTO;
 import org.taboralemu.RocketFitJavaOfficial.Models.Exercise;
 import org.taboralemu.RocketFitJavaOfficial.Services.ExerciseService;
 
@@ -18,12 +19,12 @@ public class ExerciseController {
 	private ExerciseService _eService;
 	
 	@GetMapping(value = "")
-	public Exercise findExerciseBasedOnId(@RequestParam Integer id) {
+	public ExerciseDTO findExerciseBasedOnId(@RequestParam Integer id) throws Exception {
 		return _eService.findByExerciseId(id);
 	}
 	
 	@GetMapping(value = "/all")
-	public List<Exercise> getAllExercises() {
+	public List<ExerciseDTO> getAllExercises() {
 		return _eService.getAllExercises();
 	}
 

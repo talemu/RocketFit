@@ -4,8 +4,6 @@ import jakarta.persistence.Id;
 
 public class WorkoutExerciseDTO {
 
-	@Id
-	private int WorkoutExerciseID;
 	private String Days;
 	private String Exercises ;
 	private String Sets;
@@ -15,9 +13,12 @@ public class WorkoutExerciseDTO {
 	private int AuthID;
 	private int WorkoutNumber;
 	private String WorkoutName;
+	
+	public WorkoutExerciseDTO() {
+		
+	}
 	 
-	 public WorkoutExerciseDTO(int weID, String d, String e, String s, String rs, String rt, int w, int aId, int wn, String wNa) {
-		 setWorkoutExerciseID(weID);
+	 public WorkoutExerciseDTO(String d, String e, String s, String rs, String rt, int w, int aId, int wn, String wNa) {
 		 setDays(d);
 		 setExercises(e);
 		 setSets(s);
@@ -29,9 +30,6 @@ public class WorkoutExerciseDTO {
 		 setWorkoutName(wNa);
 	 }
 
-	public int getWorkoutExerciseID() {
-		return WorkoutExerciseID;
-	}
 
 	public String getDays() {
 		return Days;
@@ -67,10 +65,6 @@ public class WorkoutExerciseDTO {
 
 	public String getWorkoutName() {
 		return WorkoutName;
-	}
-
-	public void setWorkoutExerciseID(int workoutExerciseID) {
-		WorkoutExerciseID = workoutExerciseID;
 	}
 
 	public void setDays(String days) {

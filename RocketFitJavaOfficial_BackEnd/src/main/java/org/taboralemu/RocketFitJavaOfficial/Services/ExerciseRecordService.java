@@ -1,9 +1,11 @@
 package org.taboralemu.RocketFitJavaOfficial.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.taboralemu.RocketFitJavaOfficial.DTOs.ExerciseRecordDTO;
 import org.taboralemu.RocketFitJavaOfficial.Models.ExerciseRecord;
 import org.taboralemu.RocketFitJavaOfficial.Models.WorkoutExercise;
 import org.taboralemu.RocketFitJavaOfficial.Repository.ExerciseRecordRepo;
@@ -14,13 +16,34 @@ public class ExerciseRecordService {
 	@Autowired
 	private ExerciseRecordRepo _erRepo;
 	
-	public void trackWorkout(ExerciseRecord exerciseRecord) {
-		_erRepo.save(exerciseRecord);
-		
+	public void trackWorkout(ExerciseRecordDTO exerciseRecord) {
+		ExerciseRecord er = new ExerciseRecord(
+				exerciseRecord.getExercise_name(),
+				exerciseRecord.getSets(),
+				exerciseRecord.getReps(),
+				exerciseRecord.getWeight(),
+				exerciseRecord.getAuthId(),
+				exerciseRecord.getDay(),
+				exerciseRecord.getWorkoutNumber()
+				);
+		_erRepo.save(er);
 	}
 	
-	public List<ExerciseRecord> retrieveExerciseRecords() {
-		return _erRepo.findAll();
+	public List<ExerciseRecordDTO> retrieveExerciseRecords() {
+		List<ExerciseRecordDTO> erDTOList = new ArrayList<ExerciseRecordDTO>();
+		for (ExerciseRecord x : _erRepo.findAll()) {
+			ExerciseRecordDTO erTemp = new ExerciseRecordDTO(
+					x.getExercise_name(),
+					x.getSets(),
+					x.getReps(),
+					x.getWeight(),
+					x.getAuthId(),
+					x.getDay(),
+					x.getWorkoutNumber()
+					);
+			erDTOList.add(erTemp);
+		}
+		return erDTOList;
 	}
 	
 	public double retrieveExerciseRecord(String exerciseName, int day, int workoutNum, int auth) {

@@ -1,20 +1,7 @@
-package org.taboralemu.RocketFitJavaOfficial.Models;
+package org.taboralemu.RocketFitJavaOfficial.DTOs;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "ExerciseRecord")
-public class ExerciseRecord {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private int id;
+public class ExerciseRecordDTO {
+	
 	private String exercise_name;
 	private int sets;
 	private int reps;
@@ -23,24 +10,23 @@ public class ExerciseRecord {
 	private int day;
 	private int workout_number;
 	
-	public ExerciseRecord() {
+	public ExerciseRecordDTO() {
 		
 	}
-
-	public ExerciseRecord(String eName, int r, int s, double w, int aID, int d, int wn) {
-		setExercise_name(eName);
-		setReps(r);
-		setSets(s);
-		setWeight(w);
-		setAuthId(aID);
-		setDay(d);
-		setWorkoutNumber(wn);
+	
+	
+	public ExerciseRecordDTO(String exercise_name, int sets, int reps, double weight, int auth_id, int day,
+			int workout_number) {
+		this.exercise_name = exercise_name;
+		this.sets = sets;
+		this.reps = reps;
+		this.weight = weight;
+		this.auth_id = auth_id;
+		this.day = day;
+		this.workout_number = workout_number;
 	}
-
-	public int getId() {
-		return id;
-	}
-
+	
+	
 	public String getExercise_name() {
 		return exercise_name;
 	}
@@ -68,11 +54,6 @@ public class ExerciseRecord {
 	public int getWorkoutNumber() {
 		return workout_number;
 	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public void setExercise_name(String exercise_name) {
 		this.exercise_name = exercise_name;
 	}
