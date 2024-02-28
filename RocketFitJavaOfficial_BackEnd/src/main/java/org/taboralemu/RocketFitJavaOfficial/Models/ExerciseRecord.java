@@ -27,10 +27,10 @@ public class ExerciseRecord {
 		
 	}
 
-	public ExerciseRecord(String eName, int r, int s, double w, int aID, int d, int wn) {
+	public ExerciseRecord(String eName, int s, int r, double w, int aID, int d, int wn) {
 		setExercise_name(eName);
-		setReps(r);
 		setSets(s);
+		setReps(r);
 		setWeight(w);
 		setAuthId(aID);
 		setDay(d);

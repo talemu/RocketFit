@@ -5,6 +5,10 @@ public class ExerciseDTO {
 	private int ExerciseID;
 	private String ExerciseName;
 	
+	public ExerciseDTO() {
+		
+	}
+	
 
 	public ExerciseDTO(int id, String exerciseName) {
 		ExerciseID = id;

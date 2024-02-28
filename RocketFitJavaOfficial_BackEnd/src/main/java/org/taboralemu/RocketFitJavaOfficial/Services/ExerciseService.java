@@ -41,5 +41,12 @@ public class ExerciseService {
 		}
 		return eDTOs;
 	}
+	
+	public void addExerciseToRepo(ExerciseDTO exercise) {
+		Exercise eTemp = new Exercise(
+				exercise.getExerciseName()
+				);
+		_eRepo.save(eTemp);
+	}
 
 }

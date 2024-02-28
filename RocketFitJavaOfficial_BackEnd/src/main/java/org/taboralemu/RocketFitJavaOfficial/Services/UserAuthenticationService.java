@@ -22,7 +22,7 @@ public class UserAuthenticationService {
 		for (RFAuthUser x : rfAuthUsers.join()) {
 			RFAuthUserDTO rfAUtemp = new RFAuthUserDTO(
 					x.getId(),
-					x.getUserName(),
+					x.getUsername(),
 					x.getEmail_address()
 					);
 			rfAuthDTOs.add(rfAUtemp);
@@ -38,6 +38,15 @@ public class UserAuthenticationService {
 		catch (Exception e) {
 			return -10;
 		}
+	}
+	
+	public void registerNewUser(RFAuthUserDTO newUser, String pw) {
+		RFAuthUser rUser = new RFAuthUser(
+				newUser.getUsername(),
+				pw,
+				newUser.getEmail_address()
+				);
+		_authUserRepo.save(rUser);
 	}
 
 }

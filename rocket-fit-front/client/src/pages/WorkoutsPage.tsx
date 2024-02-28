@@ -38,7 +38,7 @@ const WorkoutsPage = () => {
   const [trigger, setTrigger] = useState<boolean>(false);
 
   useEffect(() => {
-    const { request } = workoutTemplateService.getAll("");
+    const { request } = workoutTemplateService.getAll("/all");
     request
       .then((response) => {
         standardizeWorkoutTemplates(response.data);
@@ -51,6 +51,7 @@ const WorkoutsPage = () => {
     request
       .then((response) => {
         setExercises(response.data);
+        console.log(response.data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -132,7 +133,7 @@ const WorkoutsPage = () => {
                             {
                               exercises.find(
                                 (element: Exercise) =>
-                                  element.exerciseID === item.exercises[count]
+                                  element.exerciseId === item.exercises[count]
                               )?.exerciseName
                             }
                           </TableColumn>

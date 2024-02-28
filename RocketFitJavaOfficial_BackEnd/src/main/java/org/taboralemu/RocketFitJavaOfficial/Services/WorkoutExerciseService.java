@@ -37,7 +37,7 @@ public class WorkoutExerciseService {
 					x.getReps(),
 					x.getRest(),
 					x.getWeeks(),
-					x.getAuthID(),
+					x.getAuth_id(),
 					x.getWorkoutNumber(),
 					x.getWorkoutName()
 					);
@@ -57,7 +57,7 @@ public class WorkoutExerciseService {
 					x.getReps(),
 					x.getRest(),
 					x.getWeeks(),
-					x.getAuthID(),
+					x.getAuth_id(),
 					x.getWorkoutNumber(),
 					x.getWorkoutName()
 					);
@@ -80,11 +80,26 @@ public class WorkoutExerciseService {
 					 current.getReps(),
 					 current.getRest(),
 					 current.getWeeks(),
-					 current.getAuthID(),
+					 current.getAuth_id(),
 					 current.getWorkoutNumber(),
 					 current.getWorkoutName()
 					));
 		}
 		return dtos;
+	}
+	
+	public void addWorkoutExerciseToRepo(WorkoutExerciseDTO workoutexercise) {
+		WorkoutExercise weTemp = new WorkoutExercise(
+				workoutexercise.getDays(),
+				workoutexercise.getExercises(),
+				workoutexercise.getSets(),
+				workoutexercise.getReps(),
+				workoutexercise.getRest(),
+				workoutexercise.getWeeks(),
+				workoutexercise.getAuth_id(),
+				workoutexercise.getWorkoutNumber(),
+				workoutexercise.getWorkoutName()
+				);
+		_weRepo.save(weTemp);
 	}
 }
