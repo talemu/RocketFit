@@ -1,6 +1,8 @@
 package org.taboralemu.RocketFitJavaOfficial.Models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,17 +11,19 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "WorkoutExercise")
 public class WorkoutExercise {
+	
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int WorkoutExerciseID;
-	private String Days;
-	private String Exercises ;
-	private String Sets;
-	private String Reps;
-	private String Rest;
-	private int Weeks;
-	private int AuthID;
-	private int WorkoutNumber;
-	private String WorkoutName;
+	private String days;
+	private String exercises;
+	private String sets;
+	private String reps;
+	private String rest;
+	private int weeks;
+	private int auth_id;
+	private int workoutNumber;
+	private String workoutName;
 
 	private WorkoutExercise() {
 
@@ -27,57 +31,55 @@ public class WorkoutExercise {
 
 	public WorkoutExercise(String days, String exercises, String sets, String reps, String rest, int weeks, int authID,
 			int workoutNumber, String workoutName) {
-		Days = days;
-		Exercises = exercises;
-		Sets = sets;
-		Reps = reps;
-		Rest = rest;
-		Weeks = weeks;
-		AuthID = authID;
-		WorkoutNumber = workoutNumber;
-		WorkoutName = workoutName;
+		setDays(days);
+		setExercises(exercises);
+		setSets(sets);
+		setReps(reps);
+		setRest(rest);
+		setWeeks(weeks);
+		setAuth_id(auth_id);
+		setWorkoutNumber(workoutNumber);
+		setWorkoutName(workoutName);
 	}
-
-
 
 	public int getWorkoutExerciseID() {
 		return WorkoutExerciseID;
 	}
 
 	public String getDays() {
-		return Days;
+		return days;
 	}
 
 	public String getExercises() {
-		return Exercises;
+		return exercises;
 	}
 
 	public String getSets() {
-		return Sets;
+		return sets;
 	}
 
 	public String getReps() {
-		return Reps;
+		return reps;
 	}
 
 	public String getRest() {
-		return Rest;
+		return rest;
 	}
 
 	public int getWeeks() {
-		return Weeks;
+		return weeks;
 	}
 
-	public int getAuthID() {
-		return AuthID;
+	public int getAuth_id() {
+		return auth_id;
 	}
 
 	public int getWorkoutNumber() {
-		return WorkoutNumber;
+		return workoutNumber;
 	}
 
 	public String getWorkoutName() {
-		return WorkoutName;
+		return workoutName;
 	}
 
 	public void setWorkoutExerciseID(int workoutExerciseID) {
@@ -85,39 +87,39 @@ public class WorkoutExercise {
 	}
 
 	public void setDays(String days) {
-		Days = days;
+		this.days = days;
 	}
 
 	public void setExercises(String exercises) {
-		Exercises = exercises;
+		this.exercises = exercises;
 	}
 
 	public void setSets(String sets) {
-		Sets = sets;
+		this.sets = sets;
 	}
 
 	public void setReps(String reps) {
-		Reps = reps;
+		this.reps = reps;
 	}
 
 	public void setRest(String rest) {
-		Rest = rest;
+		this.rest = rest;
 	}
 
 	public void setWeeks(int weeks) {
-		Weeks = weeks;
+		this.weeks = weeks;
 	}
 
-	public void setAuthID(int authID) {
-		AuthID = authID;
+	public void setAuth_id(int auth_id) {
+		this.auth_id = auth_id;
 	}
 
 	public void setWorkoutNumber(int workoutNumber) {
-		WorkoutNumber = workoutNumber;
+		this.workoutNumber = workoutNumber;
 	}
-	
+
 	public void setWorkoutName(String workoutName) {
-		WorkoutName = workoutName;
+		this.workoutName = workoutName;
 	}
 
 }

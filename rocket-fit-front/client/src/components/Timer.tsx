@@ -141,19 +141,19 @@ const Timer = ({
     const avg = sum / sets;
     const exerciseRecord = {
       exercise_name: exercises.find(
-        (element) => element.exerciseID === workout.exercise
+        (element) => element.exerciseId === workout.exercise
       )?.exerciseName,
       sets: sets,
       reps: reps,
       weight: parseFloat(avg.toFixed(1)),
-      auth_id: id,
+      authId: id,
       day: workout.day,
-      workoutNum: workoutNum,
+      workoutNumber: workoutNum,
     };
     console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), false);
-    const { request } = exerciseRecordService.postItem("/save", exerciseRecord);
+    const { request } = exerciseRecordService.postItem("", exerciseRecord);
     request
       .then((response) => {
         console.log(response);

@@ -5,4 +5,4 @@ export interface Exercise {
   exerciseId: number;
 }
 
-export default create("/exercises");
+export default create("/exercise");

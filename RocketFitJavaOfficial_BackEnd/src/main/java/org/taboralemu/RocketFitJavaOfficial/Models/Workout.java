@@ -3,7 +3,8 @@ package org.taboralemu.RocketFitJavaOfficial.Models;
 import java.util.List;
 
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -11,7 +12,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="Workout")
 public class Workout {
+	
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int WorkoutID;
 	private int WorkoutDay;
 	

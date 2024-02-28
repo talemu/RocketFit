@@ -26,7 +26,7 @@ public class ExerciseRecordController {
 		_erService.trackWorkout(exerciseRecord);
     }
     
-    @GetMapping(value = "/")
+    @GetMapping(value = "/all")
     public List<ExerciseRecordDTO> retrieveAllRecord() {
     	return _erService.retrieveExerciseRecords();
     }

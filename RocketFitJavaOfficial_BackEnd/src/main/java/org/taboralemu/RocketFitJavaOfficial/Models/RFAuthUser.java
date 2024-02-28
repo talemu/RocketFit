@@ -1,20 +1,29 @@
 package org.taboralemu.RocketFitJavaOfficial.Models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class RFAuthUser {
 	
 	@Id
-	public int id;
-	public String userName;
-	public String password;
-	public String email_address;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String username;
+	private String password;
+	private String email_address;
 	
 
 	public RFAuthUser() {
 		
+	}
+	
+	public RFAuthUser(String username, String password, String email_address) {
+		setUsername(username);
+		setPassword(password);
+		setEmail_address(email_address);
 	}
 
 	public int getId() {
@@ -25,8 +34,8 @@ public class RFAuthUser {
 		return password;
 	}
 	
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 	
 	public String getEmail_address() {
@@ -41,8 +50,8 @@ public class RFAuthUser {
 		this.password = password;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 	
 	public void setEmail_address(String email_address) {

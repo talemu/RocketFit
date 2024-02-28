@@ -45,9 +45,7 @@ const CustomizeWorkout = () => {
     setChange(!change);
   };
 
-  const AddWorkoutToUser = () => {
-    
-  };
+  const AddWorkoutToUser = () => {};
 
   return (
     <>
@@ -86,7 +84,7 @@ const CustomizeWorkout = () => {
                   <TableColumn>
                     {
                       workoutData[1].find(
-                        (element: Exercise) => element.exerciseID === count + 1
+                        (element: Exercise) => element.exerciseId === count + 1
                       )?.exerciseName
                     }
                   </TableColumn>

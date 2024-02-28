@@ -1,7 +1,7 @@
 package org.taboralemu.RocketFitJavaOfficial.DTOs;
 
 public class ExerciseRecordDTO {
-	
+
 	private String exercise_name;
 	private int sets;
 	private int reps;
@@ -9,24 +9,22 @@ public class ExerciseRecordDTO {
 	private int auth_id;
 	private int day;
 	private int workout_number;
-	
+
 	public ExerciseRecordDTO() {
-		
+
 	}
-	
-	
+
 	public ExerciseRecordDTO(String exercise_name, int sets, int reps, double weight, int auth_id, int day,
 			int workout_number) {
-		this.exercise_name = exercise_name;
-		this.sets = sets;
-		this.reps = reps;
-		this.weight = weight;
-		this.auth_id = auth_id;
-		this.day = day;
-		this.workout_number = workout_number;
+		setExercise_name(exercise_name);
+		setSets(sets);
+		setReps(reps);
+		setWeight(weight);
+		setAuthId(auth_id);
+		setDay(day);
+		setWorkoutNumber(workout_number);
 	}
-	
-	
+
 	public String getExercise_name() {
 		return exercise_name;
 	}
@@ -46,7 +44,7 @@ public class ExerciseRecordDTO {
 	public int getAuthId() {
 		return auth_id;
 	}
-	
+
 	public int getDay() {
 		return day;
 	}
@@ -54,6 +52,7 @@ public class ExerciseRecordDTO {
 	public int getWorkoutNumber() {
 		return workout_number;
 	}
+
 	public void setExercise_name(String exercise_name) {
 		this.exercise_name = exercise_name;
 	}
@@ -73,11 +72,11 @@ public class ExerciseRecordDTO {
 	public void setAuthId(int id) {
 		this.auth_id = id;
 	}
-	
+
 	public void setDay(int day) {
 		this.day = day;
 	}
-	
+
 	public void setWorkoutNumber(int workoutNumber) {
 		this.workout_number = workoutNumber;
 	}

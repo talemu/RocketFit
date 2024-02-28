@@ -34,7 +34,7 @@ import org.taboralemu.RocketFitJavaOfficial.Services.ExerciseRecordService;
 import org.taboralemu.RocketFitJavaOfficial.Services.WorkoutExerciseService;
 import org.taboralemu.RocketFitJavaOfficial.Services.WorkoutService;
 
-@RequestMapping("/api/workoutexercise")
+@RequestMapping("api/workoutexercise")
 @RestController
 public class WorkoutExerciseController {
 
@@ -47,19 +47,24 @@ public class WorkoutExerciseController {
     	return "LocalHost Running";
     }
     
-    @GetMapping(value = "")
+    @GetMapping(value = "/all")
     public List<WorkoutExerciseDTO> getAllWorkouts() {
     	return _weService.findAllWorkouts();
     }
     
-    @GetMapping(value = "/id/{authid}")
-    public List<WorkoutExerciseDTO> getWorkoutsById(@PathVariable int authid) {
-    	return _weService.findWorkoutExerciseByAuthID(authid);
+    @GetMapping(value = "/id/{auth_id}")
+    public List<WorkoutExerciseDTO> getWorkoutsById(@PathVariable int auth_id) {
+    	return _weService.findWorkoutExerciseByAuthID(auth_id);
     }
     
     @GetMapping(value = "/{id}")
     public List<WorkoutExerciseDTO> getAllWorkoutsByIdandDay(@PathVariable int id, @RequestParam int workoutNum) {
     	return _weService.findWorkoutBasedOnIdandDay(id, workoutNum);
+    }
+    
+    @PostMapping(value = "")
+    public void addWorkoutExerciseItem(@RequestBody WorkoutExerciseDTO workoutexercise) {
+    	_weService.addWorkoutExerciseToRepo(workoutexercise);
     }
     
 }

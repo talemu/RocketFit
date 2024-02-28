@@ -16,7 +16,7 @@ public class WorkoutTemplateController {
 	@Autowired
 	private WorkoutTemplateService _wtService;
 	
-	@GetMapping("")
+	@GetMapping("/all")
 	public List<WorkoutTemplate> getWorkoutTemplates() {
 		return _wtService.retrieveWorkoutTemplates();
 	}
