@@ -61,9 +61,36 @@ function App() {
                 />
               }
             />
-            <Route path="/workouts" Component={WorkoutsPage} />
-            <Route path="customize" Component={CustomizeWorkout} />
-            <Route path="/workout" Component={WorkoutPage} />
+            <Route
+              path="/workouts"
+              element={
+                <WorkoutsPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
+            <Route
+              path="/customize"
+              element={
+                <CustomizeWorkout
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
+            <Route
+              path="/workout"
+              element={
+                <WorkoutPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
           </Routes>
         </Router>
       </Border>

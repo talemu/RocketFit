@@ -64,8 +64,6 @@ const Timer = ({
       const response = await exerciseService.getAll("/all").request;
       const exercise_items = response.data as unknown as Exercise[];
 
-      console.log(exercises, exercise_items);
-
       const response2 = await exerciseRecordService.getAll(
         "?exercise=" +
           exercise_items.find(
@@ -150,7 +148,6 @@ const Timer = ({
       day: workout.day,
       workoutNumber: workoutNum,
     };
-    console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), false);
     const { request } = exerciseRecordService.postItem("", exerciseRecord);
