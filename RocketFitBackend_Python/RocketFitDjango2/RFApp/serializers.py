@@ -4,51 +4,70 @@ from .models import Workoutexercise, Workouttemplate, Rfauthuser, Workout, Exerc
 class WorkoutexerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workoutexercise
-        fields = [
-            "days",
-            "exercises",
-            "sets",
-            "reps",
-            "rest",
-            "weeks",
-            "workoutnumber",
-            "workoutname"]
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
+    
+    def serialize(self, item):
+        return item.asdict()
+        
 
 class WorkouttemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workouttemplate
-        fields = ["workoutname",
-                "exercises",
-                "sets",
-                "reps",
-                "rest",
-                "day",
-                "weeks"]
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
 
 class RfauthuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rfauthuser
-        fields = ['password',
-                'username', 
-                'email_address' ]
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
 
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
         fields = '__all__'
 
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
+
 class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exercise
-        fields = ['exercisename']
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
 
 class ExerciserecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exerciserecord
-        fields = ['exercise_name', 
-                    'sets', 
-                    "reps",
-                    "weight",
-                    "day",
-                    "workout_number"]
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # Call the superclass method to get the original representation
+        ret = super().to_representation(instance)
+        # Filter out any fields that are None (or you could customize the condition)
+        return {key: value for key, value in ret.items() if value is not None}
 
