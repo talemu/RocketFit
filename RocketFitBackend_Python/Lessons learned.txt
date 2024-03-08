@@ -1,0 +1,5 @@
+Use install dependency for database first migration of models:
+ 
+pip install mssql-django
+
+Debugger is built in the launch.json file

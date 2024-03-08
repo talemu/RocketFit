@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import exerciseRecordService from "../services/exerciseRecordService";
+import exerciseRecordService, {
+  ExerciseRecord,
+} from "../services/exerciseRecordService";
 import { WorkoutItem } from "../services/workoutExerciseService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 
@@ -48,44 +50,41 @@ const Timer = ({
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
   const [exercises, setExercises] = useState<Exercise[]>([]);
 
-  const [trigger, setTrigger] = useState<boolean>(false);
-
   useEffect(() => {
     const { request } = exerciseService.getAll("/all");
 
     request.then((response) => {
       setExercises(response.data);
     });
-    setTrigger(!trigger);
+    // setTrigger(!trigger);
   }, []);
 
   useEffect(() => {
-    console.log(
-      exercises.find((element) => element.exerciseID === workout.exercise)
-        ?.exerciseName
-    );
-    const { request } = exerciseRecordService.getAll(
-      "?exercise=" +
-        exercises.find((element) => element.exerciseID === workout.exercise)
-          ?.exerciseName +
-        "&day=" +
-        workout.day +
-        "&workoutNum=" +
-        workoutNum +
-        "&auth=" +
-        id
-    );
+    const fetchData = async () => {
+      const response = await exerciseService.getAll("/all").request;
+      const exercise_items = response.data as unknown as Exercise[];
 
-    request
-      .then((response) => {
-        console.log(response);
+      const response2 = await exerciseRecordService.getAll(
+        "?exercise=" +
+          exercise_items.find(
+            (element: Exercise) => element.exerciseId === workout.exercise
+          )?.exerciseName +
+          "&day=" +
+          workout.day +
+          "&workoutNum=" +
+          workoutNum +
+          "&auth_id=" +
+          id
+      ).request;
 
-        if (response.data != -1) {
-          sendDataToParent(response.data, false);
-          setWorkoutComplete(true);
-        }
-      })
-      .catch((err) => console.log(err));
+      const exercise_record = response2.data as unknown as number;
+
+      if (exercise_record != -1) {
+        sendDataToParent(exercise_record, false);
+        setWorkoutComplete(true);
+      }
+    };
+    fetchData();
   }, [exercises]);
 
   useEffect(() => {
@@ -140,19 +139,18 @@ const Timer = ({
     const avg = sum / sets;
     const exerciseRecord = {
       exercise_name: exercises.find(
-        (element) => element.exerciseID === workout.exercise
+        (element) => element.exerciseId === workout.exercise
       )?.exerciseName,
       sets: sets,
       reps: reps,
       weight: parseFloat(avg.toFixed(1)),
-      auth_id: id,
+      authId: id,
       day: workout.day,
-      workoutNum: workoutNum,
+      workoutNumber: workoutNum,
     };
-    console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), false);
-    const { request } = exerciseRecordService.postItem("/save", exerciseRecord);
+    const { request } = exerciseRecordService.postItem("", exerciseRecord);
     request
       .then((response) => {
         console.log(response);

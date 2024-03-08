@@ -2,7 +2,7 @@ import create from "./http-service";
 
 export interface Exercise {
   exerciseName: string;
-  exerciseID: number;
+  exerciseId: number;
 }
 
-export default create("/exercises");
+export default create("/exercise");
