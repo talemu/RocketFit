@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Content from "../components/Content";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, redirect, useLocation, useNavigate } from "react-router-dom";
 import {
   StandardizedWorkoutExercise,
   Workout,
@@ -36,62 +36,29 @@ const ExitWorkoutButton = styled.button`
   margin: 2em 0em 0em 2em;
 `;
 
+const LoginButton = styled.button`
+  margin: 2em 0em 0em 2em;
+`;
+
 const MainPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const [show, setShow] = useState<boolean>(true);
-  const [show2, setShow2] = useState<boolean>(false);
-  const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
-  const workout = (location.state != null
-    ? location.state
-    : JSON.parse(
-        localStorage.getItem("savedWorkout") || "{}"
-      )) as unknown as Workout;
-
+  const [workout, setWorkout] = useState<Workout>(location.state);
   const [week, setWeek] = useState<number>(1);
-
-  const [isPreviousButtonDisabled, setIsPreviousButtonDisabled] =
+  const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
+  const [isPreviousButtonDisabled, setPreviousButtonDisabled] =
+    useState<boolean>(week <= 1);
+  const [isNextButtonDisabled, setNextButtonDisabled] =
     useState<boolean>(false);
-  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState<boolean>(
-    week >= workout.weeks
-  );
+  const validAuthIdShow = authId != -10;
 
   useEffect(() => {
-    setWeek(
-      JSON.parse(localStorage.getItem("savedWeekNumber") || "{}") == "{}"
-        ? 1
-        : JSON.parse(localStorage.getItem("savedWeekNumber") || "{}")
-    );
-
-    if (week >= 2) {
-      setIsPreviousButtonDisabled(false);
-    } else {
-      setIsPreviousButtonDisabled(true);
+    if (authId != -10) {
+      setNextButtonDisabled(week >= workout.weeks);
+      StandardizeWorkouts(workout);
     }
-
-    if (authId == -10) {
-      setShow(false);
-    } else {
-      if (!show) {
-        setWeek(week);
-      }
-      setShow(true);
-    }
-    localStorage.setItem("savedWorkout", JSON.stringify(location.state));
-    StandardizeWorkouts(workout);
-  }, [week, workout]);
-
-  useEffect(() => {
-    setShow2(true);
-  }, [workoutArray]);
-
-  useEffect(() => {
-    if (week >= workout.weeks) {
-      setIsNextButtonDisabled(true);
-    } else {
-      setIsNextButtonDisabled(false);
-    }
-  }, [week, isNextButtonDisabled]);
+    setPreviousButtonDisabled(week <= 1);
+  }, [week]);
 
   const StandardizeWorkouts = (item: Workout) => {
     const standardWE = {
@@ -148,61 +115,57 @@ const MainPage = ({ authId }: Props) => {
     setWeek(week + 1);
   };
 
+  const LoginClick = () => {
+    Navigate("/login");
+  };
+
   const ExitWorkoutClick = () => {
     Navigate("/myworkouts");
   };
 
   return (
     <>
-      {" "}
-      {show2 ? (
+      {validAuthIdShow ? (
         <>
-          {" "}
-          {show ? (
-            <>
-              <WeekHeader>Week {week}</WeekHeader>{" "}
-              {[...new Set(workoutArray.map((item) => item.day))].map(
-                (item) => (
-                  <Link
-                    to="/workout"
-                    state={[
-                      workout,
-                      workoutArray.filter((item2) => item2.day === item),
-                      authId,
-                      workout.workoutNumber,
-                    ]}
-                  >
-                    <WeekContent> Day {item} </WeekContent>
-                  </Link>
-                )
-              )}
-              <WeekButtonDiv>
-                <PreviousWeekButton
-                  onClick={PreviousButtonClick}
-                  disabled={isPreviousButtonDisabled}
-                >
-                  Previous Week{" "}
-                </PreviousWeekButton>
-                <NextWeekButton
-                  onClick={NextButtonClick}
-                  disabled={isNextButtonDisabled}
-                >
-                  Next Week{" "}
-                </NextWeekButton>
-              </WeekButtonDiv>{" "}
-              <ExitWorkoutButton onClick={ExitWorkoutClick}>
-                Exit Workout
-              </ExitWorkoutButton>
-            </>
-          ) : (
-            <div> Please Login</div>
-          )}{" "}
+          <WeekHeader>Week {week}</WeekHeader>{" "}
+          {[...new Set(workoutArray.map((item) => item.day))].map((item) => (
+            <Link
+              to="/workout"
+              state={[
+                workout,
+                workoutArray.filter((item2) => item2.day === item),
+                authId,
+                workout.workoutNumber,
+              ]}
+            >
+              <WeekContent> Day {item} </WeekContent>
+            </Link>
+          ))}
+          <WeekButtonDiv>
+            <PreviousWeekButton
+              onClick={PreviousButtonClick}
+              disabled={isPreviousButtonDisabled}
+            >
+              Previous Week{" "}
+            </PreviousWeekButton>
+            <NextWeekButton
+              onClick={NextButtonClick}
+              disabled={isNextButtonDisabled}
+            >
+              Next Week{" "}
+            </NextWeekButton>
+          </WeekButtonDiv>{" "}
+          <ExitWorkoutButton onClick={ExitWorkoutClick}>
+            Exit Workout
+          </ExitWorkoutButton>
         </>
       ) : (
-        <div>One Moment...</div>
+        <>
+          <div>Please Login</div>
+          <LoginButton onClick={LoginClick}>Login</LoginButton>
+        </>
       )}
     </>
   );
 };
-
 export default MainPage;

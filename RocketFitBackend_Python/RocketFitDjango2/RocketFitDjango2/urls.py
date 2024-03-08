@@ -24,11 +24,11 @@ from RFApp.views.exerciseView import ExerciseViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r"workoutexercises", WorkoutExerciseViewSet)
-router.register(r"exerciserecord", ExerciseRecordViewSet)
-router.register(r"workouttemplate", WorkoutTemplateViewSet)
-router.register(r"auth",RFAuthUserViewSet )
-router.register(r"exercises", ExerciseViewSet)
+router.register(r"workoutexercise", WorkoutExerciseViewSet, basename='workoutexercise')
+router.register(r"exerciserecord", ExerciseRecordViewSet, basename='exerciserecord')
+router.register(r"workouttemplate", WorkoutTemplateViewSet, basename='workouttemplate')
+router.register(r"auth",RFAuthUserViewSet, basename='rfauthuser' )
+router.register(r"exercise", ExerciseViewSet, basename='exercise')
 
 urlpatterns = [
     #WorkoutExercise
@@ -38,9 +38,6 @@ urlpatterns = [
     #ExerciseRecords
     #url changed
     # path('api/exerciserecord', ExerciseRecordView.retrieve_exercise_records_based_on_name_day_wn_id, name='retrieve_exercise_records_based_on_name_day_wn_id'),
-    #http://127.0.0.1:8000/api/exerciserecord/retrieveer/
+    #http://127.0.0.1:8000/api/exerciserecord/track/
 
-    #Exercise
-    # path('api/exercises/all', ExerciseView.retrieve_all_exercises, name = 'retrieve_all_exercises'),
-    # path('api/exercises', ExerciseView.retrieve_exercise_given_id, name = 'retrieve_exercise_given_id')
 ]

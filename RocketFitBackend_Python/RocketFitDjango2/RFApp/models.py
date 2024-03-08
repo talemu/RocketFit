@@ -21,7 +21,8 @@ class Exercise(models.Model):
 
 
 class Exerciserecord(models.Model):
-    exercise_name = models.CharField(max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+    exercise_name = models.CharField(max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)
     sets = models.IntegerField()
     reps = models.IntegerField()
     weight = models.FloatField()
@@ -39,9 +40,9 @@ class Exerciserecord(models.Model):
 
 class Rfauthuser(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    password = models.CharField(db_column='Password', max_length=28, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(max_length=20, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
-    email_address = models.CharField(max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
+    password = models.CharField(db_column='Password', max_length=28, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    username = models.CharField(max_length=20, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)
+    email_address = models.CharField(max_length=255, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)
 
     class Meta:
         managed = False
@@ -65,15 +66,15 @@ class Workout(models.Model):
 
 class Workoutexercise(models.Model):
     workoutexerciseid = models.AutoField(db_column='WorkoutExerciseID', primary_key=True)  # Field name made lowercase.
-    days = models.CharField(db_column='Days', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    sets = models.CharField(db_column='Sets', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    reps = models.CharField(db_column='Reps', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    rest = models.CharField(db_column='Rest', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    weeks = models.IntegerField(db_column='Weeks', blank=True, null=True)  # Field name made lowercase.
-    authid = models.IntegerField(db_column='AuthID', blank=True, null=True)  # Field name made lowercase.
-    workoutnumber = models.IntegerField(db_column='WorkoutNumber', blank=True, null=True)  # Field name made lowercase.
-    workoutname = models.CharField(db_column='WorkoutName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
+    days = models.CharField(db_column='Days', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    sets = models.CharField(db_column='Sets', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    reps = models.CharField(db_column='Reps', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    rest = models.CharField(db_column='Rest', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    weeks = models.IntegerField(db_column='Weeks', blank=False, null=False)  # Field name made lowercase.
+    authid = models.IntegerField(db_column='AuthID', blank=False, null=False)  # Field name made lowercase.
+    workoutnumber = models.IntegerField(db_column='WorkoutNumber', blank=False, null=False)  # Field name made lowercase.
+    workoutname = models.CharField(db_column='WorkoutName', max_length=50, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -85,13 +86,13 @@ class Workoutexercise(models.Model):
 
 class Workouttemplate(models.Model):
     workouttemplateid = models.AutoField(db_column='WorkoutTemplateID', primary_key=True)  # Field name made lowercase.
-    workoutname = models.CharField(db_column='WorkoutName', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    sets = models.CharField(db_column='Sets', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    reps = models.CharField(db_column='Reps', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    rest = models.CharField(db_column='Rest', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    day = models.CharField(db_column='Day', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)  # Field name made lowercase.
-    weeks = models.IntegerField(db_column='Weeks', blank=True, null=True)  # Field name made lowercase.
+    workoutname = models.CharField(db_column='WorkoutName', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    sets = models.CharField(db_column='Sets', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    reps = models.CharField(db_column='Reps', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    rest = models.CharField(db_column='Rest', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    days = models.CharField(db_column='Days', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
+    weeks = models.IntegerField(db_column='Weeks', blank=False, null=False)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -133,7 +134,7 @@ class AuthPermission(models.Model):
 
 class AuthUser(models.Model):
     password = models.CharField(max_length=128, db_collation='SQL_Latin1_General_CP1_CI_AS')
-    last_login = models.DateTimeField(blank=True, null=True)
+    last_login = models.DateTimeField(blank=False, null=False)
     is_superuser = models.BooleanField()
     username = models.CharField(unique=True, max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')
     first_name = models.CharField(max_length=150, db_collation='SQL_Latin1_General_CP1_CI_AS')
@@ -172,11 +173,11 @@ class AuthUserUserPermissions(models.Model):
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
-    object_id = models.TextField(db_collation='SQL_Latin1_General_CP1_CI_AS', blank=True, null=True)
+    object_id = models.TextField(db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)
     object_repr = models.CharField(max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS')
     action_flag = models.SmallIntegerField()
     change_message = models.TextField(db_collation='SQL_Latin1_General_CP1_CI_AS')
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=False, null=False)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:

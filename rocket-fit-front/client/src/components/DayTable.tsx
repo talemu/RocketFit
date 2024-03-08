@@ -1,4 +1,4 @@
-import { Workout, WorkoutItem } from "../services/workoutExerciseService";
+import { WorkoutItem } from "../services/workoutExerciseService";
 import styled from "styled-components";
 import Timer from "./Timer";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -43,6 +43,7 @@ const TableWeightArrayItems = styled.div`
 const TableWeightArrayItem = styled.div``;
 
 const DayTable = ({ item, id, workoutNum }: Props) => {
+  const [contentShow, setContentShow] = useState<boolean>(false);
   const [weight, setWeight] = useState<number>(-1);
   const [initial, setInitial] = useState<number>(-1);
   const [weightArray, setWeightArray] = useState<number[]>([]);
@@ -62,7 +63,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
   useEffect(() => {
     const { request } = exerciseRecordService.getAll(
       "/averageweight?exercise=" +
-        exercises.find((element) => element.exerciseID === item.exercise)
+        exercises.find((element) => element.exerciseId === item.exercise)
           ?.exerciseName +
         "&auth_id=" +
         id
@@ -109,7 +110,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
               <TableColumn>
                 {
                   exercises.find(
-                    (element) => element.exerciseID === item.exercise
+                    (element) => element.exerciseId === item.exercise
                   )?.exerciseName
                 }
               </TableColumn>

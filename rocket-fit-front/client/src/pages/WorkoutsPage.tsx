@@ -5,7 +5,7 @@ import workoutTemplateService, {
 } from "../services/workoutTemplateService";
 import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HeaderOne = styled.h1``;
 
@@ -31,14 +31,24 @@ const FlipButton = styled.button``;
 
 const CustomizeButton = styled.button``;
 
-const WorkoutsPage = () => {
+interface Props {
+  authId: number;
+}
+
+const WorkoutsPage = ({ authId }: Props) => {
+  const Navigate = useNavigate();
+
   const [templates, setTemplates] = useState<StandardizedWorkoutTemplate[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [dropdowns, setDropdowns] = useState<boolean[]>([]);
   const [trigger, setTrigger] = useState<boolean>(false);
 
+  if (authId == -10) {
+    Navigate("/main");
+  }
+
   useEffect(() => {
-    const { request } = workoutTemplateService.getAll("");
+    const { request } = workoutTemplateService.getAll("/all");
     request
       .then((response) => {
         standardizeWorkoutTemplates(response.data);
@@ -132,7 +142,7 @@ const WorkoutsPage = () => {
                             {
                               exercises.find(
                                 (element: Exercise) =>
-                                  element.exerciseID === item.exercises[count]
+                                  element.exerciseId === item.exercises[count]
                               )?.exerciseName
                             }
                           </TableColumn>
