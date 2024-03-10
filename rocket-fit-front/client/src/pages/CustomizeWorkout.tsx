@@ -83,12 +83,12 @@ const CustomizeWorkout = ({ authId }: Props) => {
                 <TableHeader>Rest</TableHeader>
               </TableRecord>
             </TableHead>
-            {workoutData[0].day.map((day: number, count: number) => (
+            {workoutData[0].days.map((day: number, count: number) => (
               <>
                 <TableBody>
                   <TableRecord>
-                    {workoutData[0].day[count] !==
-                    workoutData[0].day[count - 1] ? (
+                    {workoutData[0].days[count] !==
+                    workoutData[0].days[count - 1] ? (
                       <TableColumn>{day}</TableColumn>
                     ) : (
                       <TableColumn></TableColumn>
