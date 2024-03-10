@@ -22,7 +22,10 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
         workoutNum = request.query_params.get('workoutNum', -1)
         auth = request.query_params.get('auth', -1)
         response_data = self._erService.get_ExerciseRecord_based_on_exercise_day_wn_id(exercise, day, workoutNum, auth)
-        response = list(map(lambda x: x.asdict(), response_data))
+        if response_data == -10:
+            response = response_data
+        else:
+            response = response_data.asdict()
         return JsonResponse(response, safe = False)
     
     @action(detail=False, methods=['get'], url_path='averageweight')

@@ -53,7 +53,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
   useEffect(() => {}, [isInputDisabled]);
 
   useEffect(() => {
-    const { request } = exerciseService.getAll("/all");
+    const { request } = exerciseService.getAll("");
 
     request.then((response) => {
       setExercises(response.data);
@@ -65,7 +65,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
       "/averageweight?exercise=" +
         exercises.find((element) => element.exerciseId === item.exercise)
           ?.exerciseName +
-        "&auth_id=" +
+        "&auth=" +
         id
     );
     request

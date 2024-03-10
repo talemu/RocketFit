@@ -48,7 +48,7 @@ const WorkoutsPage = ({ authId }: Props) => {
   }
 
   useEffect(() => {
-    const { request } = workoutTemplateService.getAll("/all");
+    const { request } = workoutTemplateService.getAll("");
     request
       .then((response) => {
         standardizeWorkoutTemplates(response.data);
@@ -57,7 +57,7 @@ const WorkoutsPage = ({ authId }: Props) => {
   }, []);
 
   useEffect(() => {
-    const { request } = exerciseService.getAll("/all");
+    const { request } = exerciseService.getAll("");
     request
       .then((response) => {
         setExercises(response.data);
@@ -66,20 +66,23 @@ const WorkoutsPage = ({ authId }: Props) => {
   }, []);
 
   const standardizeWorkoutTemplates = (item: WorkoutTemplate[]) => {
+    console.log(item);
     setTemplates([]);
     setDropdowns([]);
     item.forEach((element) => {
       const standardWT = {
         workoutTemplateID: element.workoutTemplateID,
         workoutName: element.workoutName,
-        day: [-1],
+        days: [-1],
         exercises: [-1],
         sets: [-1],
         reps: [-1],
         rest: [-1],
         weeks: element.weeks,
       };
-      standardWT.day = element.day.split(",").map((item) => parseInt(item, 10));
+      standardWT.days = element.days
+        .split(",")
+        .map((item) => parseInt(item, 10));
       standardWT.exercises = element.exercises
         .split(",")
         .map((item) => parseInt(item, 10));
@@ -94,6 +97,7 @@ const WorkoutsPage = ({ authId }: Props) => {
         .map((item) => parseInt(item, 10));
       setTemplates((templates) => [...templates, standardWT]);
       setDropdowns([...dropdowns, false]);
+      console.log(standardWT);
     });
   };
 
@@ -127,11 +131,11 @@ const WorkoutsPage = ({ authId }: Props) => {
                     <TableHeader>Rest</TableHeader>
                   </TableRecord>
                 </TableHead>
-                {item.day.map((day, count) => (
+                {item.days.map((day, count) => (
                   <>
                     <TableBody>
                       <TableRecord>
-                        {item.day[count] !== item.day[count - 1] ? (
+                        {item.days[count] !== item.days[count - 1] ? (
                           <TableColumn>{day}</TableColumn>
                         ) : (
                           <TableColumn></TableColumn>

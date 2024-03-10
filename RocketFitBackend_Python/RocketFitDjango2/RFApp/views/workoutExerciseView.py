@@ -6,6 +6,7 @@ from ..services.workoutExerciseService import WorkoutExerciseService
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 class WorkoutExerciseViewSet(viewsets.ViewSet):
 
@@ -15,7 +16,7 @@ class WorkoutExerciseViewSet(viewsets.ViewSet):
         response_data = self._weService.get_all_WorkoutExercises()
         response = list(map(lambda x: x.asdict(), response_data))
         return JsonResponse(response, safe=False)
-        
+
     def retrieve(self, request, pk):
         response_data = self._weService.get_WorkoutExercise_By_ID(pk)
         response = list(map(lambda x: x.asdict(), response_data))

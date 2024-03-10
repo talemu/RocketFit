@@ -1,9 +1,8 @@
 import create from "./http-service";
 
 export interface WorkoutTemplate {
-  workoutTemplateID: number;
   workoutName: string;
-  day: string;
+  days: string;
   exercises: string;
   sets: string;
   reps: string;
@@ -14,7 +13,7 @@ export interface WorkoutTemplate {
 export interface StandardizedWorkoutTemplate {
   workoutTemplateID: number;
   workoutName: string;
-  day: number[];
+  days: number[];
   exercises: number[];
   sets: number[];
   reps: number[];
