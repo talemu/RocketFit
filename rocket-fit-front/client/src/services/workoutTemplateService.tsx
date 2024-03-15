@@ -11,7 +11,6 @@ export interface WorkoutTemplate {
 }
 
 export interface StandardizedWorkoutTemplate {
-  workoutTemplateID: number;
   workoutName: string;
   days: number[];
   exercises: number[];

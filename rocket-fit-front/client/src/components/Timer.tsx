@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import exerciseRecordService, {
-  ExerciseRecord,
-} from "../services/exerciseRecordService";
+import exerciseRecordService from "../services/exerciseRecordService";
 import { WorkoutItem } from "../services/workoutExerciseService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 
@@ -54,7 +52,8 @@ const Timer = ({
     const { request } = exerciseService.getAll("");
 
     request.then((response) => {
-      setExercises(response.data);
+      const exercises = response.data as unknown[] as Exercise[];
+      setExercises(exercises);
     });
     // setTrigger(!trigger);
   }, []);

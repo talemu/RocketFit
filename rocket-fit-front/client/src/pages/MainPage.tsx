@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import Content from "../components/Content";
 import { useEffect, useState } from "react";
-import { Link, redirect, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   StandardizedWorkoutExercise,
   Workout,
@@ -43,7 +42,7 @@ const LoginButton = styled.button`
 const MainPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const [workout, setWorkout] = useState<Workout>(location.state);
+  const workout = location.state;
   const [week, setWeek] = useState<number>(1);
   const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
   const [isPreviousButtonDisabled, setPreviousButtonDisabled] =
@@ -93,7 +92,7 @@ const MainPage = ({ authId }: Props) => {
     StandardWE: StandardizedWorkoutExercise
   ) => {
     const newWorkoutItems = StandardWE.day.map(
-      (item: number, index: number) => ({
+      (_item: number, index: number) => ({
         day: StandardWE.day[index],
         exercise: StandardWE.exercises[index],
         sets: StandardWE.sets[index],

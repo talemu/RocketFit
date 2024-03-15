@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Exercise } from "../services/exerciseService";
 import styled from "styled-components";
 import NumberAdjuster from "../components/NumberAdjuster";
-import { StandardizedWorkoutTemplate } from "../services/workoutTemplateService";
 
 const HeaderOne = styled.h1``;
-
-const HeaderTwo = styled.h2``;
 
 const StyledTable = styled.table``;
 

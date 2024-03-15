@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import workoutTemplateService, {
   StandardizedWorkoutTemplate,
   WorkoutTemplate,
@@ -51,7 +51,9 @@ const WorkoutsPage = ({ authId }: Props) => {
     const { request } = workoutTemplateService.getAll("");
     request
       .then((response) => {
-        standardizeWorkoutTemplates(response.data);
+        const workoutTemplates =
+          response.data as unknown[] as WorkoutTemplate[];
+        standardizeWorkoutTemplates(workoutTemplates);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -60,7 +62,8 @@ const WorkoutsPage = ({ authId }: Props) => {
     const { request } = exerciseService.getAll("");
     request
       .then((response) => {
-        setExercises(response.data);
+        const exercises = response.data as unknown[] as Exercise[];
+        setExercises(exercises);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -71,7 +74,6 @@ const WorkoutsPage = ({ authId }: Props) => {
     setDropdowns([]);
     item.forEach((element) => {
       const standardWT = {
-        workoutTemplateID: element.workoutTemplateID,
         workoutName: element.workoutName,
         days: [-1],
         exercises: [-1],
