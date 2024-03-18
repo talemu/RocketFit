@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Exercise } from "../services/exerciseService";
 import styled from "styled-components";
 import NumberAdjuster from "../components/NumberAdjuster";
-import { StandardizedWorkoutTemplate } from "../services/workoutTemplateService";
 
 const HeaderOne = styled.h1``;
-
-const HeaderTwo = styled.h2``;
 
 const StyledTable = styled.table``;
 
@@ -83,12 +80,12 @@ const CustomizeWorkout = ({ authId }: Props) => {
                 <TableHeader>Rest</TableHeader>
               </TableRecord>
             </TableHead>
-            {workoutData[0].day.map((day: number, count: number) => (
+            {workoutData[0].days.map((day: number, count: number) => (
               <>
                 <TableBody>
                   <TableRecord>
-                    {workoutData[0].day[count] !==
-                    workoutData[0].day[count - 1] ? (
+                    {workoutData[0].days[count] !==
+                    workoutData[0].days[count - 1] ? (
                       <TableColumn>{day}</TableColumn>
                     ) : (
                       <TableColumn></TableColumn>

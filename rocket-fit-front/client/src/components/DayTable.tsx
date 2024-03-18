@@ -43,7 +43,6 @@ const TableWeightArrayItems = styled.div`
 const TableWeightArrayItem = styled.div``;
 
 const DayTable = ({ item, id, workoutNum }: Props) => {
-  const [contentShow, setContentShow] = useState<boolean>(false);
   const [weight, setWeight] = useState<number>(-1);
   const [initial, setInitial] = useState<number>(-1);
   const [weightArray, setWeightArray] = useState<number[]>([]);
@@ -53,10 +52,11 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
   useEffect(() => {}, [isInputDisabled]);
 
   useEffect(() => {
-    const { request } = exerciseService.getAll("/all");
+    const { request } = exerciseService.getAll("");
 
     request.then((response) => {
-      setExercises(response.data);
+      const exercises = response.data as unknown[] as Exercise[];
+      setExercises(exercises);
     });
   }, []);
 
@@ -65,13 +65,13 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
       "/averageweight?exercise=" +
         exercises.find((element) => element.exerciseId === item.exercise)
           ?.exerciseName +
-        "&auth_id=" +
+        "&auth=" +
         id
     );
     request
       .then((response) => {
-        const returned_weight = response.data as unknown as number;
-        if (returned_weight === "NaN") {
+        const returned_weight = Number(response.data) as unknown as number;
+        if (isNaN(returned_weight)) {
           setInitial(0);
         } else {
           setInitial(returned_weight * (1 - 0.02 * item.reps));

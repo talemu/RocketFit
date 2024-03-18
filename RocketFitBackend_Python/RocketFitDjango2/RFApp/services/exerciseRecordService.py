@@ -12,8 +12,11 @@ class ExerciseRecordService():
         return er
     
     def get_ExerciseRecord_based_on_exercise_day_wn_id(self, exercise: str, day: int, workoutNum: int, auth:int) -> list[ExerciseRecordDTO]:
-        er = list(map(lambda x: self._erMapper.map_to_dto(x), self._erRepo.get_er_based_on_exercise_day_wn_id(exercise, day, workoutNum, auth)))
-        return er
+        record = self._erRepo.get_er_based_on_exercise_day_wn_id(exercise, day, workoutNum, auth)
+        if (record.exists()):
+            return self._erMapper.map_to_dto(record[0])
+        else:
+            return -10
     
     def get_ExerciseRecord_average_based_on_name_id(self, name:str, id) -> float:
         er = self._erRepo.get_all_er_based_on_exercise_id(name, id)

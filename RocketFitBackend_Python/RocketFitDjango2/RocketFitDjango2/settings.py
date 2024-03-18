@@ -10,10 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,16 +43,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware']
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Access-Control-Allow-Origin',
+)
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    # Add other allowed origins as needed
+]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'RocketFitDjango2.urls'
 
@@ -75,15 +94,12 @@ WSGI_APPLICATION = 'RocketFitDjango2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'RocketFitDBOfficial',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'rocketfitmariadb',
         'USER': 'RocketFitUser',
         'PASSWORD': 'RocketFitUser',
-        'HOST': '.',
-        'Options' : {
-            'driver' : 'ODBC Driver 17 for SQL Server',
-            'isolation_level' : 'READ UNCOMITTED'
-        }        
+        'HOST': 'rocketfitdb.c7c26iwqcw34.us-east-2.rds.amazonaws.com',
+        'PORT': '3306'  
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import workoutExerciseService, {
   Workout,
 } from "../services/workoutExerciseService";
@@ -25,7 +25,7 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
   }
 
   useEffect(() => {
-    const { request } = workoutExerciseService.getAll("/id/" + authId);
+    const { request } = workoutExerciseService.getAll("/" + authId);
     request.then((response) => {
       const workouts = response.data as unknown[] as Workout[];
       setWorkouts(workouts);
