@@ -49,8 +49,6 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
   const [isInputDisabled, setInputDisabled] = useState<boolean>(false);
   const [exercises, setExercises] = useState<Exercise[]>([]);
 
-  useEffect(() => {}, [isInputDisabled]);
-
   useEffect(() => {
     const { request } = exerciseService.getAll("");
 
@@ -74,7 +72,7 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
         if (isNaN(returned_weight)) {
           setInitial(0);
         } else {
-          setInitial(returned_weight * (1 - 0.02 * item.reps));
+          setInitial(returned_weight / (1 + 0.02 * item.reps));
         }
       })
       .catch((err) => console.log(err));
