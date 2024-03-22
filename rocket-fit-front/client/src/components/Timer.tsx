@@ -44,6 +44,7 @@ const Timer = ({
   const [startFlag, setStartFlag] = useState(false);
   const [isStartDisabled, setStartDisabled] = useState(true);
   const [isResetDisabled, setResetDisabled] = useState(false);
+  const [isSkipDisabled, setSkipDisabled] = useState(true);
   const [weightArray, setWeightArray] = useState<number[]>([]);
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -122,13 +123,25 @@ const Timer = ({
     setWeightArray([...weightArray, weight]);
     setStartFlag(true);
     setStartDisabled(true);
+    setSkipDisabled(false);
     if (weightArray.length == sets - 1) {
       setResetDisabled(true);
     }
   };
 
+  const skipTimer = () => {
+    resetTimer();
+    setSkipDisabled(true);
+    if (weightArray.length == sets) {
+      setResetDisabled(true);
+      setSeconds(0);
+      setMinutes(0);
+    }
+  };
+
   const resetTimer = () => {
     setStartFlag(false);
+    setSkipDisabled(true);
     setMinutes(Math.floor(initialTimeInSec / 60));
     setSeconds(initialTimeInSec % 60);
   };
@@ -137,7 +150,7 @@ const Timer = ({
     const sum = weightArray.reduce((total, num) => total + num, 0);
     const avg = sum / sets;
     const exerciseRecord = {
-      exercise_name: exercises.find(
+      exerciseName: exercises.find(
         (element) => element.exerciseId === workout.exercise
       )?.exerciseName,
       sets: sets,
@@ -147,9 +160,10 @@ const Timer = ({
       day: workout.day,
       workoutNumber: workoutNum,
     };
+    console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), false);
-    const { request } = exerciseRecordService.postItem("", exerciseRecord);
+    const { request } = exerciseRecordService.postItem("/", exerciseRecord);
     request
       .then((response) => {
         console.log(response);
@@ -198,6 +212,13 @@ const Timer = ({
                 <TimerButton onClick={startTimer} disabled={isStartDisabled}>
                   start
                 </TimerButton>
+                {!isSkipDisabled ? (
+                  <TimerButton onClick={skipTimer} disabled={isSkipDisabled}>
+                    skip
+                  </TimerButton>
+                ) : (
+                  <div></div>
+                )}
               </TimerItemDiv>
             </>
           )}
