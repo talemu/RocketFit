@@ -119,7 +119,9 @@ const DayTable = ({ item, id, workoutNum }: Props) => {
             <TableWeightArray>
               <TableInput
                 type="number"
-                placeholder={weight == -1 || isNaN(weight) ? "Enter" : weight}
+                placeholder={
+                  weight == -1 || isNaN(weight) ? "Enter" : String(weight)
+                }
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setWeight(parseInt(e.target.value));
                 }}

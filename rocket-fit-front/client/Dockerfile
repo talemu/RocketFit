@@ -17,5 +17,7 @@ COPY . .
 #UI port number
 EXPOSE 3000
 
+RUN npm run build
+
 #Commands to build and start frontend
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "serve", "--", "--host", "0.0.0.0", "--port", "3000"]
