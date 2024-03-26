@@ -8,14 +8,19 @@ from rest_framework import status
 from rest_framework import viewsets
 
 class WorkoutTemplateViewSet(viewsets.ViewSet):
+    """
+    Class: ViewSet (controller) class dedicated to handling Workout Template requests.
+    """
 
     _wtService = WorkoutTemplateService()
 
+    #GET /workoutTemplate/
     def list(self, request):
         response_data = self._wtService.get_all_workout_templates()
         response = list(map(lambda x : x.asdict(), response_data))
         return JsonResponse(response, safe = False)
     
+    #POST /workoutTemplate/
     def create(self,request):
         try:
             dto = TransformRequestMapper.to_wt_dto(request.data)

@@ -18,7 +18,7 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 #Copy project
-COPY . /RocketFitDjango2
+COPY . .
 
 #Collecting Static Files
 RUN python manage.py collectstatic --noinput
@@ -27,4 +27,5 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 #commands when starting backend
-# CMD ["gunicorn", "RocketFitDjango2.wsgi:application", "--bind", "0.0.0.0:8000"]
+# CMD ["gunicorn", "RocketFitDjango2.wsgi:application", "--bind", "0.0.0.0:8000"
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

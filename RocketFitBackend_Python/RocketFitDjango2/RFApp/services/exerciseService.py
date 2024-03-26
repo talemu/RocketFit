@@ -4,6 +4,11 @@ from ..serializers import ExerciseSerializer
 from ..repositories.exerciseRepository import ExerciseRepo
 
 class ExerciseService:
+
+    """
+    Class: Service class dedicated to handling Exercise business logic.
+    """
+
     _eRepo = ExerciseRepo()
     _eMapper = ExerciseMapper()
 
@@ -17,6 +22,13 @@ class ExerciseService:
             raise Exception("Exercise Does Not Exist with ID")
         return dto
     
+    """
+        Method: Validates the Exercise sent from the client side. If the record is valid, it is saved to the database (sent to repo class).
+
+            Input: ExerciseDTO object containing the exercise record to be saved.
+
+            Returns: ExerciseDTO object containing the saved exercise record if successful.
+    """
     def add_exercise(self, exercise):
         try:
             entity = self._eMapper.map_to_e(exercise)

@@ -2,6 +2,10 @@
 
 class RfAuthUserDTO:
 
+    """
+    Class: Data Transfer Object class for RFAuthUser objects.
+    """
+
     id : int
     username : str
     emailAddress = str
