@@ -1,5 +1,8 @@
 
 class WorkoutExerciseDTO:
+    """
+    Class: Data Transfer Object class for Workout Exercise objects.
+    """
     days : str
     exercises : str
     sets : str

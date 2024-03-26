@@ -1,5 +1,10 @@
 
 class WorkoutTemplateDTO:
+
+    """
+    Class: Data Transfer Object class for Workout Templates
+    """
+
     workoutName : str
     exercises : str
     sets : str

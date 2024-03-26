@@ -9,14 +9,19 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class RFAuthUserViewSet(viewsets.ViewSet):
+    """
+    Class: ViewSet (controller) class dedicated to handling RF Autherized User requests.
+    """
 
     _rfAuthService = RfauthUserService()
 
+    #GET /rfAuthUser/
     def list(self, request):
         response_data = self._rfAuthService.get_all_auth_users()
         response = list(map(lambda x : x.asdict(), response_data))
         return JsonResponse(response, safe = False)
 
+    #GET /rfAuthUser/login?loginKey=1&password=1
     @action(detail=False, methods=['get'], url_path='login')
     def login(self, request):
         loginKey = request.GET.get('loginKey', '')
@@ -24,6 +29,7 @@ class RFAuthUserViewSet(viewsets.ViewSet):
         response = self._rfAuthService.get_user_id(loginKey, password)
         return JsonResponse(response, safe=False)
     
+    #POST /rfAuthUser/
     def create(self, request):
         try:
             dto = TransformRequestMapper.to_rfau_dto(request.data)

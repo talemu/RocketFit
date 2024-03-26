@@ -11,14 +11,19 @@ from rest_framework import status
 
 
 class ExerciseViewSet(viewsets.ViewSet):
+    """
+    Class: ViewSet (controller) class dedicated to handling Exercise requests.
+    """
     
     _eService = ExerciseService()
 
+    #GET /exercise/
     def list(self, request):
         response_data = self._eService.get_all_exercises()
         response = list(map(lambda x : x.asdict(), response_data))
         return JsonResponse(response, safe = False)
         
+    #GET /exercise/item?id=1
     @action(detail = False, methods=['get'], url_path='item')
     def retrieve_exercise_given_id(self, request):
         id = request.GET.get('id', 0)
@@ -29,6 +34,7 @@ class ExerciseViewSet(viewsets.ViewSet):
         except Exception as e:
             return JsonResponse({"error log" : e.args[0]})
     
+    #POST /exercise/
     @csrf_exempt
     def create(self, request):
         try:

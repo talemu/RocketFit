@@ -8,13 +8,19 @@ from rest_framework.decorators import action
 
 class ExerciseRecordViewSet(viewsets.ViewSet):
 
+    """
+    Class: ViewSet (controller) class dedicated to handling Exercise Record requests.
+    """
+
     _erService = ExerciseRecordService()
 
+    #GET /exerciseRecord/
     def list(self, request):
         response_data = self._erService.get_all_exercise_records()
         response = list(map(lambda x: x.asdict(), response_data))
         return JsonResponse(response, safe = False)
     
+    #GET /exerciseRecord/item?params
     @action(detail=False, methods=['get'], url_path='item')
     def retrieve_er(self, request):
         exercise = request.query_params.get('exercise', '')
@@ -28,6 +34,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
             response = response_data.asdict()
         return JsonResponse(response, safe = False)
     
+    #GET /exerciseRecord/averageweight?params
     @action(detail=False, methods=['get'], url_path='averageweight')
     def averageweight(self, request):
         name = request.query_params.get('exercise', '')
@@ -35,6 +42,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
         response = self._erService.get_ExerciseRecord_average_based_on_name_id(name, id)
         return JsonResponse(response, safe=False)
         
+    #POST /exerciseRecord/
     @csrf_exempt 
     def create(self, request):
         try : 
