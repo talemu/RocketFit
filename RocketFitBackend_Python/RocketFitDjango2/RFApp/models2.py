@@ -10,7 +10,7 @@ from django.db import models
 
 class Exercise(models.Model):
     exerciseid = models.AutoField(db_column='ExerciseID', primary_key=True)  # Field name made lowercase.
-    exercisename = models.CharField(db_column='ExerciseName', max_length=30, null=False)  # Field name made lowercase.
+    exercisename = models.CharField(db_column='ExerciseName', max_length=30)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -18,29 +18,24 @@ class Exercise(models.Model):
 
 
 class Exerciserecord(models.Model):
-    exercise_name = models.CharField(max_length=50, null=False)
-    sets = models.IntegerField(null=False)
-    reps = models.IntegerField(null=False)
-    weight = models.FloatField(null=False)
-    auth_id = models.IntegerField(null=False)
-    day = models.IntegerField(null=False)
-    workout_number = models.IntegerField(null=False)
+    exercise_name = models.CharField(max_length=50)
+    sets = models.IntegerField()
+    reps = models.IntegerField()
+    weight = models.FloatField()
+    auth_id = models.IntegerField()
+    day = models.IntegerField()
+    workout_number = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'ExerciseRecord'
 
-    def clean(self):
-        # Check if any required field has a null value
-        if any(field_value is None for field_name, field_value in self.__dict__.items()
-               if field_name in ['exercise_name', 'sets', 'reps', 'weight', 'auth_id', 'day', 'workout_number']):
-            raise Exception("All required fields must be provided.")
 
 class Rfauthuser(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    password = models.CharField(max_length=28, null=False)
-    username = models.CharField(max_length=50, null=False)
-    email_address = models.CharField(max_length=255, null=False)
+    password = models.CharField(max_length=28)
+    username = models.CharField(max_length=50)
+    email_address = models.CharField(max_length=255)
 
     class Meta:
         managed = False
@@ -49,15 +44,15 @@ class Rfauthuser(models.Model):
 
 class Workoutexercise(models.Model):
     workoutexerciseid = models.AutoField(db_column='WorkoutExerciseID', primary_key=True)  # Field name made lowercase.
-    days = models.CharField(max_length=200, null=False)
-    exercises = models.CharField(max_length=200, null=False)
-    sets = models.CharField(max_length=200, null=False)
-    reps = models.CharField(max_length=200, null=False)
-    rest = models.CharField(max_length=200, null=False)
-    weeks = models.IntegerField(null=False)
-    authid = models.IntegerField(db_column='AuthID', null=False)  # Field name made lowercase.
-    workoutnumber = models.IntegerField(db_column='WorkoutNumber', null=False)  # Field name made lowercase.
-    workoutname = models.CharField(db_column='WorkoutName', max_length=50, null=False)  # Field name made lowercase.
+    days = models.CharField(max_length=200)
+    exercises = models.CharField(max_length=200)
+    sets = models.CharField(max_length=200)
+    reps = models.CharField(max_length=200)
+    rest = models.CharField(max_length=200)
+    weeks = models.IntegerField()
+    authid = models.IntegerField(db_column='AuthID')  # Field name made lowercase.
+    workoutnumber = models.IntegerField(db_column='WorkoutNumber')  # Field name made lowercase.
+    workoutname = models.CharField(db_column='WorkoutName', max_length=50)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -66,13 +61,13 @@ class Workoutexercise(models.Model):
 
 class Workouttemplate(models.Model):
     workouttemplateid = models.AutoField(db_column='WorkoutTemplateID', primary_key=True)  # Field name made lowercase.
-    workoutname = models.CharField(max_length=200, db_collation='utf8mb3_general_ci', null=False)
-    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
-    sets = models.CharField(db_column='Sets', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
-    reps = models.CharField(db_column='Reps', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
-    rest = models.CharField(db_column='Rest', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
-    days = models.CharField(db_column='Days', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
-    weeks = models.CharField(db_column='Weeks', max_length=200, db_collation='utf8mb3_general_ci', null=False)  # Field name made lowercase.
+    workoutname = models.CharField(max_length=200, db_collation='utf8mb3_general_ci')
+    exercises = models.CharField(db_column='Exercises', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
+    sets = models.CharField(db_column='Sets', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
+    reps = models.CharField(db_column='Reps', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
+    rest = models.CharField(db_column='Rest', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
+    days = models.CharField(db_column='Days', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
+    weeks = models.CharField(db_column='Weeks', max_length=200, db_collation='utf8mb3_general_ci')  # Field name made lowercase.
 
     class Meta:
         managed = False

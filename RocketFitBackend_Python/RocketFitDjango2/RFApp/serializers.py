@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Workoutexercise, Workouttemplate, Rfauthuser, Workout, Exercise, Exerciserecord
+from .models import Workoutexercise, Workouttemplate, Rfauthuser, Exercise, Exerciserecord
 
 class WorkoutexerciseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,17 +30,6 @@ class WorkouttemplateSerializer(serializers.ModelSerializer):
 class RfauthuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rfauthuser
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        # Call the superclass method to get the original representation
-        ret = super().to_representation(instance)
-        # Filter out any fields that are None (or you could customize the condition)
-        return {key: value for key, value in ret.items() if value is not None}
-
-class WorkoutSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Workout
         fields = '__all__'
 
     def to_representation(self, instance):
