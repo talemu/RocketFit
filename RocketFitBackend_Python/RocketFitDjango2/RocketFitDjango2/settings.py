@@ -103,16 +103,9 @@ DATABASES = {
         'PASSWORD': 'RocketFitUser',
         'HOST': 'rocketfitdb.c7c26iwqcw34.us-east-2.rds.amazonaws.com',
         'PORT': '3306'  
-    },
-    'test': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_rocketfitmariadb',
-        'USER': 'RocketFitUser',
-        'PASSWORD': 'RocketFitUser',
-        'HOST': 'rocketfitdb.c7c26iwqcw34.us-east-2.rds.amazonaws.com',
-        'PORT': '3306'  
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
