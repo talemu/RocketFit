@@ -18,6 +18,10 @@ class Exercise(models.Model):
 
     def __str__(self):
         return str(self.exerciseid) + " -- " + self.exercisename
+    
+    def clean(self):
+        if (self.exercisename is None):
+            raise AssertionError("Exercise is missing exercisename")
 
 
 class Exerciserecord(models.Model):
@@ -36,7 +40,12 @@ class Exerciserecord(models.Model):
 
     def __str__(self):
         return str(self.auth_id)
-
+    
+    def clean(self):
+        if (self.exercise_name is None or self.sets is None or self.reps 
+            is None or self.weight is None or self.auth_id is None or self.day 
+            is None or self.workout_number is None):
+            raise AssertionError("ExerciseRecord is missing value/values")
 
 class Rfauthuser(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
@@ -50,6 +59,12 @@ class Rfauthuser(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+    def clean(self):
+        if (self.password is (None or '') or self.username is (None or '') or self.email_address is (None or '')):
+            raise AssertionError("RFAuthUser is missing value/values")
+        if ('@' not in self.email_address):
+            raise AssertionError("RFAuthUser does not contain a valid email address")
 
 
 class Workout(models.Model):
@@ -62,8 +77,7 @@ class Workout(models.Model):
 
     def __str__(self):
         return str(self.workoutid)
-
-
+    
 class Workoutexercise(models.Model):
     workoutexerciseid = models.AutoField(db_column='WorkoutExerciseID', primary_key=True)  # Field name made lowercase.
     days = models.CharField(db_column='Days', max_length=200, db_collation='SQL_Latin1_General_CP1_CI_AS', blank=False, null=False)  # Field name made lowercase.
@@ -82,6 +96,12 @@ class Workoutexercise(models.Model):
 
     def __str__(self):
         return self.workoutname
+    
+    def clean(self):
+        if (self.days is (None or '') or self.exercises is (None or '') or self.sets is (None or '')
+            or self.reps is (None or '') or self.rest is (None or '') or self.weeks is (None or '')
+            or self.authid is (None or '') or self.workoutnumber is (None or '') or self.workoutname is (None or '')):
+            raise AssertionError("WorkoutExercise is missing value/values")
 
 
 class Workouttemplate(models.Model):
@@ -100,6 +120,12 @@ class Workouttemplate(models.Model):
 
     def __str__(self):
         return self.workoutname
+    
+    def clean(self):
+        if (self.days is None or self.exercises is None or self.sets is None
+            or self.reps is None or self.rest is None or self.weeks is None
+            or self.workoutname is None):
+            raise AssertionError("WorkoutTemplate is missing value/values")
 
 
 class AuthGroup(models.Model):

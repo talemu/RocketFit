@@ -15,7 +15,7 @@ class WorkoutExerciseService:
         return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_all()))
     
     def get_WorkoutExercise_By_ID(self, id):
-        return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_we_by_id(id)))
+        return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_we_by_auth_id(id)))
     
     """
         Method: Validates the Workout Exercise sent from the client side. 
