@@ -23,5 +23,8 @@ class RfauthUserRepo:
         Method: Saves a user to the Rfauthuser model.
     """
     def save_user(self, user):
-        user.clean()
-        return user.save()
+        try:
+            user.clean()
+            return user.save()
+        except Exception as e:
+            raise Exception(e.args[0])

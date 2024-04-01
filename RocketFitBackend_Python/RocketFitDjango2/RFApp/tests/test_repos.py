@@ -5,6 +5,7 @@ from ..repositories.exerciseRecordsRepository import ExerciseRecordRepo
 from ..repositories.exerciseRepository import ExerciseRepo
 from ..repositories.rfAuthUserRepository import RfauthUserRepo
 from ..repositories.workoutExerciseRepository import WorkoutExerciseRepo
+from ..repositories.workoutTemplateRepository import WorkoutTemplateRepo
 
 
 class ExerciseRecordsRepoTests(TestCase):
@@ -108,11 +109,24 @@ class RFAuthUserRepoTests(TestCase):
     def test_save_user_fault(self):
         pre_attempted_add_users = self._test_rfauthuser_repo.get_all()
         try:
+            #Missing username field
+            user = Rfauthuser(password = "testPassword", email_address = "testEmailAddress@gmail.com")
+            self._test_rfauthuser_repo.save_user(user)
+        except:
+            post_attempted_add_users = self._test_rfauthuser_repo.get_all()
+            self.assertEqual(pre_attempted_add_users.count(), post_attempted_add_users.count())
+
+    def test_save_user_faulty_email(self):
+        pre_attempted_add_users = self._test_rfauthuser_repo.get_all()
+        try:
+            #not a valid email address
             user = Rfauthuser(password = "testPassword", username = "testUser", email_address = "testEmailAddress")
             self._test_rfauthuser_repo.save_user(user)
         except:
             post_attempted_add_users = self._test_rfauthuser_repo.get_all()
             self.assertEqual(pre_attempted_add_users.count(), post_attempted_add_users.count())
+
+    
 
 class WorkoutExerciseRepoTest(TestCase):
 
@@ -139,8 +153,34 @@ class WorkoutExerciseRepoTest(TestCase):
     def test_save_workout_fault(self):
         pre_attempted_save = self._test_we_repo.get_all()
         try:
+            #missing days field
             workout_exercise = Workoutexercise(exercises = '0', sets = '0', reps = '0', rest= '0', weeks = '0', authid = '0', workoutnumber = 0, workoutname = 'Test Workout')
             self._test_we_repo.save_workout(workout_exercise)
         except:
             post_attempted_save = self._test_we_repo.get_all()
+            self.assertEqual(pre_attempted_save.count(), post_attempted_save.count())
+
+class WorkoutTemplateRepoTest(TestCase):
+    
+    _test_wt_repo = WorkoutTemplateRepo()
+
+    def test_get_all(self):
+        templates = self._test_wt_repo.get_all()
+        self.assertEqual(templates.count(), 2)
+
+    def test_save_template(self):
+        template = Workouttemplate(days = '0', exercises = '0', sets = '0', reps = '0', rest= '0', weeks = '0', workoutname = 'Test Workout')
+        self._test_wt_repo.save_template(template)
+        templates = self._test_wt_repo.get_all()
+        self.assertEqual(templates[templates.count() - 1].workoutname, 'Test Workout')
+
+    def test_save_template_fault(self):
+        pre_attempted_save = self._test_wt_repo.get_all()
+        try:
+            #missing sets field
+            template = Workouttemplate(days = '0', exercises = '0', reps = '0', rest= '0', weeks = '0', workoutname = 'Test Workout')
+            print(template.sets)
+            self._test_wt_repo.save_template(template)
+        except:
+            post_attempted_save = self._test_wt_repo.get_all()
             self.assertEqual(pre_attempted_save.count(), post_attempted_save.count())

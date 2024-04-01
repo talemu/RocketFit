@@ -122,9 +122,9 @@ class Workouttemplate(models.Model):
         return self.workoutname
     
     def clean(self):
-        if (self.days is None or self.exercises is None or self.sets is None
-            or self.reps is None or self.rest is None or self.weeks is None
-            or self.workoutname is None):
+        if (self.days is (None or '') or self.exercises is (None or '') or self.sets is (None or '')
+            or self.reps is (None or '') or self.rest is (None or '') or self.weeks is (None or '')
+            or self.workoutname is (None or '')):
             raise AssertionError("WorkoutTemplate is missing value/values")
 
 

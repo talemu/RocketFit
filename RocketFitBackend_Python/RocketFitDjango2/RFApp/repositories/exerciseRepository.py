@@ -19,5 +19,8 @@ class ExerciseRepo:
         Method: Saves an exercise to the Exercise model.
     """
     def save_exercise(self, exercise):
-        exercise.clean()
-        return exercise.save()
+        try:
+            exercise.clean()
+            return exercise.save()
+        except Exception as e:
+            raise Exception(e.args[0])
