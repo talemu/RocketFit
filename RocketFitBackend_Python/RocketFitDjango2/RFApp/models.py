@@ -20,7 +20,7 @@ class Exercise(models.Model):
         return str(self.exerciseid) + " -- " + self.exercisename
     
     def clean(self):
-        if (self.exercisename is None):
+        if (self.exercisename is (None or '')):
             raise AssertionError("Exercise is missing exercisename")
 
 
@@ -42,10 +42,12 @@ class Exerciserecord(models.Model):
         return str(self.auth_id)
     
     def clean(self):
-        if (self.exercise_name is None or self.sets is None or self.reps 
-            is None or self.weight is None or self.auth_id is None or self.day 
-            is None or self.workout_number is None):
-            raise AssertionError("ExerciseRecord is missing value/values")
+        if (self.exercise_name is (None or '') or self.sets is (None or 0) or self.reps 
+            is (None or 0) or self.weight is (None) or self.auth_id is (None) or self.day 
+            is (None) or self.workout_number is (None or 0)):
+            raise AssertionError("ExerciseRecord is missing value/values or invalid")
+        if (self.weight < 0 or self.auth_id < 0):
+            raise AssertionError("ExerciseRecord is invalid (ensure weight and authid are >= 0)")
 
 class Rfauthuser(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
