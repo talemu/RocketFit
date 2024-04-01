@@ -18,25 +18,25 @@ class ExerciseRecordsRepoTests(TestCase):
 
     def test_get_all_er(self):
         obj = self._test_er_repo.get_all()
-        self.assertEqual(obj.count() > 0, True)
+        self.assertEqual(len(obj) > 0, True)
 
     # get exercise record based on exercise day, workout number, and auth id
     def test_get_er_based_on_exercise_day_wn_id(self):
         obj = self._test_er_repo.get_er_based_on_exercise_day_wn_id("Test Case", 0, 0, 1)
-        self.assertEqual(obj.count(), 1)
+        self.assertEqual(len(obj), 1)
         self.assertEqual(obj[0].exercise_name, "Test Case")
 
     # get exercise record that doesn't exist
     def test_get_all_er_based_on_exercise_id_fault(self):
         obj = self._test_er_repo.get_er_based_on_exercise_day_wn_id("Empty", 0, 0, 1)
-        self.assertEqual(obj.count(), 0)
+        self.assertEqual(len(obj), 0)
 
     # save a new record and ensure it is saved in the test database
     def test_save_new_exercise_record(self):
         new_record = Exerciserecord(exercise_name="New Record", sets=1, reps=1, weight=10, day=1, workout_number=1, auth_id=1)
         self._test_er_repo.save_record(new_record)
         obj = self._test_er_repo.get_all()
-        self.assertEqual(obj[obj.count() - 1].exercise_name, "New Record")
+        self.assertEqual(obj[len(obj) - 1].exercise_name, "New Record")
 
     # faulty record save
     def test_save_new_exercise_record_fault(self):
@@ -45,7 +45,7 @@ class ExerciseRecordsRepoTests(TestCase):
             new_record = Exerciserecord()
             self._test_er_repo.save_record(new_record)
         post_attempted_save = self._test_er_repo.get_all()
-        self.assertEqual(pre_attempted_save.count(), post_attempted_save.count())
+        self.assertEqual(len(pre_attempted_save), len(post_attempted_save))
 
 class ExerciseRepoTests(TestCase):
     """
@@ -57,7 +57,7 @@ class ExerciseRepoTests(TestCase):
 
     def test_get_all_exercises(self):
         exercises = self._test_exercise_repo.get_all()
-        self.assertEqual(exercises.count(), 35)
+        self.assertEqual(len(exercises), 35)
 
     def test_get_exercise_by_id(self):
         exercise = self._test_exercise_repo.get_exercise_by_id(1)
@@ -71,7 +71,7 @@ class ExerciseRepoTests(TestCase):
         exercise = Exercise(exercisename="test exercise")
         self._test_exercise_repo.save_exercise(exercise)
         exercises = self._test_exercise_repo.get_all()
-        self.assertEqual(exercises[exercises.count() - 1].exercisename, exercise.exercisename)
+        self.assertEqual(exercises[len(exercises) - 1].exercisename, exercise.exercisename)
 
     def test_save_exercise_fault(self):
         pre_attempted_exercise_add = self._test_exercise_repo.get_all()
@@ -79,7 +79,7 @@ class ExerciseRepoTests(TestCase):
             exercise = Exercise()
             self._test_exercise_repo.save_exercise(exercise)
         post_attemped_exercise_add = self._test_exercise_repo.get_all()
-        self.assertEqual(pre_attempted_exercise_add.count(), post_attemped_exercise_add.count())
+        self.assertEqual(len(pre_attempted_exercise_add), len(post_attemped_exercise_add))
 
 class RFAuthUserRepoTests(TestCase):
     """
@@ -91,7 +91,7 @@ class RFAuthUserRepoTests(TestCase):
 
     def test_get_all(self):
         users = self._test_rfauthuser_repo.get_all()
-        self.assertEqual(users.count(), 2)
+        self.assertEqual(len(users), 2)
 
     def test_authenticate_user(self):
         user = self._test_rfauthuser_repo.authenticate_user("adminOne", "admin123")
@@ -109,7 +109,7 @@ class RFAuthUserRepoTests(TestCase):
         user = Rfauthuser(password="testPassword", username="testUser", email_address="testEmailAddress@gmail.com")
         self._test_rfauthuser_repo.save_user(user)
         users = self._test_rfauthuser_repo.get_all()
-        self.assertEqual(users[users.count() - 1].username, "testUser")
+        self.assertEqual(users[len(users) - 1].username, "testUser")
 
     def test_save_user_fault(self):
         pre_attempted_add_users = self._test_rfauthuser_repo.get_all()
@@ -118,7 +118,7 @@ class RFAuthUserRepoTests(TestCase):
             user = Rfauthuser(password="testPassword", email_address="testEmailAddress@gmail.com")
             self._test_rfauthuser_repo.save_user(user)
         post_attempted_add_users = self._test_rfauthuser_repo.get_all()
-        self.assertEqual(pre_attempted_add_users.count(), post_attempted_add_users.count())
+        self.assertEqual(len(pre_attempted_add_users), len(post_attempted_add_users))
 
     def test_save_user_faulty_email(self):
         pre_attempted_add_users = self._test_rfauthuser_repo.get_all()
@@ -127,7 +127,7 @@ class RFAuthUserRepoTests(TestCase):
             user = Rfauthuser(password="testPassword", username="testUser", email_address="testEmailAddress")
             self._test_rfauthuser_repo.save_user(user)
         post_attempted_add_users = self._test_rfauthuser_repo.get_all()
-        self.assertEqual(pre_attempted_add_users.count(), post_attempted_add_users.count())
+        self.assertEqual(len(pre_attempted_add_users), len(post_attempted_add_users))
 
 class WorkoutExerciseRepoTest(TestCase):
     """
@@ -139,21 +139,21 @@ class WorkoutExerciseRepoTest(TestCase):
 
     def test_get_all_we(self):
         workout_exercises = self._test_we_repo.get_all()
-        self.assertEqual(workout_exercises.count(), 1)
+        self.assertEqual(len(workout_exercises), 1)
 
     def test_get_we_by_auth_id(self):
         workout_exercises = self._test_we_repo.get_we_by_auth_id(100000)
-        self.assertEqual(workout_exercises.count(), 1)
+        self.assertEqual(len(workout_exercises), 1)
 
     def test_get_we_by_auth_id_empty(self):
         workout_exercises = self._test_we_repo.get_we_by_auth_id(1)
-        self.assertEqual(workout_exercises.count(), 0)
+        self.assertEqual(len(workout_exercises), 0)
 
     def test_save_workout(self):
         workout_exercise = Workoutexercise(days='0', exercises='0', sets='0', reps='0', rest='0', weeks='0', authid='0', workoutnumber=0, workoutname='Test Workout')
         self._test_we_repo.save_workout(workout_exercise)
         workout_exercises = self._test_we_repo.get_all()
-        self.assertEqual(workout_exercises[workout_exercises.count() - 1].workoutname, 'Test Workout')
+        self.assertEqual(workout_exercises[len(workout_exercises) - 1].workoutname, 'Test Workout')
 
     def test_save_workout_fault(self):
         pre_attempted_save = self._test_we_repo.get_all()
@@ -162,7 +162,7 @@ class WorkoutExerciseRepoTest(TestCase):
             workout_exercise = Workoutexercise(exercises='0', sets='0', reps='0', rest='0', weeks='0', authid='0', workoutnumber=0, workoutname='Test Workout')
             self._test_we_repo.save_workout(workout_exercise)
         post_attempted_save = self._test_we_repo.get_all()
-        self.assertEqual(pre_attempted_save.count(), post_attempted_save.count())
+        self.assertEqual(len(pre_attempted_save), len(post_attempted_save))
 
 class WorkoutTemplateRepoTest(TestCase):
     """
@@ -174,13 +174,13 @@ class WorkoutTemplateRepoTest(TestCase):
 
     def test_get_all(self):
         templates = self._test_wt_repo.get_all()
-        self.assertEqual(templates.count(), 2)
+        self.assertEqual(len(templates), 2)
 
     def test_save_template(self):
         template = Workouttemplate(days='0', exercises='0', sets='0', reps='0', rest='0', weeks='0', workoutname='Test Workout')
         self._test_wt_repo.save_template(template)
         templates = self._test_wt_repo.get_all()
-        self.assertEqual(templates[templates.count() - 1].workoutname, 'Test Workout')
+        self.assertEqual(templates[len(templates) - 1].workoutname, 'Test Workout')
 
     def test_save_template_fault(self):
         pre_attempted_save = self._test_wt_repo.get_all()
@@ -190,4 +190,4 @@ class WorkoutTemplateRepoTest(TestCase):
             print(template.sets)
             self._test_wt_repo.save_template(template)
         post_attempted_save = self._test_wt_repo.get_all()
-        self.assertEqual(pre_attempted_save.count(), post_attempted_save.count())
+        self.assertEqual(len(pre_attempted_save), len(post_attempted_save))
