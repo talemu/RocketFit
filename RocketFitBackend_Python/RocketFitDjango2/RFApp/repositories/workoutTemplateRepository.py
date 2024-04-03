@@ -11,4 +11,7 @@ class WorkoutTemplateRepo:
         Method: Saves a workout template to the Workouttemplate model.
     """
     def save_template(self, template):
-        return template.save()
+        try:
+            return template.save()
+        except Exception as e:
+            raise Exception(e.args[0])

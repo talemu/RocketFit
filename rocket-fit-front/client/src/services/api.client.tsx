@@ -18,18 +18,9 @@ import axios from "axios";
 //   },
 // });
 
-//python prod endpoint
-// export default axios.create({
-//   baseURL: "http://localhost:8080/api",
-//   params: {},
-//   headers: {
-//     "Access-Control-Allow-Origin": "*",
-//   },
-// });
-
-//python dev endpoint
+//python api endpoint
 export default axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "http://localhost:8080/api",
   params: {},
   headers: {
     "Access-Control-Allow-Origin": "*",

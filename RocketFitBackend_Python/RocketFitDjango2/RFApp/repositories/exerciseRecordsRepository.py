@@ -16,10 +16,8 @@ class ExerciseRecordRepo:
     """
         Method: Save Exercise Record to the database.
     """
-    def save_record(self, exercise):
+    def save_record(self, exerciserecord):
         try:
-            exercise.clean()
+            return exerciserecord.save()
         except Exception as e:
-            print(e)
-            return None
-        return exercise.save()
+            raise Exception(e.args[0])

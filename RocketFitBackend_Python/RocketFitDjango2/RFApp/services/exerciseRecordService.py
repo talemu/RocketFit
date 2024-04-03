@@ -17,7 +17,7 @@ class ExerciseRecordService():
     def get_ExerciseRecord_based_on_exercise_day_wn_id(self, exercise: str, day: int, workoutNum: int, auth:int) -> list[ExerciseRecordDTO]:
         record = self._erRepo.get_er_based_on_exercise_day_wn_id(exercise, day, workoutNum, auth)
         if (record.exists()):
-            return self._erMapper.map_to_dto(record[0])
+            return list(map(lambda x: self._erMapper.map_to_dto(x), record))
         else:
             return -10
     
@@ -43,8 +43,10 @@ class ExerciseRecordService():
     """
     def exerciseRecord_track_workout(self, dto:ExerciseRecordDTO):
         try:
-            entity = self._erMapper.map_to_er(dto)
-            self._erRepo.save_record(entity)
-            return self._erMapper.map_to_dto(entity)
+            exercise_record = self._erMapper.map_to_er(dto)
+            # ensure all the exercise record fields are present
+            exercise_record.clean()
+            self._erRepo.save_record(exercise_record)
+            return self._erMapper.map_to_dto(exercise_record)
         except Exception as e:
             raise Exception(e.args[0])
