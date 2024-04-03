@@ -18,7 +18,6 @@ class ExerciseRecordRepo:
     """
     def save_record(self, exerciserecord):
         try:
-            exerciserecord.clean()
             return exerciserecord.save()
         except Exception as e:
             raise Exception(e.args[0])

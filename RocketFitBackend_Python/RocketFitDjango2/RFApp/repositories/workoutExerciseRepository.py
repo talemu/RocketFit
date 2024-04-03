@@ -16,7 +16,6 @@ class WorkoutExerciseRepo:
     """
     def save_workout(self, workout):
         try:
-            workout.clean()
             return workout.save()
         except Exception as e:
             raise Exception(e.args[0])

@@ -20,7 +20,6 @@ class ExerciseRepo:
     """
     def save_exercise(self, exercise):
         try:
-            exercise.clean()
             return exercise.save()
         except Exception as e:
             raise Exception(e.args[0])

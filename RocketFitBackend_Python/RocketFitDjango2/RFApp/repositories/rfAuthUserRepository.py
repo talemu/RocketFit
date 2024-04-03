@@ -17,14 +17,13 @@ class RfauthUserRepo:
             else:
                 return Rfauthuser.objects.get(email_address = loginKey, password = password)
         except Rfauthuser.DoesNotExist:
-            return -1
+            return None
         
     """
         Method: Saves a user to the Rfauthuser model.
     """
     def save_user(self, user):
         try:
-            user.clean()
             return user.save()
         except Exception as e:
             raise Exception(e.args[0])

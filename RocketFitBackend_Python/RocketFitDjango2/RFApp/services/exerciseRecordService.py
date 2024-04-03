@@ -43,8 +43,10 @@ class ExerciseRecordService():
     """
     def exerciseRecord_track_workout(self, dto:ExerciseRecordDTO):
         try:
-            entity = self._erMapper.map_to_er(dto)
-            self._erRepo.save_record(entity)
-            return self._erMapper.map_to_dto(entity)
+            exercise_record = self._erMapper.map_to_er(dto)
+            # ensure all the exercise record fields are present
+            exercise_record.clean()
+            self._erRepo.save_record(exercise_record)
+            return self._erMapper.map_to_dto(exercise_record)
         except Exception as e:
             raise Exception(e.args[0])

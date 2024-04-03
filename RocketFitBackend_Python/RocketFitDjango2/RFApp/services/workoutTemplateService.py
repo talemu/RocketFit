@@ -22,8 +22,9 @@ class WorkoutTemplateService:
             Returns: WorkoutTemplateDTO object containing the saved workout template record if successful."""
     def add_template(self, workouttemplate: WorkoutTemplateDTO):
         try:
-            entity = self._wtMapper.map_to_wt(workouttemplate)
-            self._wtRepo.save_template(entity)
-            return self._wtMapper.map_to_dto(entity)
+            template = self._wtMapper.map_to_wt(workouttemplate)
+            template.clean()
+            self._wtRepo.save_template(template)
+            return self._wtMapper.map_to_dto(template)
         except Exception as e:
             raise Exception("error log: " + e.args[0])

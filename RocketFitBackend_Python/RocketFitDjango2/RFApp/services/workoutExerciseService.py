@@ -14,7 +14,7 @@ class WorkoutExerciseService:
     def get_all_WorkoutExercises(self) -> list[WorkoutExerciseDTO]:
         return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_all()))
     
-    def get_WorkoutExercise_By_ID(self, id):
+    def get_workoutexercise_by_auth_id(self, id):
         return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_we_by_auth_id(id)))
     
     """
@@ -27,8 +27,10 @@ class WorkoutExerciseService:
     """
     def add_workout(self, workoutexercisedto):
         try:
-            entity = self._weMapper.map_to_we(workoutexercisedto)
-            self._weRepo.save_workout(entity)
-            return self._weMapper.map_to_dto(entity)
+            workout_exercise = self._weMapper.map_to_we(workoutexercisedto)
+            #ensure the workout exercise has all the valid fields
+            workout_exercise.clean()
+            self._weRepo.save_workout(workout_exercise)
+            return self._weMapper.map_to_dto(workout_exercise)
         except Exception as e:
             raise Exception(e.args[0])

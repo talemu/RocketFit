@@ -12,7 +12,6 @@ class WorkoutTemplateRepo:
     """
     def save_template(self, template):
         try:
-            template.clean()
             return template.save()
         except Exception as e:
             raise Exception(e.args[0])

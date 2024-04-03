@@ -29,10 +29,12 @@ class ExerciseService:
 
             Returns: ExerciseDTO object containing the saved exercise record if successful.
     """
-    def add_exercise(self, exercise):
+    def add_exercise(self, ex):
         try:
-            entity = self._eMapper.map_to_e(exercise)
-            self._eRepo.save_exercise(entity)
-            return self._eMapper.map_to_dto(entity)
+            exercise = self._eMapper.map_to_e(ex)
+            #ensure the exercise has all the valid fields
+            exercise.clean()
+            self._eRepo.save_exercise(exercise)
+            return self._eMapper.map_to_dto(exercise)
         except Exception as e:
             raise Exception(e.args[0])
