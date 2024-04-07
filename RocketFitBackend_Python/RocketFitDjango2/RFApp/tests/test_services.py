@@ -12,12 +12,13 @@ from ..services.rfAuthUserService import RfauthUserService
 from ..services.workoutExerciseService import WorkoutExerciseService
 from ..services.workoutTemplateService import WorkoutTemplateService
 
+
 class ExerciseRecordsServiceTests(TestCase):
     _test_er_service = ExerciseRecordService()
 
     def test_get_all_exercise_records(self):
         exercise_records = self._test_er_service.get_all_exercise_records()
-        self.assertEqual(len(exercise_records), 1)
+        self.assertEqual(len(exercise_records), 2)
         self.assertTrue(all(isinstance(item, ExerciseRecordDTO) for item in exercise_records))
 
     def test_get_ExerciseRecord_based_on_exercise_day_wn_id(self):
@@ -60,7 +61,6 @@ class ExerciseRecordsServiceTests(TestCase):
         
 
 class ExerciseServiceTests(TestCase):
-
     _test_exercise_service = ExerciseService()
     
     def test_get_all_exercises(self):
@@ -121,7 +121,7 @@ class RFAuthUserServiceTest(TestCase):
         users = self._test_rf_auth_service.get_all_auth_users()
         self.assertEqual(users[len(users) - 1].username, "TestUser")
         self.assertTrue(isinstance(new_user, RfAuthUserDTO))
-        
+
     def test_add_user_fault(self):
         pre_attempted_users = self._test_rf_auth_service.get_all_auth_users()
         #missing password field

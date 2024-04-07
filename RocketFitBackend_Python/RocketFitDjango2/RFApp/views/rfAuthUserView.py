@@ -15,21 +15,24 @@ class RFAuthUserViewSet(viewsets.ViewSet):
 
     _rfAuthService = RfauthUserService()
 
-    #GET /rfAuthUser/
+    #GET /auth/
     def list(self, request):
         response_data = self._rfAuthService.get_all_auth_users()
         response = list(map(lambda x : x.asdict(), response_data))
         return JsonResponse(response, safe = False)
 
-    #GET /rfAuthUser/login?loginKey=1&password=1
+    #GET /auth/login?loginKey=1&password=1
     @action(detail=False, methods=['get'], url_path='login')
     def login(self, request):
-        loginKey = request.GET.get('loginKey', '')
-        password = request.GET.get('password', '')
-        response = self._rfAuthService.get_user_id(loginKey, password)
-        return JsonResponse(response, safe=False)
+        try :
+            loginKey = request.GET.get('loginKey', '')
+            password = request.GET.get('password', '')
+            response = self._rfAuthService.get_user_id(loginKey, password)
+            return JsonResponse(response, safe=False)
+        except Exception as e:
+            return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
     
-    #POST /rfAuthUser/
+    #POST /auth/
     def create(self, request):
         try:
             dto = TransformRequestMapper.to_rfau_dto(request.data)

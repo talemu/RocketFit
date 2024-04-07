@@ -46,7 +46,7 @@ class Exerciserecord(models.Model):
             is (None or 0) or self.weight is (None) or self.auth_id is (None) or self.day 
             is (None) or self.workout_number is (None or 0)):
             raise AssertionError("ExerciseRecord is missing value/values or invalid")
-        if (self.weight < 0 or self.auth_id < 0):
+        if (float(self.weight) < 0 or float(self.auth_id) < 0):
             raise AssertionError("ExerciseRecord is invalid (ensure weight and authid are >= 0)")
 
 class Rfauthuser(models.Model):

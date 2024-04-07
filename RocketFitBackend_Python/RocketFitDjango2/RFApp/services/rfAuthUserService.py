@@ -19,6 +19,8 @@ class RfauthUserService:
             Returns: Id of the validated user if user found, -10 if unsuccessful.
     """
     def get_user_id(self, loginKey, password):
+        if (loginKey == '' or password == ''):
+            raise Exception("LoginKey or Password is empty.")
         user = self._rfAuthRepo.authenticate_user(loginKey, password)
         if user is None:
             return -10

@@ -69,7 +69,6 @@ class RFAuthUserRepoTests(TestCase):
     This class contains unit tests for the RfauthUserRepo class.
     It tests various methods of the RfauthUserRepo class to ensure their correctness.
     """
-
     _test_rfauthuser_repo = RfauthUserRepo()
 
     def test_get_all(self):
