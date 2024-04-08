@@ -32,7 +32,7 @@ class ExerciseViewSet(viewsets.ViewSet):
             response = response_data.asdict()
             return JsonResponse(response, safe = False)
         except Exception as e:
-            return JsonResponse({"error log" : e.args[0]})
+            return JsonResponse({"error log" : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
     
     #POST /exercise/
     @csrf_exempt
