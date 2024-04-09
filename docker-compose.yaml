@@ -4,12 +4,12 @@ services:
     build: ./RocketFitBackend_Python/RocketFitDjango2
     container_name: api_rf
     ports:
-      - "8000:8000"
-    command: python3 manage.py runserver
+      - "8080:8000"
+    # command: python3 manage.py runserver 
   application:
     build: ./rocket-fit-front/client
     container_name: app_rf
     ports:
-      - "3000:3000"
+      - "3001:3000"
     stdin_open: true
     tty: true

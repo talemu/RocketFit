@@ -5,6 +5,15 @@ from RFApp.models import Workouttemplate
 
 class WorkoutTemplateMapper:
     def map_to_dto(self, workoutTemplate):
+        """
+        Maps a WorkoutTemplate object to a WorkoutTemplateDTO object.
+
+        Parameters:
+        workoutTemplate (WorkoutTemplate): The WorkoutTemplate object to be mapped.
+
+        Returns:
+        WorkoutTemplateDTO: The mapped WorkoutTemplateDTO object.
+        """
         return WorkoutTemplateDTO(
             workoutName = workoutTemplate.workoutname,
             exercises = workoutTemplate.exercises,
@@ -16,6 +25,15 @@ class WorkoutTemplateMapper:
         )
     
     def map_to_wt(self, workoutTemplateDto):
+        """
+        Maps a WorkoutTemplateDTO object to a Workouttemplate object.
+
+        Parameters:
+        workoutTemplateDto (WorkoutTemplateDTO): The WorkoutTemplateDTO object to be mapped.
+
+        Returns:
+        Workouttemplate: The mapped Workouttemplate object.
+        """
         return Workouttemplate(
             workoutname = workoutTemplateDto.workoutName,
             exercises = workoutTemplateDto.exercises,

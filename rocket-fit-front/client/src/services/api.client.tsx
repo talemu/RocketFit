@@ -20,7 +20,7 @@ import axios from "axios";
 
 //python api endpoint
 export default axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: "http://localhost:8080/api",
   params: {},
   headers: {
     "Access-Control-Allow-Origin": "*",

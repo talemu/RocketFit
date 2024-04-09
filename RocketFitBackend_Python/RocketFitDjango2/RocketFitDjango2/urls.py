@@ -1,19 +1,4 @@
-"""
-URL configuration for RocketFitDjango2 project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import include, path
 from RFApp.views.workoutExerciseView import WorkoutExerciseViewSet
@@ -23,6 +8,13 @@ from RFApp.views.rfAuthUserView import RFAuthUserViewSet
 from RFApp.views.exerciseView import ExerciseViewSet
 from rest_framework.routers import DefaultRouter
 
+"""
+URL configuration for RocketFitDjango2 project.
+"""
+
+""" 
+Registers the urls specified in the viewsets to be used in the Django application.
+"""
 router = DefaultRouter()
 router.register(r"workoutexercise", WorkoutExerciseViewSet, basename='workoutexercise')
 router.register(r"exerciserecord", ExerciseRecordViewSet, basename='exerciserecord')

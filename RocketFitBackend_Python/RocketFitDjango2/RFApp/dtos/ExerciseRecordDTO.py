@@ -1,6 +1,10 @@
 
 
 class ExerciseRecordDTO:
+    """
+    Class: Data Transfer Object class for Exercise Record objects.
+    """
+
     exerciseName : str
     sets : int
     reps : int

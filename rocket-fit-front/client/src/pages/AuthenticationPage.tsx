@@ -58,12 +58,12 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitted]);
 
-  const handleUsernameChange = (event: KeyboardEvent) => {
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const textValue: string = (event.target as HTMLInputElement).value;
     setUsername(textValue);
   };
 
-  const handlePasswordChange = (event: KeyboardEvent) => {
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const textValue: string = (event.target as HTMLInputElement).value;
     setPassword(textValue);
   };

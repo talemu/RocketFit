@@ -1,5 +1,8 @@
 
 class ExerciseDTO:
+    """
+    Class: Data Transfer Object class for Exercise objects.
+    """
     exerciseId : int
     exerciseName : str
 
