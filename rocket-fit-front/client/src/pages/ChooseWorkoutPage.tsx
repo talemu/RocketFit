@@ -4,54 +4,63 @@ import workoutExerciseService, {
 } from "../services/workoutExerciseService";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 interface Props {
   authId: number;
 }
 
+const ContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 10em;
+`;
+
 const WorkoutButton = styled.button`
   margin: 1em;
 `;
 
-const ButtonBreak = styled.br``;
-
 const ChooseWorkoutPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
-  const [workoutNums, setWorkoutsNums] = useState<number[]>([]);
   const [workoutArray, setWorkouts] = useState<Workout[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   if (authId == -10) {
-    Navigate("/main");
+    Navigate("/unauthorized");
   }
 
   useEffect(() => {
+    setLoading(true);
     const { request } = workoutExerciseService.getAll("/" + authId);
     request.then((response) => {
       const workouts = response.data as unknown[] as Workout[];
       setWorkouts(workouts);
-      setWorkoutsNums(workouts.map((item: Workout) => item.workoutNumber));
+      setLoading(false);
     });
   }, []);
 
   return (
     <>
-      {workoutNums?.map((item: number) => (
+      <ContentDiv>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {workoutArray?.map((item: Workout) => (
+              <WorkoutButton>
+                <Link to={"/main"} state={item}>
+                  {" "}
+                  {item.workoutName}
+                </Link>
+              </WorkoutButton>
+            ))}
+          </>
+        )}
+
         <WorkoutButton>
-          <Link
-            to={"/main"}
-            state={workoutArray.find(
-              (element) => (element.workoutNumber = item)
-            )}
-          >
-            {" "}
-            Workout {item}
-          </Link>
+          <Link to={"/workouts"}>Choose New Workout</Link>
         </WorkoutButton>
-      ))}
-      <ButtonBreak />
-      <WorkoutButton>
-        <Link to={"/workouts"}>Choose New Workout</Link>
-      </WorkoutButton>
+      </ContentDiv>
     </>
   );
 };

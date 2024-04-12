@@ -40,7 +40,7 @@ const CustomizeWorkout = ({ authId }: Props) => {
 
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/main");
+      Navigate("/authorized");
     }
   }, [change]);
 

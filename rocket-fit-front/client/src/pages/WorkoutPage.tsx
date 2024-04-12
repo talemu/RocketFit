@@ -21,7 +21,7 @@ const WorkoutPage = ({ authId }: Props) => {
 
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/main");
+      Navigate("/unauthorized");
     }
   });
 

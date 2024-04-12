@@ -10,6 +10,8 @@ import styled from "styled-components";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import Base from "./components/Base";
 import CustomizeWorkout from "./pages/CustomizeWorkout";
+import "bootstrap/dist/css/bootstrap.min.css";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 const Border = styled.div`
   padding: 1em;
@@ -17,8 +19,6 @@ const Border = styled.div`
 
 function App() {
   const [trigger, setTrigger] = useState<boolean>(true);
-
-  useEffect(() => {}, [trigger]);
 
   const handleAuthData = (data: number) => {
     setTrigger(!trigger);
@@ -91,6 +91,7 @@ function App() {
                 />
               }
             />
+            <Route path="/unauthorized" Component={UnauthorizedPage} />
           </Routes>
         </Router>
       </Border>

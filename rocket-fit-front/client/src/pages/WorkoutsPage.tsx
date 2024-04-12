@@ -44,7 +44,7 @@ const WorkoutsPage = ({ authId }: Props) => {
   const [trigger, setTrigger] = useState<boolean>(false);
 
   if (authId == -10) {
-    Navigate("/main");
+    Navigate("/unauthorized");
   }
 
   useEffect(() => {
