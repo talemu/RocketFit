@@ -34,6 +34,7 @@ const DayButton = styled.button`
 const MainPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const location = useLocation();
+  //data incoming from WorkoutPage returning back to main page
   const workout = location.state;
   const [week, setWeek] = useState<number>(1);
   const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);

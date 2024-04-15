@@ -5,7 +5,7 @@ import { WorkoutItem } from "../services/workoutExerciseService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 
 interface Props {
-  id: number;
+  authId: number;
   initialTimeInSec: number;
   weight: number;
   sets: number;
@@ -30,7 +30,7 @@ const TimerText = styled.p`
 const TimerButton = styled.button``;
 
 const Timer = ({
-  id,
+  authId,
   initialTimeInSec,
   weight,
   sets,
@@ -74,7 +74,7 @@ const Timer = ({
           "&workoutNum=" +
           workoutNum +
           "&auth=" +
-          id
+          authId
       ).request;
 
       const exercise_record = response2.data as unknown as number;
@@ -156,7 +156,7 @@ const Timer = ({
       sets: sets,
       reps: reps,
       weight: parseFloat(avg.toFixed(1)),
-      authId: id,
+      authId: authId,
       day: workout.day,
       workoutNumber: workoutNum,
     };
