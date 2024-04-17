@@ -14,6 +14,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
     """
 
     _erService = ExerciseRecordService()
+    _transformMapper = TransformRequestMapper()
 
     #GET /exerciseRecord/
     def list(self, request):
@@ -53,7 +54,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
     @csrf_exempt 
     def create(self, request):
         try : 
-            dto = TransformRequestMapper.to_er_dto(request.data)
+            dto = self._transformMapper.to_er_dto(request.data)
             er = self._erService.exerciseRecord_track_workout(dto)
             response = er.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

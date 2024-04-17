@@ -16,6 +16,7 @@ class ExerciseViewSet(viewsets.ViewSet):
     """
     
     _eService = ExerciseService()
+    _transformMapper = TransformRequestMapper()
 
     #GET /exercise/
     def list(self, request):
@@ -38,7 +39,7 @@ class ExerciseViewSet(viewsets.ViewSet):
     @csrf_exempt
     def create(self, request):
         try:
-            dto = TransformRequestMapper.to_e_dto(request.data)
+            dto = self._transformMapper.to_e_dto(request.data)
             e = self._eService.add_exercise(dto)
             response = e.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

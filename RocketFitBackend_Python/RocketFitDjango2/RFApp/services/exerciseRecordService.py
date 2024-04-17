@@ -31,7 +31,7 @@ class ExerciseRecordService():
         else:
             sum = 0
             for item in er:
-                sum += item.weight
+                sum += item.weight * (1 + 0.025 * item.reps)
             return sum / len(er)
     
     """
