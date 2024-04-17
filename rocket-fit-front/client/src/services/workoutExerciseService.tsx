@@ -33,7 +33,7 @@ export interface WorkoutItem {
 }
 
 //Standardizing the Workout Exercise data from string to and array of
-export const StandardizeWorkouts = (item: Workout) => {
+export const StandardizeWorkouts = (item: Workout, week: number) => {
   const standardWE = {
     workoutTemplateID: item.workoutExerciseID,
     workoutName: item.workoutName,
@@ -44,7 +44,9 @@ export const StandardizeWorkouts = (item: Workout) => {
     rest: [-1],
     weeks: item.weeks,
   };
-  standardWE.day = item.days.split(",").map((element) => parseInt(element, 10));
+  standardWE.day = item.days
+    .split(",")
+    .map((element) => parseInt(element, 10) + (week - 1) * 7);
   standardWE.exercises = item.exercises
     .split(",")
     .map((item) => parseInt(item, 10));

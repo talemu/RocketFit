@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import exerciseRecordService from "../services/exerciseRecordService";
+import exerciseRecordService, {
+  ExerciseRecord,
+} from "../services/exerciseRecordService";
 import { WorkoutItem } from "../services/workoutExerciseService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 
 interface Props {
+  exercises: Exercise[];
   authId: number;
   initialTimeInSec: number;
   weight: number;
@@ -12,10 +15,21 @@ interface Props {
   reps: number;
   workout: WorkoutItem;
   workoutNum: number;
-  sendDataToParent: (data: number, start: boolean) => void;
+  sendDataToParent: (
+    weight_entered: number,
+    target_weigth: number,
+    start: boolean,
+    index: number
+  ) => void;
+  index: number;
 }
 
+const LiftCompleteDiv = styled.div`
+  margin-bottom: 1em;
+`;
+
 const TimerDiv = styled.div`
+  margin-bottom: 0.5em;
   display: flex;
 `;
 
@@ -30,6 +44,7 @@ const TimerText = styled.p`
 const TimerButton = styled.button``;
 
 const Timer = ({
+  exercises,
   authId,
   initialTimeInSec,
   weight,
@@ -38,6 +53,7 @@ const Timer = ({
   workout,
   workoutNum,
   sendDataToParent,
+  index,
 }: Props) => {
   const [minutes, setMinutes] = useState(Math.floor(initialTimeInSec / 60));
   const [seconds, setSeconds] = useState(initialTimeInSec % 60);
@@ -47,26 +63,13 @@ const Timer = ({
   const [isSkipDisabled, setSkipDisabled] = useState(true);
   const [weightArray, setWeightArray] = useState<number[]>([]);
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-
-  useEffect(() => {
-    const { request } = exerciseService.getAll("");
-
-    request.then((response) => {
-      const exercises = response.data as unknown[] as Exercise[];
-      setExercises(exercises);
-    });
-    // setTrigger(!trigger);
-  }, []);
+  console.log(workout.day);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await exerciseService.getAll("").request;
-      const exercise_items = response.data as unknown as Exercise[];
-
       const response2 = await exerciseRecordService.getAll(
         "/item?exercise=" +
-          exercise_items.find(
+          exercises.find(
             (element: Exercise) => element.exerciseId === workout.exercise
           )?.exerciseName +
           "&day=" +
@@ -77,16 +80,24 @@ const Timer = ({
           authId
       ).request;
 
-      const exercise_record = response2.data as unknown as number;
+      const exercise_record_value = response2.data;
 
-      if (exercise_record != -10) {
-        sendDataToParent(exercise_record, false);
+      if (!(typeof exercise_record_value == "number")) {
+        const exercise_record =
+          exercise_record_value[0] as unknown as ExerciseRecord;
+        sendDataToParent(
+          exercise_record.weight,
+          exercise_record.targetWeight,
+          false,
+          index
+        );
         setWorkoutComplete(true);
       }
     };
     fetchData();
   }, [exercises]);
 
+  //Timer Functionality
   useEffect(() => {
     if (weight <= 0) {
       setStartDisabled(true);
@@ -119,7 +130,7 @@ const Timer = ({
   }, [startFlag, seconds, weight, isStartDisabled, isWorkoutComplete]);
 
   const startTimer = () => {
-    sendDataToParent(weight, true);
+    sendDataToParent(weight, 0, true, index);
     setWeightArray([...weightArray, weight]);
     setStartFlag(true);
     setStartDisabled(true);
@@ -162,7 +173,7 @@ const Timer = ({
     };
     console.log(exerciseRecord);
     setWorkoutComplete(true);
-    sendDataToParent(parseFloat(avg.toFixed(1)), false);
+    sendDataToParent(parseFloat(avg.toFixed(1)), 0, false, index);
     const { request } = exerciseRecordService.postItem("/", exerciseRecord);
     request
       .then((response) => {
@@ -177,7 +188,7 @@ const Timer = ({
   return (
     <>
       {isWorkoutComplete ? (
-        <div>Lift Complete</div>
+        <LiftCompleteDiv>Lift Complete</LiftCompleteDiv>
       ) : (
         <TimerDiv>
           {minutes === 0 && seconds === 0 ? (

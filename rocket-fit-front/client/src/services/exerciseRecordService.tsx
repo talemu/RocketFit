@@ -5,6 +5,7 @@ export interface ExerciseRecord {
   sets: number;
   reps: number;
   weight: number;
+  targetWeight: number;
 }
 
 //.NET create

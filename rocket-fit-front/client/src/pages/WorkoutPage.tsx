@@ -2,7 +2,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 // import DayTable from "../components/DayTable";
 import styled from "styled-components";
 import DayTable from "../components/DayTable";
-import { WorkoutItem } from "../services/workoutExerciseService";
 import { useEffect } from "react";
 
 const BackToHomeButton = styled.button`
@@ -38,6 +37,7 @@ const WorkoutPage = ({ authId }: Props) => {
         exerciseItems={selectedWorkoutInformation[1]}
         authId={selectedWorkoutInformation[2]}
         workoutNum={selectedWorkoutInformation[3]}
+        week={selectedWorkoutInformation[4]}
       />
     </>
   );

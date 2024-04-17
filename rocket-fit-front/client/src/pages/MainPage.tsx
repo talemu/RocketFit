@@ -52,7 +52,7 @@ const MainPage = ({ authId }: Props) => {
     setLoading(true);
     if (authId != -10) {
       setNextButtonDisabled(week >= workout.weeks);
-      setWorkoutArray(StandardizeWorkouts(workout));
+      setWorkoutArray(StandardizeWorkouts(workout, week));
     }
     setPreviousButtonDisabled(week <= 1);
     setLoading(false);
@@ -79,9 +79,10 @@ const MainPage = ({ authId }: Props) => {
                     workoutArray.filter((item2) => item2.day === item),
                     authId,
                     workout.workoutNumber,
+                    week,
                   ]}
                 >
-                  Day {item}
+                  Day {item - (week - 1) * 7}
                 </Link>
               </DayButton>
             ))}
