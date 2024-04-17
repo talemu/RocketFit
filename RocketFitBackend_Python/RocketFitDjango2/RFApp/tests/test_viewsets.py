@@ -43,7 +43,7 @@ class ExerciseRecordViewTest(TestCase):
         response = self.client.get(self.url + '/exerciserecord/averageweight?exercise=Test Case&auth=1', follow=True)
         self.assertTrue(isinstance(response, JsonResponse))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content.decode('utf-8')), 10.0)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), 10.25)
 
     def test_averageweight_fault(self):
         #record does not exist
@@ -61,7 +61,8 @@ class ExerciseRecordViewTest(TestCase):
             "weight" : 100,
             "authId" : 1,
             "sets" : 3,
-            "reps" : 4
+            "reps" : 4,
+            "targetWeight" : "0.0"
         }
         response = self.client.post(self.url + '/exerciserecord/', data=data)
         post_inserted_er = self.client.get(self.url + '/exerciserecord/')

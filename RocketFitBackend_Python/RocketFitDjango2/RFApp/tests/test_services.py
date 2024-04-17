@@ -32,7 +32,7 @@ class ExerciseRecordsServiceTests(TestCase):
 
     def test_get_ExerciseRecord_average_based_on_name_id(self):
         average_weight = self._test_er_service.get_ExerciseRecord_average_based_on_name_id("Test Case", 1)
-        self.assertEqual(average_weight, 10)
+        self.assertEqual(average_weight, 10.25)
 
     def test_get_ExerciseRecord_average_based_on_name_id_no_records(self):
         average_weight = self._test_er_service.get_ExerciseRecord_average_based_on_name_id("Test Case", 0)
@@ -40,7 +40,7 @@ class ExerciseRecordsServiceTests(TestCase):
 
     def test_exerciseRecord_track_workout(self):
         pre_added_er = self._test_er_service.get_all_exercise_records()
-        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1)
+        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1, targetWeight = 0)
         returned_dto = self._test_er_service.exerciseRecord_track_workout(er)
         post_added_er = self._test_er_service.get_all_exercise_records()
         #Check item added to repo

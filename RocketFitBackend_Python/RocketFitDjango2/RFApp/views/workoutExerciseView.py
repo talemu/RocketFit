@@ -15,6 +15,7 @@ class WorkoutExerciseViewSet(viewsets.ViewSet):
     """
 
     _weService = WorkoutExerciseService()
+    _transformMapper = TransformRequestMapper()
     
     #GET /workoutexercise/
     def list(self, request):
@@ -31,7 +32,7 @@ class WorkoutExerciseViewSet(viewsets.ViewSet):
     #POST /workoutexercise/
     def create(self, request):
         try:
-            dto = TransformRequestMapper.to_we_dto(request.data)
+            dto = self._transformMapper.to_we_dto(request.data)
             we = self._weService.add_workout(dto)
             response = we.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

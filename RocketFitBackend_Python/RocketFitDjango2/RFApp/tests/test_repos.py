@@ -33,7 +33,7 @@ class ExerciseRecordsRepoTests(TestCase):
 
     # save a new record and ensure it is saved in the test database
     def test_save_new_exercise_record(self):
-        new_record = Exerciserecord(exercise_name="New Record", sets=1, reps=1, weight=10, day=1, workout_number=1, auth_id=1)
+        new_record = Exerciserecord(exercise_name="New Record", sets=1, reps=1, weight=10, day=1, workout_number=1, auth_id=1, target_weight=0)
         self._test_er_repo.save_record(new_record)
         obj = self._test_er_repo.get_all()
         self.assertEqual(obj[len(obj) - 1].exercise_name, "New Record")

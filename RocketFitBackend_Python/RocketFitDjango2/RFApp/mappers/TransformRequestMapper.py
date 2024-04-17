@@ -29,7 +29,8 @@ class TransformRequestMapper:
                 weight = json_dict['weight'],
                 authId = json_dict['authId'],
                 day = json_dict['day'],
-                workoutNumber = json_dict['workoutNumber']
+                workoutNumber = json_dict['workoutNumber'],
+                targetWeight = json_dict['targetWeight']
             )
         except Exception as e:
             raise Exception("Missing property: " + e.args[0])
