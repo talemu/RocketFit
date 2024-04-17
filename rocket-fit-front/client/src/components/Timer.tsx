@@ -19,7 +19,8 @@ interface Props {
     weight_entered: number,
     target_weigth: number,
     start: boolean,
-    index: number
+    index: number,
+    exercise: number
   ) => void;
   index: number;
 }
@@ -63,7 +64,6 @@ const Timer = ({
   const [isSkipDisabled, setSkipDisabled] = useState(true);
   const [weightArray, setWeightArray] = useState<number[]>([]);
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
-  console.log(workout.day);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,7 +89,8 @@ const Timer = ({
           exercise_record.weight,
           exercise_record.targetWeight,
           false,
-          index
+          index,
+          0
         );
         setWorkoutComplete(true);
       }
@@ -129,8 +130,12 @@ const Timer = ({
     }
   }, [startFlag, seconds, weight, isStartDisabled, isWorkoutComplete]);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    console.log(event.key);
+  };
+
   const startTimer = () => {
-    sendDataToParent(weight, 0, true, index);
+    sendDataToParent(weight, 0, true, index, workout.exercise);
     setWeightArray([...weightArray, weight]);
     setStartFlag(true);
     setStartDisabled(true);
@@ -173,7 +178,7 @@ const Timer = ({
     };
     console.log(exerciseRecord);
     setWorkoutComplete(true);
-    sendDataToParent(parseFloat(avg.toFixed(1)), 0, false, index);
+    sendDataToParent(parseFloat(avg.toFixed(1)), 0, false, index, 0);
     const { request } = exerciseRecordService.postItem("/", exerciseRecord);
     request
       .then((response) => {
@@ -220,7 +225,11 @@ const Timer = ({
                 </TimerText>
               </TimerItemDiv>
               <TimerItemDiv>
-                <TimerButton onClick={startTimer} disabled={isStartDisabled}>
+                <TimerButton
+                  onClick={startTimer}
+                  onKeyDown={handleKeyDown}
+                  disabled={isStartDisabled}
+                >
                   start
                 </TimerButton>
                 {!isSkipDisabled ? (

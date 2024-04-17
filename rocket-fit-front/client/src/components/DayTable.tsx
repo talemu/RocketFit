@@ -7,6 +7,7 @@ import exerciseRecordService, {
 } from "../services/exerciseRecordService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 import Spinner from "./Spinner";
+import { Dict } from "styled-components/dist/types";
 
 interface Props {
   exerciseItems: WorkoutItem[];
@@ -48,7 +49,6 @@ const TableWeightArrayItem = styled.div``;
 
 const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
   const [initial, setInitial] = useState<number[]>([]);
-  const [weightArray, setWeightArray] = useState<number[]>([]);
   const [weight, setWeight] = useState<number[]>(
     new Array(exerciseItems.length).fill(-1)
   );
@@ -58,6 +58,12 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  //setting keys for the Weight Dictionary
+  const keys = exerciseItems.map((exerciseItem) => exerciseItem.exercise);
+  const [weightDictionary, setWeightDictionary] = useState<Dict>(
+    keys.reduce((acc, key) => ({ ...acc, [key]: [] }), {})
+  );
+
   useEffect(() => {
     const { request } = exerciseService.getAll("");
 
@@ -65,12 +71,12 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
     request.then((response) => {
       const exercises = response.data as unknown[] as Exercise[];
       setExercises(exercises);
-      getAverageWeights(exercises);
+      getAverageWeightsAndSetInitials(exercises);
     });
   }, []);
 
   //fetches the average weight for each exercise for the Target Weight field
-  const getAverageWeights = async (exercises: Exercise[]) => {
+  const getAverageWeightsAndSetInitials = async (exercises: Exercise[]) => {
     const promises = exerciseItems.map((exerciseItem, index) => {
       return new Promise((resolve, reject) => {
         const { request } = exerciseRecordService.getAll(
@@ -106,7 +112,8 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
     weight_entered: number,
     targetWeight: number,
     start: boolean,
-    index: number
+    index: number,
+    exercise: number
   ) => {
     if (start == false) {
       //set weight to weight recorded during the workout
@@ -128,7 +135,10 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
         });
       });
     } else {
-      setWeightArray([...weightArray, weight_entered]);
+      setWeightDictionary((prevDictionary) => ({
+        ...prevDictionary,
+        [exercise]: [...prevDictionary[exercise], weight_entered],
+      }));
     }
   };
 
@@ -181,22 +191,16 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
                       }}
                       disabled={isInputDisabled[index]}
                     ></TableInput>
-                    {weightArray.length != 0 ? (
-                      <>
-                        <TableWeightArrayItems>
-                          [
-                          {weightArray.map((item, count) => (
-                            <TableWeightArrayItem>
-                              {" "}
-                              {count != 0 ? <>,{item}</> : <>{item}</>}
-                            </TableWeightArrayItem>
-                          ))}
-                          ]
-                        </TableWeightArrayItems>
-                      </>
-                    ) : (
-                      <TableWeightArrayItems></TableWeightArrayItems>
-                    )}
+
+                    <TableWeightArrayItems>
+                      {weightDictionary[exerciseItem.exercise].length != 0 ? (
+                        <TableWeightArrayItem>
+                          {"[" + weightDictionary[exerciseItem.exercise] + "]"}
+                        </TableWeightArrayItem>
+                      ) : (
+                        <TableWeightArrayItem />
+                      )}
+                    </TableWeightArrayItems>
                   </TableWeightArray>
                   <TableColumn>
                     <Timer

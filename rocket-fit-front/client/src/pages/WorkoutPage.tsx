@@ -29,7 +29,10 @@ const WorkoutPage = ({ authId }: Props) => {
   return (
     <>
       <BackToHomeButton>
-        <Link to="/main" state={selectedWorkoutInformation[0]}>
+        <Link
+          to="/main"
+          state={[selectedWorkoutInformation[4], selectedWorkoutInformation[0]]}
+        >
           Home
         </Link>
       </BackToHomeButton>

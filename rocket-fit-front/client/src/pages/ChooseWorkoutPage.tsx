@@ -48,7 +48,7 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
           <>
             {workoutArray?.map((item: Workout) => (
               <WorkoutButton>
-                <Link to={"/main"} state={item}>
+                <Link to={"/main"} state={[0, item]}>
                   {" "}
                   {item.workoutName}
                 </Link>
