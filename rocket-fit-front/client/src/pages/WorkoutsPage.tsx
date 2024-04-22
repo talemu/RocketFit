@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import workoutTemplateService, {
   StandardizedWorkoutTemplate,
   WorkoutTemplate,
+  standardizeWorkoutTemplates,
 } from "../services/workoutTemplateService";
 import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Spinner from "../components/Spinner";
 
 const HeaderOne = styled.h1``;
 
@@ -31,6 +33,8 @@ const FlipButton = styled.button``;
 
 const CustomizeButton = styled.button``;
 
+const BackButton = styled.button``;
+
 interface Props {
   authId: number;
 }
@@ -38,25 +42,19 @@ interface Props {
 const WorkoutsPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
 
+  //number of workouts the user already has
+  const location = useLocation();
+  const numberOfWorkouts = location.state;
+
   const [templates, setTemplates] = useState<StandardizedWorkoutTemplate[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [dropdowns, setDropdowns] = useState<boolean[]>([]);
   const [trigger, setTrigger] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   if (authId == -10) {
     Navigate("/unauthorized");
   }
-
-  useEffect(() => {
-    const { request } = workoutTemplateService.getAll("");
-    request
-      .then((response) => {
-        const workoutTemplates =
-          response.data as unknown[] as WorkoutTemplate[];
-        standardizeWorkoutTemplates(workoutTemplates);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   useEffect(() => {
     const { request } = exerciseService.getAll("");
@@ -68,111 +66,98 @@ const WorkoutsPage = ({ authId }: Props) => {
       .catch((err) => console.log(err));
   }, []);
 
-  const standardizeWorkoutTemplates = (item: WorkoutTemplate[]) => {
-    console.log(item);
-    setTemplates([]);
-    setDropdowns([]);
-    item.forEach((element) => {
-      const standardWT = {
-        workoutName: element.workoutName,
-        days: [-1],
-        exercises: [-1],
-        sets: [-1],
-        reps: [-1],
-        rest: [-1],
-        weeks: element.weeks,
-      };
-      standardWT.days = element.days
-        .split(",")
-        .map((item) => parseInt(item, 10));
-      standardWT.exercises = element.exercises
-        .split(",")
-        .map((item) => parseInt(item, 10));
-      standardWT.sets = element.sets
-        .split(",")
-        .map((item) => parseInt(item, 10));
-      standardWT.reps = element.reps
-        .split(",")
-        .map((item) => parseInt(item, 10));
-      standardWT.rest = element.rest
-        .split(",")
-        .map((item) => parseInt(item, 10));
-      setTemplates((templates) => [...templates, standardWT]);
-      setDropdowns([...dropdowns, false]);
-      console.log(standardWT);
-    });
-  };
+  useEffect(() => {
+    const { request } = workoutTemplateService.getAll("");
+    request
+      .then((response) => {
+        const workoutTemplates =
+          response.data as unknown[] as WorkoutTemplate[];
+        const standardTemplatesAndDropdowns =
+          standardizeWorkoutTemplates(workoutTemplates);
+        setTemplates(standardTemplatesAndDropdowns[0]);
+        setDropdowns(standardTemplatesAndDropdowns[1]);
+        setLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const FlipDrop = (count: number) => {
     setTrigger(!trigger);
     dropdowns[count] = !dropdowns[count];
   };
 
-  const BackButton = styled.button``;
-
-  // return <>{data[0].day}</>;
   return (
     <>
       <BackButton>
         <Link to="/myworkouts">Back</Link>
       </BackButton>
-      {templates.map((item, count) => (
+      {loading ? (
+        <Spinner />
+      ) : (
         <>
-          <HeaderOne>{item.workoutName}</HeaderOne>
-          <FlipButton onClick={() => FlipDrop(count)}>flip</FlipButton>
-          {dropdowns[count] ? (
+          {templates.map((item, count) => (
             <>
-              <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
-              <StyledTable>
-                <TableHead>
-                  <TableRecord>
-                    <TableHeader>Day</TableHeader>
-                    <TableHeader>Exercise</TableHeader>
-                    <TableHeader>Sets</TableHeader>
-                    <TableHeader>Reps</TableHeader>
-                    <TableHeader>Rest</TableHeader>
-                  </TableRecord>
-                </TableHead>
-                {item.days.map((day, count) => (
-                  <>
-                    <TableBody>
+              <HeaderOne>{item.workoutName}</HeaderOne>
+              <FlipButton onClick={() => FlipDrop(count)}>flip</FlipButton>
+              {dropdowns[count] ? (
+                <>
+                  <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
+                  <StyledTable>
+                    <TableHead>
                       <TableRecord>
-                        {item.days[count] !== item.days[count - 1] ? (
-                          <TableColumn>{day}</TableColumn>
-                        ) : (
-                          <TableColumn></TableColumn>
-                        )}
-
-                        {
-                          <TableColumn>
-                            {
-                              exercises.find(
-                                (element: Exercise) =>
-                                  element.exerciseId === item.exercises[count]
-                              )?.exerciseName
-                            }
-                          </TableColumn>
-                        }
-                        {<TableColumn>{item.sets[count]}</TableColumn>}
-                        {<TableColumn>{item.reps[count]}</TableColumn>}
-                        {<TableColumn>{item.rest[count]}</TableColumn>}
+                        <TableHeader>Day</TableHeader>
+                        <TableHeader>Exercise</TableHeader>
+                        <TableHeader>Sets</TableHeader>
+                        <TableHeader>Reps</TableHeader>
+                        <TableHeader>Rest</TableHeader>
                       </TableRecord>
-                    </TableBody>
-                  </>
-                ))}
-              </StyledTable>
-              <CustomizeButton>
-                <Link to="/customize" state={[item, exercises]}>
-                  {" "}
-                  Customize Workout{" "}
-                </Link>
-              </CustomizeButton>
+                    </TableHead>
+                    {item.days.map((day, count) => (
+                      <>
+                        <TableBody>
+                          <TableRecord>
+                            {item.days[count] !== item.days[count - 1] ? (
+                              <TableColumn>{day}</TableColumn>
+                            ) : (
+                              <TableColumn></TableColumn>
+                            )}
+
+                            {
+                              <TableColumn>
+                                {
+                                  exercises.find(
+                                    (element: Exercise) =>
+                                      element.exerciseId ===
+                                      item.exercises[count]
+                                  )?.exerciseName
+                                }
+                              </TableColumn>
+                            }
+                            {<TableColumn>{item.sets[count]}</TableColumn>}
+                            {<TableColumn>{item.reps[count]}</TableColumn>}
+                            {<TableColumn>{item.rest[count]}</TableColumn>}
+                          </TableRecord>
+                        </TableBody>
+                      </>
+                    ))}
+                  </StyledTable>
+                  <CustomizeButton>
+                    <Link
+                      to="/customize"
+                      state={[item, exercises, numberOfWorkouts]}
+                    >
+                      {" "}
+                      Customize Workout{" "}
+                    </Link>
+                  </CustomizeButton>
+                </>
+              ) : (
+                <StyledTable></StyledTable>
+              )}
             </>
-          ) : (
-            <div></div>
-          )}
+          ))}
         </>
-      ))}
+      )}
     </>
   );
 };

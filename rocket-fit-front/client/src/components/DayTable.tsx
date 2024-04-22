@@ -69,20 +69,21 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
 
     //setting the exercises array to the exercises returned from the database
     request.then((response) => {
-      const exercises = response.data as unknown[] as Exercise[];
-      setExercises(exercises);
-      getAverageWeightsAndSetInitials(exercises);
+      const response_exercises = response.data as unknown[] as Exercise[];
+      setExercises(response_exercises);
+      getAverageWeightsAndSetInitials(response_exercises);
     });
   }, []);
 
   //fetches the average weight for each exercise for the Target Weight field
   const getAverageWeightsAndSetInitials = async (exercises: Exercise[]) => {
+    console.log(exerciseItems);
     const promises = exerciseItems.map((exerciseItem, index) => {
       return new Promise((resolve, reject) => {
         const { request } = exerciseRecordService.getAll(
           "/averageweight?exercise=" +
             exercises.find(
-              (element) => element.exerciseId === exerciseItems[index].exercise
+              (element) => element.exerciseId === exerciseItem.exercise
             )?.exerciseName +
             "&auth=" +
             authId
@@ -90,11 +91,11 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
         request
           .then((response) => {
             const returned_weight = Number(response.data) as unknown as number;
-            if (isNaN(returned_weight)) {
-              resolve(0);
-            } else {
-              resolve(returned_weight / (1 + 0.02 * exerciseItems[index].reps));
-            }
+            isNaN(returned_weight)
+              ? resolve(0)
+              : resolve(
+                  returned_weight / (1 + 0.02 * exerciseItems[index].reps)
+                );
           })
           .catch((err) => {
             console.log(err);
@@ -103,19 +104,19 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
       });
     });
     const averageweights = (await Promise.all(promises)) as number[];
+    setInitial(averageweights);
     //work around to bug where the first average weight returned is the correct averages
     setLoading(false);
-    setInitial(averageweights);
   };
 
   const UpdateWeightArray = (
     weight_entered: number,
-    targetWeight: number,
+    target_weight: number,
     start: boolean,
     index: number,
     exercise: number
   ) => {
-    if (start == false) {
+    if (!start) {
       //set weight to weight recorded during the workout
       setWeight((prevState) => {
         return prevState.map((value, i) => {
@@ -125,7 +126,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
       //set inital weight to weight recorded the day of the workout
       setInitial((prevState) => {
         return prevState.map((value, i) => {
-          return i === index ? targetWeight : value;
+          return i === index ? target_weight : value;
         });
       });
       //iterates over the input disabled array and disables the input for the index specified
@@ -135,6 +136,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
         });
       });
     } else {
+      //set weight array visually showing user progress throughout workout
       setWeightDictionary((prevDictionary) => ({
         ...prevDictionary,
         [exercise]: [...prevDictionary[exercise], weight_entered],
@@ -206,10 +208,10 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
                     <Timer
                       exercises={exercises}
                       authId={authId}
+                      //Development time set at 2 sec, will be exerciseItem.rest
+                      //initialTimeInSec={exerciseItem.rest}
                       initialTimeInSec={2}
                       weight={weight[index]}
-                      sets={exerciseItem.sets}
-                      reps={exerciseItem.reps}
                       workout={exerciseItem}
                       workoutNum={workoutNum}
                       sendDataToParent={UpdateWeightArray}

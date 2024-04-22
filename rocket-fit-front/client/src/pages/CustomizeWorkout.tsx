@@ -3,8 +3,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Exercise } from "../services/exerciseService";
 import styled from "styled-components";
 import NumberAdjuster from "../components/NumberAdjuster";
+import e from "cors";
+import workoutExerciseService from "../services/workoutExerciseService";
 
-const HeaderOne = styled.h1``;
+const HeaderDiv = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const HeaderOne = styled.input``;
+
+const EditWorkoutButton = styled.button`
+  margin-left: 1em;
+`;
 
 const StyledTable = styled.table``;
 
@@ -35,14 +47,24 @@ const CustomizeWorkout = ({ authId }: Props) => {
 
   const location = useLocation();
   const workoutData = location.state;
-  const validAuthIdShow = authId != -10;
   const [change, setChange] = useState<boolean>(false);
+  const [editWorkoutName, setEditWorkoutName] = useState<boolean>(false);
+  const [workoutName, setWorkoutName] = useState<string>(
+    workoutData[0].workoutName
+  );
 
   useEffect(() => {
     if (authId == -10) {
       Navigate("/authorized");
     }
   }, [change]);
+
+  const handleWorkoutNameEdit = () => {
+    if (editWorkoutName) {
+      workoutData[0].workoutName = workoutName;
+    }
+    setEditWorkoutName(!editWorkoutName);
+  };
 
   const UpdateCurrent = (data: number, count: number, array: number[]) => {
     if (count != -1) {
@@ -53,95 +75,139 @@ const CustomizeWorkout = ({ authId }: Props) => {
     setChange(!change);
   };
 
-  const AddWorkoutToUser = () => {};
+  const AddWorkoutToUser = () => {
+    const proposedWorkout = {
+      days: workoutData[0].days.join(","),
+      exercises: workoutData[0].exercises.join(","),
+      sets: workoutData[0].sets.join(","),
+      reps: workoutData[0].reps.join(","),
+      rest: workoutData[0].rest.join(","),
+      weeks: workoutData[0].weeks,
+      authid: authId,
+      workoutName: workoutData[0].workoutName,
+      workoutNumber: workoutData[2] + 1,
+    };
+    console.log(proposedWorkout);
+    const { request } = workoutExerciseService.postItem("/", proposedWorkout);
+    request
+      .then((response) => {
+        console.log(response);
+        console.log("POST request successful", response.data);
+      })
+      .catch((error) => {
+        console.error("Error sending POST request", error);
+      });
+  };
 
   return (
     <>
-      {validAuthIdShow ? (
-        <>
-          <WorkoutsButton>
-            <Link to="/workouts">Back</Link>
-          </WorkoutsButton>
-          <HeaderOne>{workoutData[0].workoutName}</HeaderOne>
-          <NumberAdjuster
-            weeksFlag={true}
-            sendDataToParent={(current) =>
-              UpdateCurrent(current, -1, workoutData[0].weeks)
-            }
-            current={workoutData[0].weeks}
-          />
-          <StyledTable>
-            <TableHead>
+      <WorkoutsButton>
+        <Link to="/workouts">Back</Link>
+      </WorkoutsButton>
+      <HeaderDiv>
+        {editWorkoutName ? (
+          <>
+            <HeaderOne
+              type="text"
+              value={workoutName}
+              disabled={false}
+              onChange={(event) => setWorkoutName(event.target.value)}
+            ></HeaderOne>
+            <EditWorkoutButton onClick={handleWorkoutNameEdit}>
+              Set
+            </EditWorkoutButton>
+          </>
+        ) : (
+          <>
+            <HeaderOne
+              type="text"
+              placeholder={workoutData[0].workoutName}
+              disabled={true}
+            ></HeaderOne>
+            <EditWorkoutButton onClick={handleWorkoutNameEdit}>
+              Edit
+            </EditWorkoutButton>
+          </>
+        )}
+      </HeaderDiv>
+      <NumberAdjuster
+        weeksFlag={true}
+        sendDataToParent={(current) =>
+          UpdateCurrent(current, -1, workoutData[0].weeks)
+        }
+        current={workoutData[0].weeks}
+        increment={1}
+      />
+      <StyledTable>
+        <TableHead>
+          <TableRecord>
+            <TableHeader>Day</TableHeader>
+            <TableHeader>Exercise</TableHeader>
+            <TableHeader>Sets</TableHeader>
+            <TableHeader>Reps</TableHeader>
+            <TableHeader>Rest (seconds) </TableHeader>
+          </TableRecord>
+        </TableHead>
+        {workoutData[0].days.map((day: number, count: number) => (
+          <>
+            <TableBody>
               <TableRecord>
-                <TableHeader>Day</TableHeader>
-                <TableHeader>Exercise</TableHeader>
-                <TableHeader>Sets</TableHeader>
-                <TableHeader>Reps</TableHeader>
-                <TableHeader>Rest</TableHeader>
-              </TableRecord>
-            </TableHead>
-            {workoutData[0].days.map((day: number, count: number) => (
-              <>
-                <TableBody>
-                  <TableRecord>
-                    {workoutData[0].days[count] !==
-                    workoutData[0].days[count - 1] ? (
-                      <TableColumn>{day}</TableColumn>
-                    ) : (
-                      <TableColumn></TableColumn>
-                    )}
+                {workoutData[0].days[count] !==
+                workoutData[0].days[count - 1] ? (
+                  <TableColumn>{day}</TableColumn>
+                ) : (
+                  <TableColumn></TableColumn>
+                )}
 
+                {
+                  <TableColumn>
                     {
-                      <TableColumn>
-                        {
-                          workoutData[1].find(
-                            (element: Exercise) =>
-                              element.exerciseId === count + 1
-                          )?.exerciseName
-                        }
-                      </TableColumn>
+                      workoutData[1].find(
+                        (element: Exercise) => element.exerciseId === count + 1
+                      )?.exerciseName
                     }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          weeksFlag={false}
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData[0].sets)
-                          }
-                          current={workoutData[0].sets[count]}
-                        />{" "}
-                      </TableColumn>
+                  </TableColumn>
+                }
+                {
+                  <TableColumn>
+                    <NumberAdjuster
+                      weeksFlag={false}
+                      sendDataToParent={(current) =>
+                        UpdateCurrent(current, count, workoutData[0].sets)
+                      }
+                      current={workoutData[0].sets[count]}
+                      increment={1}
+                    />{" "}
+                  </TableColumn>
+                }
+                {
+                  <TableColumn>
+                    <NumberAdjuster
+                      weeksFlag={false}
+                      sendDataToParent={(current) =>
+                        UpdateCurrent(current, count, workoutData[0].reps)
+                      }
+                      current={workoutData[0].reps[count]}
+                      increment={1}
+                    />
+                  </TableColumn>
+                }
+                {
+                  <NumberAdjuster
+                    weeksFlag={false}
+                    sendDataToParent={(current) =>
+                      UpdateCurrent(current, count, workoutData[0].rest)
                     }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          weeksFlag={false}
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData[0].reps)
-                          }
-                          current={workoutData[0].reps[count]}
-                        />
-                      </TableColumn>
-                    }
-                    {
-                      <NumberAdjuster
-                        weeksFlag={false}
-                        sendDataToParent={(current) =>
-                          UpdateCurrent(current, count, workoutData[0].rest)
-                        }
-                        current={workoutData[0].rest[count]}
-                      />
-                    }
-                  </TableRecord>
-                </TableBody>
-              </>
-            ))}
-          </StyledTable>
-          <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
-        </>
-      ) : (
-        <div></div>
-      )}
+                    current={workoutData[0].rest[count]}
+                    increment={15}
+                  />
+                }
+              </TableRecord>
+            </TableBody>
+          </>
+        ))}
+      </StyledTable>
+      <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
     </>
   );
 };

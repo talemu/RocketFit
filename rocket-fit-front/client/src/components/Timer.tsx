@@ -11,13 +11,11 @@ interface Props {
   authId: number;
   initialTimeInSec: number;
   weight: number;
-  sets: number;
-  reps: number;
   workout: WorkoutItem;
   workoutNum: number;
   sendDataToParent: (
     weight_entered: number,
-    target_weigth: number,
+    target_weight: number,
     start: boolean,
     index: number,
     exercise: number
@@ -49,8 +47,6 @@ const Timer = ({
   authId,
   initialTimeInSec,
   weight,
-  sets,
-  reps,
   workout,
   workoutNum,
   sendDataToParent,
@@ -63,6 +59,7 @@ const Timer = ({
   const [isResetDisabled, setResetDisabled] = useState(false);
   const [isSkipDisabled, setSkipDisabled] = useState(true);
   const [weightArray, setWeightArray] = useState<number[]>([]);
+  const [targetWeight, setTargetWeight] = useState<number>(0);
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
 
   useEffect(() => {
@@ -85,6 +82,7 @@ const Timer = ({
       if (!(typeof exercise_record_value == "number")) {
         const exercise_record =
           exercise_record_value[0] as unknown as ExerciseRecord;
+        setTargetWeight(exercise_record.targetWeight);
         sendDataToParent(
           exercise_record.weight,
           exercise_record.targetWeight,
@@ -93,6 +91,8 @@ const Timer = ({
           0
         );
         setWorkoutComplete(true);
+      } else {
+        setTargetWeight(0);
       }
     };
     fetchData();
@@ -100,15 +100,13 @@ const Timer = ({
 
   //Timer Functionality
   useEffect(() => {
-    if (weight <= 0) {
-      setStartDisabled(true);
-    } else if (isNaN(weight)) {
-      setStartDisabled(true);
-    } else if (startFlag == true) {
-      setStartDisabled(true);
-    } else {
+    //enabling start button if weight is entered
+    if (weight > 0 && startFlag == false) {
       setStartDisabled(false);
+    } else {
+      setStartDisabled(true);
     }
+
     if (startFlag) {
       const interval = setInterval(() => {
         // eslint-disable-next-line no-debugger
@@ -128,11 +126,7 @@ const Timer = ({
         clearInterval(interval);
       };
     }
-  }, [startFlag, seconds, weight, isStartDisabled, isWorkoutComplete]);
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    console.log(event.key);
-  };
+  }, [startFlag, seconds, weight, isWorkoutComplete]);
 
   const startTimer = () => {
     sendDataToParent(weight, 0, true, index, workout.exercise);
@@ -140,7 +134,7 @@ const Timer = ({
     setStartFlag(true);
     setStartDisabled(true);
     setSkipDisabled(false);
-    if (weightArray.length == sets - 1) {
+    if (weightArray.length == workout.sets - 1) {
       setResetDisabled(true);
     }
   };
@@ -148,7 +142,7 @@ const Timer = ({
   const skipTimer = () => {
     resetTimer();
     setSkipDisabled(true);
-    if (weightArray.length == sets) {
+    if (weightArray.length == workout.sets) {
       setResetDisabled(true);
       setSeconds(0);
       setMinutes(0);
@@ -163,18 +157,19 @@ const Timer = ({
   };
 
   const completeWorkout = () => {
-    const sum = weightArray.reduce((total, num) => total + num, 0);
-    const avg = sum / sets;
+    const avg =
+      weightArray.reduce((total, num) => total + num, 0) / workout.sets;
     const exerciseRecord = {
       exerciseName: exercises.find(
         (element) => element.exerciseId === workout.exercise
       )?.exerciseName,
-      sets: sets,
-      reps: reps,
+      sets: workout.sets,
+      reps: workout.reps,
       weight: parseFloat(avg.toFixed(1)),
       authId: authId,
       day: workout.day,
       workoutNumber: workoutNum,
+      targetWeight: targetWeight,
     };
     console.log(exerciseRecord);
     setWorkoutComplete(true);
@@ -225,11 +220,7 @@ const Timer = ({
                 </TimerText>
               </TimerItemDiv>
               <TimerItemDiv>
-                <TimerButton
-                  onClick={startTimer}
-                  onKeyDown={handleKeyDown}
-                  disabled={isStartDisabled}
-                >
+                <TimerButton onClick={startTimer} disabled={isStartDisabled}>
                   start
                 </TimerButton>
                 {!isSkipDisabled ? (

@@ -58,7 +58,9 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
         )}
 
         <WorkoutButton>
-          <Link to={"/workouts"}>Choose New Workout</Link>
+          <Link to={"/workouts"} state={workoutArray.length}>
+            Choose New Workout
+          </Link>
         </WorkoutButton>
       </ContentDiv>
     </>
