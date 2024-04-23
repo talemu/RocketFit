@@ -29,7 +29,7 @@ class WorkoutExerciseViewSet(viewsets.ViewSet):
         response = list(map(lambda x: x.asdict(), response_data))
         return JsonResponse(response, safe=False)
     
-    #GET /workoutexercise/?pk={pk}&workoutNum={workoutNum}
+    #GET /workoutexercise/?authId={pk}&workoutNum={workoutNum}
     @action(detail=False, methods=['get'], url_path='item')
     def retrieve_we_based_on_auth_id_and_workout_num(self, request):
         try:
