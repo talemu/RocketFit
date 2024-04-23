@@ -39,7 +39,7 @@ interface Props {
   authId: number;
 }
 
-const WorkoutsPage = ({ authId }: Props) => {
+const WorkoutTemplatesPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
 
   //number of workouts the user already has
@@ -162,4 +162,4 @@ const WorkoutsPage = ({ authId }: Props) => {
   );
 };
 
-export default WorkoutsPage;
+export default WorkoutTemplatesPage;

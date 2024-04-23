@@ -3,11 +3,11 @@ import MainPage from "./pages/MainPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import WorkoutPage from "./pages/WorkoutPage";
 import AuthenticationPage from "./pages/AuthenticationPage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ChooseWorkoutPage from "./pages/ChooseWorkoutPage";
 import Navbar from "./components/Navbar";
 import styled from "styled-components";
-import WorkoutsPage from "./pages/WorkoutsPage";
+import WorkoutTemplatesPage from "./pages/WorkoutsTemplatesPage";
 import Base from "./components/Base";
 import CustomizeWorkout from "./pages/CustomizeWorkout";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -64,7 +64,7 @@ function App() {
             <Route
               path="/workouts"
               element={
-                <WorkoutsPage
+                <WorkoutTemplatesPage
                   authId={JSON.parse(
                     localStorage.getItem("savedAuthId") || "{}"
                   )}
