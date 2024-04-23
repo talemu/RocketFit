@@ -2,10 +2,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 // import DayTable from "../components/DayTable";
 import styled from "styled-components";
 import DayTable from "../components/DayTable";
-import { WorkoutItem } from "../services/workoutExerciseService";
 import { useEffect } from "react";
 
-const BackToHomeButton = styled.button``;
+const BackToHomeButton = styled.button`
+  a {
+    text-decoration: none;
+    color: black;
+  }
+`;
 
 interface Props {
   authId: number;
@@ -14,31 +18,30 @@ interface Props {
 const WorkoutPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const item = location.state;
-  const validAuthIdShow = authId != -10;
-
-  console.log(authId);
+  const selectedWorkoutInformation = location.state;
 
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/main");
+      Navigate("/unauthorized");
     }
   });
 
   return (
     <>
-      {validAuthIdShow ? (
-        <>
-          <Link to="/main" state={item[0]}>
-            <BackToHomeButton>Home</BackToHomeButton>
-          </Link>
-          {item[1].map((item2: WorkoutItem) => (
-            <DayTable item={item2} id={item[2]} workoutNum={item[3]} />
-          ))}
-        </>
-      ) : (
-        <div></div>
-      )}
+      <BackToHomeButton>
+        <Link
+          to="/main"
+          state={[selectedWorkoutInformation[4], selectedWorkoutInformation[0]]}
+        >
+          Home
+        </Link>
+      </BackToHomeButton>
+      <DayTable
+        exerciseItems={selectedWorkoutInformation[1]}
+        authId={selectedWorkoutInformation[2]}
+        workoutNum={selectedWorkoutInformation[3]}
+        week={selectedWorkoutInformation[4]}
+      />
     </>
   );
 };

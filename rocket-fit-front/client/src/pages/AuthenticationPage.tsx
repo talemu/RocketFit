@@ -19,9 +19,19 @@ const SubmitButton = styled.button`
   flex-direction: column;
 `;
 
+const SpinnerDiv = styled.div`
+  margin: 1em 0em 0em 0em;
+  display: flex;
+  flex-direction: column;
+`;
+
+const SpinnerSpan = styled.span``;
+
 const ErrorMessage = styled.div`
   background-color: red;
 `;
+
+const EmptyDiv = styled.div``;
 
 interface Props {
   sendDataToParent: (data: number) => void;
@@ -29,34 +39,11 @@ interface Props {
 
 const AuthenticationPage = ({ sendDataToParent }: Props) => {
   const navigate = useNavigate();
-  const [authId, setAuthId] = useState(0);
+  const [authId, setAuthId] = useState(-10);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [invalidLogin, setInvalidLogin] = useState<boolean>(false);
-
-  useEffect(() => {
-    setSubmitted(false);
-    const { request } = authUserService.getAll(
-      "/login?loginKey=" + username + "&password=" + password
-    );
-    request
-      .then((response) => {
-        const returned_id: number = response.data as unknown as number;
-        if (returned_id === -10 && authId === -10) {
-          setInvalidLogin(true);
-          setAuthId(-10);
-        } else if (returned_id === -10 && authId === 0) {
-          setAuthId(-10);
-        } else {
-          setAuthId(returned_id);
-          sendDataToParent(returned_id);
-          navigate("/myworkouts");
-        }
-      })
-      .catch((err) => console.log(err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submitted]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const textValue: string = (event.target as HTMLInputElement).value;
@@ -76,17 +63,36 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
   };
 
   const SubmitLogin = () => {
-    setSubmitted(true);
+    setLoading(true);
+    const { request } = authUserService.getAll(
+      "/login?loginKey=" + username + "&password=" + password
+    );
+    request
+      .then((response) => {
+        console.log("hi");
+        const returned_id: number = response.data as unknown as number;
+        console.log(returned_id, authId);
+        if (returned_id === -10 && authId === -10) {
+          setInvalidLogin(true);
+          setLoading(false);
+        } else {
+          setAuthId(returned_id);
+          sendDataToParent(returned_id);
+          navigate("/myworkouts");
+        }
+      })
+      .catch((err) => console.log(err));
   };
+
   return (
     <>
       <LoginHeader1>Login</LoginHeader1>
       {invalidLogin ? (
-        <ErrorMessage>Incorrect Username / Password</ErrorMessage>
+        <ErrorMessage>Incorrect Username and/or Password</ErrorMessage>
       ) : (
-        <div></div>
+        <EmptyDiv></EmptyDiv>
       )}
-      <LoginHeader2>Username or Email:</LoginHeader2>
+      <LoginHeader2>Username:</LoginHeader2>
       <LoginInput
         key={1}
         type="text"
@@ -104,9 +110,15 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         onChange={handlePasswordChange}
         onKeyDown={HandleEnterDown}
       />
-      <SubmitButton onClick={SubmitLogin} onKeyDown={HandleEnterDown}>
-        Submit
-      </SubmitButton>
+      {loading ? (
+        <SpinnerDiv className="spinner-border text-dark" role="status">
+          <SpinnerSpan className="sr-only"></SpinnerSpan>
+        </SpinnerDiv>
+      ) : (
+        <SubmitButton onClick={SubmitLogin} onKeyDown={HandleEnterDown}>
+          Submit
+        </SubmitButton>
+      )}
     </>
   );
 };

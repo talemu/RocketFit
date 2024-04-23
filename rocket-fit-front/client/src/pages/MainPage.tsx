@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  StandardizedWorkoutExercise,
-  Workout,
+  StandardizeWorkouts,
   WorkoutItem,
 } from "../services/workoutExerciseService";
+import WeekButtons from "../components/WeekButtons";
+import Spinner from "../components/Spinner";
 
 interface Props {
   authId: number;
@@ -19,151 +20,83 @@ const WeekContent = styled.div`
   padding: 0em 0em 0em 1em;
 `;
 
-const WeekButtonDiv = styled.div`
-  padding: 2em 0em 0em 2em;
-`;
+const DayButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
 
-const PreviousWeekButton = styled.button`
-  margin-right: 1em;
-`;
-
-const NextWeekButton = styled.button`
-  margin-right: 1em;
-`;
-
-const ExitWorkoutButton = styled.button`
-  margin: 2em 0em 0em 2em;
-`;
-
-const LoginButton = styled.button`
-  margin: 2em 0em 0em 2em;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const MainPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const workout = location.state;
-  const [week, setWeek] = useState<number>(1);
+  //data incoming from WorkoutPage returning back to main page
+  const workout = location.state[1];
+  const [week, setWeek] = useState<number>(
+    location.state[0] == 0 ? 1 : location.state[0]
+  );
   const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
   const [isPreviousButtonDisabled, setPreviousButtonDisabled] =
     useState<boolean>(week <= 1);
   const [isNextButtonDisabled, setNextButtonDisabled] =
     useState<boolean>(false);
-  const validAuthIdShow = authId != -10;
+  const [loading, setLoading] = useState<boolean>(false);
+
+  if (authId == -10) {
+    Navigate("/unauthorized");
+  }
 
   useEffect(() => {
+    setLoading(true);
     if (authId != -10) {
       setNextButtonDisabled(week >= workout.weeks);
-      StandardizeWorkouts(workout);
+      setWorkoutArray(StandardizeWorkouts(workout, week));
     }
     setPreviousButtonDisabled(week <= 1);
+    setLoading(false);
   }, [week]);
 
-  const StandardizeWorkouts = (item: Workout) => {
-    const standardWE = {
-      workoutTemplateID: item.workoutExerciseID,
-      workoutName: item.workoutName,
-      day: [-1],
-      exercises: [-1],
-      sets: [-1],
-      reps: [-1],
-      rest: [-1],
-      weeks: item.weeks,
-    };
-    standardWE.day = item.days
-      .split(",")
-      .map((element) => parseInt(element, 10));
-    standardWE.exercises = item.exercises
-      .split(",")
-      .map((item) => parseInt(item, 10));
-    standardWE.sets = item.sets
-      .split(",")
-      .map((element) => parseInt(element, 10));
-    standardWE.reps = item.reps
-      .split(",")
-      .map((element) => parseInt(element, 10));
-    standardWE.rest = item.rest
-      .split(",")
-      .map((element) => parseInt(element, 10));
-    setWorkoutArray(MapStandardWEToWorkoutItems(standardWE));
-  };
-
-  const MapStandardWEToWorkoutItems = (
-    StandardWE: StandardizedWorkoutExercise
-  ) => {
-    const newWorkoutItems = StandardWE.day.map(
-      (_item: number, index: number) => ({
-        day: StandardWE.day[index],
-        exercise: StandardWE.exercises[index],
-        sets: StandardWE.sets[index],
-        reps: StandardWE.reps[index],
-        rest: StandardWE.rest[index],
-      })
-    );
-
-    return newWorkoutItems;
-  };
-
-  const PreviousButtonClick = () => {
-    localStorage.setItem("savedWeekNumber", JSON.stringify(week - 1));
-    setWeek(week - 1);
-  };
-
-  const NextButtonClick = () => {
-    localStorage.setItem("savedWeekNumber", JSON.stringify(week + 1));
-    setWeek(week + 1);
-  };
-
-  const LoginClick = () => {
-    Navigate("/login");
-  };
-
-  const ExitWorkoutClick = () => {
-    Navigate("/myworkouts");
+  const handleWeekData = (data: number) => {
+    setWeek(data);
   };
 
   return (
     <>
-      {validAuthIdShow ? (
-        <>
-          <WeekHeader>Week {week}</WeekHeader>{" "}
-          {[...new Set(workoutArray.map((item) => item.day))].map((item) => (
-            <Link
-              to="/workout"
-              state={[
-                workout,
-                workoutArray.filter((item2) => item2.day === item),
-                authId,
-                workout.workoutNumber,
-              ]}
-            >
-              <WeekContent> Day {item} </WeekContent>
-            </Link>
-          ))}
-          <WeekButtonDiv>
-            <PreviousWeekButton
-              onClick={PreviousButtonClick}
-              disabled={isPreviousButtonDisabled}
-            >
-              Previous Week{" "}
-            </PreviousWeekButton>
-            <NextWeekButton
-              onClick={NextButtonClick}
-              disabled={isNextButtonDisabled}
-            >
-              Next Week{" "}
-            </NextWeekButton>
-          </WeekButtonDiv>{" "}
-          <ExitWorkoutButton onClick={ExitWorkoutClick}>
-            Exit Workout
-          </ExitWorkoutButton>
-        </>
+      {loading ? (
+        <Spinner />
       ) : (
         <>
-          <div>Please Login</div>
-          <LoginButton onClick={LoginClick}>Login</LoginButton>
+          <WeekHeader>Week {week}</WeekHeader>{" "}
+          <WeekContent>
+            {[...new Set(workoutArray.map((item) => item.day))].map((item) => (
+              <DayButton>
+                <Link
+                  to="/workout"
+                  state={[
+                    workout,
+                    workoutArray.filter((item2) => item2.day === item),
+                    authId,
+                    workout.workoutNumber,
+                    week,
+                  ]}
+                >
+                  Day {item - (week - 1) * 7}
+                </Link>
+              </DayButton>
+            ))}
+          </WeekContent>
         </>
       )}
+      <WeekButtons
+        isPreviousButtonDisabled={isPreviousButtonDisabled}
+        isNextButtonDisabled={isNextButtonDisabled}
+        week={week}
+        sendWeekToParent={handleWeekData}
+      />
     </>
   );
 };

@@ -14,8 +14,17 @@ class WorkoutExerciseService:
     def get_all_WorkoutExercises(self) -> list[WorkoutExerciseDTO]:
         return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_all()))
     
-    def get_workoutexercise_by_auth_id(self, id):
+    def get_workoutexercise_by_auth_id(self, id) -> list[WorkoutExerciseDTO]:
         return list(map(lambda x : self._weMapper.map_to_dto(x), self._weRepo.get_we_by_auth_id(id)))
+    
+    def get_workoutexercise_by_auth_id_workout_num(self, id, workoutNum) -> WorkoutExerciseDTO:
+        try :
+            workout_exercise = self._weRepo.get_we_by_auth_id_workout_num(id, workoutNum)
+            if (workout_exercise is None):
+                raise Exception("Workout Exercise not found")
+            return self._weMapper.map_to_dto(workout_exercise)
+        except Exception as e:
+            raise Exception(e.args[0])
     
     """
         Method: Validates the Workout Exercise sent from the client side. 

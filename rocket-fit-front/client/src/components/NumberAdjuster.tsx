@@ -4,6 +4,7 @@ interface Props {
   weeksFlag: boolean;
   sendDataToParent: (data: number) => void;
   current: number;
+  increment: number;
 }
 
 const AdjusterDiv = styled.div`
@@ -20,23 +21,58 @@ const ButtonDiv = styled.div`
   font-size: 0.5em;
 `;
 
-const NumberAdjuster = ({ weeksFlag, sendDataToParent, current }: Props) => {
+const ArrowButton = styled.button``;
+
+const NumberAdjuster = ({
+  weeksFlag,
+  sendDataToParent,
+  current,
+  increment,
+}: Props) => {
   return (
     <>
       {weeksFlag ? (
         <WeeksAdjusterDiv>
           {current} Weeks
           <ButtonDiv>
-            <button onClick={() => sendDataToParent(current + 1)}>▲</button>
-            <button onClick={() => sendDataToParent(current - 1)}>▼</button>
+            <ArrowButton
+              onClick={() => {
+                sendDataToParent(Number(current) + Number(increment));
+              }}
+            >
+              ▲
+            </ArrowButton>
+            <ArrowButton
+              onClick={() =>
+                current >= 2
+                  ? sendDataToParent(Number(current) - Number(increment))
+                  : null
+              }
+            >
+              ▼
+            </ArrowButton>
           </ButtonDiv>
         </WeeksAdjusterDiv>
       ) : (
         <AdjusterDiv>
           {current}
           <ButtonDiv>
-            <button onClick={() => sendDataToParent(current + 1)}>▲</button>
-            <button onClick={() => sendDataToParent(current - 1)}>▼</button>
+            <ArrowButton
+              onClick={() => {
+                sendDataToParent(Number(current) + Number(increment));
+              }}
+            >
+              ▲
+            </ArrowButton>
+            <ArrowButton
+              onClick={() =>
+                current >= 2
+                  ? sendDataToParent(Number(current) - Number(increment))
+                  : null
+              }
+            >
+              ▼
+            </ArrowButton>
           </ButtonDiv>
         </AdjusterDiv>
       )}

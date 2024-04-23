@@ -14,6 +14,8 @@ class RFAuthUserViewSet(viewsets.ViewSet):
     """
 
     _rfAuthService = RfauthUserService()
+    _transformMapper = TransformRequestMapper()
+
 
     #GET /auth/
     def list(self, request):
@@ -35,7 +37,7 @@ class RFAuthUserViewSet(viewsets.ViewSet):
     #POST /auth/
     def create(self, request):
         try:
-            dto = TransformRequestMapper.to_rfau_dto(request.data)
+            dto = self._transformMapper.to_rfau_dto(request.data)
             us = self._rfAuthService.add_user(dto)
             response = us.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)
