@@ -3,8 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Exercise } from "../services/exerciseService";
 import styled from "styled-components";
 import NumberAdjuster from "../components/NumberAdjuster";
-import e from "cors";
-import workoutExerciseService from "../services/workoutExerciseService";
+import workoutExerciseService, {
+  Workout,
+} from "../services/workoutExerciseService";
 
 const HeaderDiv = styled.div`
   display: flex;
@@ -87,16 +88,25 @@ const CustomizeWorkout = ({ authId }: Props) => {
       workoutName: workoutData[0].workoutName,
       workoutNumber: workoutData[2] + 1,
     };
-    console.log(proposedWorkout);
     const { request } = workoutExerciseService.postItem("/", proposedWorkout);
     request
       .then((response) => {
-        console.log(response);
         console.log("POST request successful", response.data);
+        SendToMainPage(response.data);
       })
       .catch((error) => {
         console.error("Error sending POST request", error);
       });
+  };
+
+  const SendToMainPage = (newWorkout: Workout) => {
+    const { request } = workoutExerciseService.getAll(
+      "/item/?authId=" + authId + "&workoutNum=" + newWorkout.workoutNumber
+    );
+    request.then((response) => {
+      const workout_exercise = response.data as unknown as Workout;
+      Navigate("/main", { state: [0, workout_exercise] });
+    });
   };
 
   return (
