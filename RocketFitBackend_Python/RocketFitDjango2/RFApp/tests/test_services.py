@@ -163,6 +163,16 @@ class WorkoutExerciseServiceTests(TestCase):
         workout_exercises = self._test_we_service.get_workoutexercise_by_auth_id(100001)
         self.assertEqual(len(workout_exercises), 0)
 
+    def test_get_workoutexercise_by_auth_id_workout_num(self):
+        workout_exercise = self._test_we_service.get_workoutexercise_by_auth_id_workout_num(100000, 1)
+        self.assertEqual(workout_exercise.workoutName, "Workout Name")
+        self.assertTrue(isinstance(workout_exercise, WorkoutExerciseDTO))
+    
+    def test_get_workoutexercise_by_auth_id_workout_num_fault(self):
+        #User has no workout with given workout number, should raise exception
+        with self.assertRaises(Exception):
+            self._test_we_service.get_workoutexercise_by_auth_id_workout_num(100000, 1000)
+
     def test_add_workout(self):
         new_workout_exercise = self._test_we_service.add_workout(WorkoutExerciseDTO(days = "1", exercises = "1", sets = "1", reps = "1", rest = "1", weeks = 1, authid = 1, workoutNumber = 1, workoutName = "Test Workout"))
         self._test_we_service.add_workout(new_workout_exercise)

@@ -220,6 +220,19 @@ class WorkoutExerciseViewSetTests(TestCase):
         self.assertEqual(response.status_code, 200)
         #no workout exercise with auth id 100
         self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
+
+    def test_retrieve_we_based_on_auth_id_and_workout_num(self):
+        response = self.client.get(self.url + '/workoutexercise/item/?authId=100000&workoutNum=1')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('workoutName'), "Workout Name")
+
+    def test_retrieve_we_based_on_auth_id_and_workout_num_fault(self):
+        response = self.client.get(self.url + '/workoutexercise/item/?authId=100000&workoutNum=2')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #no workout exercise with auth id 100000 and workout number 2
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Workout Exercise not found")
     
     def test_create(self):
         pre_inserted_workout_exercises = self.client.get(self.url + '/workoutexercise/')

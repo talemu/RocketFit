@@ -113,6 +113,14 @@ class WorkoutExerciseRepoTest(TestCase):
         workout_exercises = self._test_we_repo.get_we_by_auth_id(1)
         self.assertEqual(len(workout_exercises), 0)
 
+    def test_get_we_by_auth_id_workout_num(self):
+        workout_exercise = self._test_we_repo.get_we_by_auth_id_workout_num(100000, 1)
+        self.assertEqual(workout_exercise.weeks, 4)
+
+    def test_get_we_by_auth_id_workout_num_fault(self):
+        workout_exercises = self._test_we_repo.get_we_by_auth_id_workout_num(100000, 1000)
+        self.assertEqual(workout_exercises, None)
+
     def test_save_workout(self):
         workout_exercise = Workoutexercise(days='0', exercises='0', sets='0', reps='0', rest='0', weeks='0', authid='0', workoutnumber=0, workoutname='Test Workout')
         self._test_we_repo.save_workout(workout_exercise)
