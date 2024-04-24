@@ -78,7 +78,6 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
     );
     request
       .then((response) => {
-        console.log("hi");
         const returned_id: number = response.data as unknown as number;
         console.log(returned_id, authId);
         if (returned_id === -10 && authId === -10) {
