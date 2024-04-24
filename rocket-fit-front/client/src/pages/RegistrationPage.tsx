@@ -2,6 +2,7 @@ import React, { KeyboardEvent, useState } from "react";
 import styled from "styled-components";
 import authUserService from "../services/authUserService";
 import { Form, useNavigate } from "react-router-dom";
+import { response } from "express";
 
 const PageHeader = styled.h1``;
 
@@ -64,14 +65,14 @@ const RegistrationPage = () => {
 
   const handleEnterDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
-      console.log("hi");
-      //SubmitRegistration();
+      ValidateRegistration();
     }
   };
 
-  const SubmitRegistration = () => {
+  const ValidateRegistration = () => {
     //email validation
     if (
+      email.length < 8 ||
       !email.includes("@") ||
       (!email.includes(".com") &&
         !email.includes(".edu") &&
@@ -93,6 +94,20 @@ const RegistrationPage = () => {
       setErrorMessage("Passwords Do Not Match");
       return;
     }
+    // checking if email or username exists in database
+    const { request } = authUserService.getAll(
+      "/checkEmailUsername/?email=" + email + "&username=" + username
+    );
+    request.then((response) => {
+      const validity = response.data as unknown as string;
+      if (validity == "Valid") {
+        SubmitRegistration();
+      }
+      setErrorMessage(validity);
+    });
+  };
+
+  const SubmitRegistration = () => {
     const newUser = {
       emailAddress: email,
       username: username,
@@ -101,7 +116,6 @@ const RegistrationPage = () => {
     const { request } = authUserService.postItem("/", newUser);
     request
       .then((response) => {
-        console.log(response.status);
         console.log("Submitted");
         Navigate("/login");
       })
@@ -152,7 +166,7 @@ const RegistrationPage = () => {
         </ShowPasswordDiv>
         {errorMessage.length != 0 ? <ErrorDiv>{errorMessage}</ErrorDiv> : null}
         <SubmitDiv>
-          <SubmitButton onClick={SubmitRegistration}>Register</SubmitButton>
+          <SubmitButton onClick={ValidateRegistration}>Register</SubmitButton>
         </SubmitDiv>
       </FormContent>
     </>
