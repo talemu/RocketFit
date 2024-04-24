@@ -20,6 +20,11 @@ const WorkoutButton = styled.button`
   margin: 1em;
 `;
 
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
+
 const ChooseWorkoutPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
   const [workoutArray, setWorkouts] = useState<Workout[]>([]);
@@ -48,20 +53,19 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
           <>
             {workoutArray?.map((item: Workout) => (
               <WorkoutButton>
-                <Link to={"/main"} state={[0, item]}>
+                <ButtonLink to={"/main"} state={[0, item]}>
                   {" "}
                   {item.workoutName}
-                </Link>
+                </ButtonLink>
               </WorkoutButton>
             ))}
+            <WorkoutButton>
+              <ButtonLink to={"/workouts"} state={workoutArray.length}>
+                Choose New Workout
+              </ButtonLink>
+            </WorkoutButton>
           </>
         )}
-
-        <WorkoutButton>
-          <Link to={"/workouts"} state={workoutArray.length}>
-            Choose New Workout
-          </Link>
-        </WorkoutButton>
       </ContentDiv>
     </>
   );

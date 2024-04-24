@@ -12,6 +12,7 @@ import Base from "./components/Base";
 import CustomizeWorkout from "./pages/CustomizeWorkout";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import RegistrationPage from "./pages/RegistrationPage";
 
 const Border = styled.div`
   padding: 1em;
@@ -41,6 +42,7 @@ function App() {
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
             />
+            <Route path="/register" Component={RegistrationPage} />
             <Route
               path="/myworkouts"
               element={
