@@ -122,6 +122,21 @@ class RFAuthUserServiceTest(TestCase):
         self.assertEqual(users[len(users) - 1].username, "TestUser")
         self.assertTrue(isinstance(new_user, RfAuthUserDTO))
 
+    def test_check_email_username_exists(self):
+        #user doesn't exist
+        check = self._test_rf_auth_service.check_email_username_exists("", "")
+        self.assertEqual(check, "Valid")
+
+    def test_check_email_username_exists_email_exists(self):
+        #email exists
+        check = self._test_rf_auth_service.check_email_username_exists("alemutabor@gmail.com", "")
+        self.assertEqual(check, "Email already exists.")
+
+    def test_check_email_username_exists_username_exists(self):
+        #username exists
+        check = self._test_rf_auth_service.check_email_username_exists("", "adminOne")
+        self.assertEqual(check, "Username already exists.")
+
     def test_add_user_fault(self):
         pre_attempted_users = self._test_rf_auth_service.get_all_auth_users()
         #missing password field

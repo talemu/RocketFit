@@ -33,6 +33,18 @@ class RFAuthUserViewSet(viewsets.ViewSet):
             return JsonResponse(response, safe=False)
         except Exception as e:
             return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
+        
+    #GET /auth/checkEmailUsername?email=1&username=1
+    #returns json with string response if it is an unused email or username
+    @action(detail=False, methods=['get'], url_path='checkEmailUsername')
+    def checkEmailUsername(self, request):
+        try:
+            email = request.GET.get('email', '')
+            username = request.GET.get('username', '')
+            response = self._rfAuthService.check_email_username_exists(email, username)
+            return JsonResponse(response, safe = False)
+        except Exception as e:
+            return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
     
     #POST /auth/
     def create(self, request):

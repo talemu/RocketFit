@@ -165,6 +165,24 @@ class RFAuthUserViewSetTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "LoginKey or Password is empty.")
 
+    def test_check_email_username_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabo@gmail.com&username=adminOn')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Valid")
+    
+    def test_check_email_username_exists_email_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabor@gmail.com&username=adminOn')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Email already exists.")
+    
+    def test_check_email_username_exists_username_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabo@gmail.com&username=adminOne')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Username already exists.")
+
     def test_create(self):
         pre_inserted_users = self.client.get(self.url + '/auth/')
         data = {
