@@ -1,7 +1,7 @@
-import { KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import authUserService from "../services/authUserService";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginHeader1 = styled.h1``;
 
@@ -17,6 +17,16 @@ const SubmitButton = styled.button`
   margin: 1em 0em 0em 0em;
   display: flex;
   flex-direction: column;
+`;
+
+const RegisterButton = styled.button`
+  margin: 1em 0em;
+  text-decoration: none;
+`;
+
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+  color: black;
 `;
 
 const SpinnerDiv = styled.div`
@@ -55,8 +65,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
     setPassword(textValue);
   };
 
-  const HandleEnterDown = (event: KeyboardEvent) => {
-    //Checking if key works
+  const handleEnterDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       SubmitLogin();
     }
@@ -99,7 +108,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         placeholder=""
         value={username}
         onChange={handleUsernameChange}
-        onKeyDown={HandleEnterDown}
+        onKeyDown={handleEnterDown}
       />
       <LoginHeader2>Password:</LoginHeader2>
       <LoginInput
@@ -108,16 +117,21 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         placeholder=""
         value={password}
         onChange={handlePasswordChange}
-        onKeyDown={HandleEnterDown}
+        onKeyDown={handleEnterDown}
       />
       {loading ? (
         <SpinnerDiv className="spinner-border text-dark" role="status">
           <SpinnerSpan className="sr-only"></SpinnerSpan>
         </SpinnerDiv>
       ) : (
-        <SubmitButton onClick={SubmitLogin} onKeyDown={HandleEnterDown}>
-          Submit
-        </SubmitButton>
+        <>
+          <SubmitButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
+            Submit
+          </SubmitButton>
+          <RegisterButton>
+            <ButtonLink to={"/register"}>New User? Register Here</ButtonLink>
+          </RegisterButton>
+        </>
       )}
     </>
   );
