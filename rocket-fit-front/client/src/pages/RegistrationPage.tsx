@@ -1,8 +1,7 @@
 import React, { KeyboardEvent, useState } from "react";
 import styled from "styled-components";
 import authUserService from "../services/authUserService";
-import { Form, useNavigate } from "react-router-dom";
-import { response } from "express";
+import { useNavigate } from "react-router-dom";
 
 const PageHeader = styled.h1``;
 
@@ -41,28 +40,26 @@ const RegistrationPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setEmail(textValue);
-  };
-
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setUsername(textValue);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setPassword(textValue);
-  };
-
-  const handlePasswordTwoChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    inputVariable: string
   ) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setPasswordTwo(textValue);
+    if (inputVariable === "email") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setEmail(textValue);
+    } else if (inputVariable === "username") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setUsername(textValue);
+    } else if (inputVariable === "password") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setPassword(textValue);
+    } else if (inputVariable === "passwordTwo") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setPasswordTwo(textValue);
+    }
   };
 
+  // Allows user to press enter to submit registration
   const handleEnterDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       ValidateRegistration();
@@ -74,6 +71,8 @@ const RegistrationPage = () => {
     if (
       email.length < 8 ||
       !email.includes("@") ||
+      email.split("@")[0].length == 0 ||
+      email.split("@")[1].split(".")[0].length == 0 ||
       (!email.includes(".com") &&
         !email.includes(".edu") &&
         !email.includes(".org"))
@@ -86,10 +85,12 @@ const RegistrationPage = () => {
       setErrorMessage("Username must be at least 3 characters long");
       return;
     }
+    //password validation
     if (password.length < 8) {
       setErrorMessage("Password must be at least 8 characters long");
       return;
     }
+    //password match validation
     if (password !== passwordTwo) {
       setErrorMessage("Passwords Do Not Match");
       return;
@@ -116,6 +117,7 @@ const RegistrationPage = () => {
     const { request } = authUserService.postItem("/", newUser);
     request
       .then((response) => {
+        console.log(response.data);
         console.log("Submitted");
         Navigate("/login");
       })
@@ -132,28 +134,28 @@ const RegistrationPage = () => {
         <UserInput
           type="email"
           value={email}
-          onChange={handleEmailChange}
+          onChange={(e) => handleInputChange(e, "email")}
           onKeyDown={handleEnterDown}
         />
         <InputHeader>Username:</InputHeader>
         <UserInput
           type="text"
           value={username}
-          onChange={handleUsernameChange}
+          onChange={(e) => handleInputChange(e, "username")}
           onKeyDown={handleEnterDown}
         />
         <InputHeader>Password:</InputHeader>
         <UserInput
           type={showPassword ? "text" : "password"}
           value={password}
-          onChange={handlePasswordChange}
+          onChange={(e) => handleInputChange(e, "password")}
           onKeyDown={handleEnterDown}
         />
         <InputHeader>Re-Enter Password:</InputHeader>
         <UserInput
           type={showPassword ? "text" : "password"}
           value={passwordTwo}
-          onChange={handlePasswordTwoChange}
+          onChange={(e) => handleInputChange(e, "passwordTwo")}
           onKeyDown={handleEnterDown}
         />
         <ShowPasswordDiv>
@@ -161,7 +163,7 @@ const RegistrationPage = () => {
             type="checkbox"
             checked={showPassword}
             onChange={() => setShowPassword(!showPassword)}
-          />
+          />{" "}
           Show Password
         </ShowPasswordDiv>
         {errorMessage.length != 0 ? <ErrorDiv>{errorMessage}</ErrorDiv> : null}
