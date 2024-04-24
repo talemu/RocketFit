@@ -55,16 +55,20 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
   const [invalidLogin, setInvalidLogin] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setUsername(textValue);
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    inputVariable: string
+  ) => {
+    if (inputVariable === "username") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setUsername(textValue);
+    } else if (inputVariable === "password") {
+      const textValue: string = (event.target as HTMLInputElement).value;
+      setPassword(textValue);
+    }
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setPassword(textValue);
-  };
-
+  // Allows user to press enter to submit login
   const handleEnterDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       SubmitLogin();
@@ -106,7 +110,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         type="text"
         placeholder=""
         value={username}
-        onChange={handleUsernameChange}
+        onChange={(e) => handleInputChange(e, "username")}
         onKeyDown={handleEnterDown}
       />
       <LoginHeader2>Password:</LoginHeader2>
@@ -115,7 +119,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         type="password"
         placeholder=""
         value={password}
-        onChange={handlePasswordChange}
+        onChange={(e) => handleInputChange(e, "password")}
         onKeyDown={handleEnterDown}
       />
       {loading ? (
