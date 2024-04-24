@@ -87,6 +87,21 @@ class RFAuthUserRepoTests(TestCase):
         user = self._test_rfauthuser_repo.authenticate_user("adminOne", "wrongPassword")
         self.assertEqual(user, None)
 
+    def test_check_if_email_or_username_exists(self):
+        #user doesn't exist
+        check = self._test_rfauthuser_repo.check_if_email_or_username_exists("", "")
+        self.assertEqual(check, "Valid")
+
+    def test_check_if_email_or_username_exists_email_exists(self):
+        #email exists
+        check = self._test_rfauthuser_repo.check_if_email_or_username_exists("alemutabor@gmail.com", "")
+        self.assertEqual(check, "Email already exists.")
+
+    def test_check_if_email_or_username_exists_username_exists(self):
+        #username exists
+        check = self._test_rfauthuser_repo.check_if_email_or_username_exists("", "adminOne")
+        self.assertEqual(check, "Username already exists.")
+
     def test_save_user(self):
         user = Rfauthuser(password="testPassword", username="testUser", email_address="testEmailAddress@gmail.com")
         self._test_rfauthuser_repo.save_user(user)

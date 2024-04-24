@@ -27,6 +27,9 @@ class RfauthUserService:
         else:
             return user.id
         
+    def check_email_username_exists(self, email, username):
+        return self._rfAuthRepo.check_if_email_or_username_exists(email, username)
+        
     """
         Method: Validates the potential user sent from the client side. 
         If the record is valid, it is saved to the database (sent to repo class).

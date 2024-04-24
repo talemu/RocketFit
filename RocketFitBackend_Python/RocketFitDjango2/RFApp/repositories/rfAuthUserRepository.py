@@ -19,6 +19,14 @@ class RfauthUserRepo:
         except Rfauthuser.DoesNotExist:
             return None
         
+    def check_if_email_or_username_exists(self, email, username):
+        if (Rfauthuser.objects.filter(email_address = email).exists()):
+            return "Email already exists."
+        elif (Rfauthuser.objects.filter(username = username).exists()):
+            return "Username already exists."
+        else:
+            return "Valid"
+        
     """
         Method: Saves a user to the Rfauthuser model.
     """
