@@ -28,12 +28,24 @@ class ExerciseViewSet(viewsets.ViewSet):
     @action(detail = False, methods=['get'], url_path='item')
     def retrieve_exercise_given_id(self, request):
         id = request.GET.get('id', 0)
+        name = request.GET.get('name', "")
         try:
-            response_data = self._eService.get_exercise_by_id(id)
+            response_data = self._eService.get_exercise_by_id_or_name(id, name)
             response = response_data.asdict()
             return JsonResponse(response, safe = False)
         except Exception as e:
             return JsonResponse({"error log" : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
+        
+    # #Get /exercise/item?name=Pushups
+    # @action(detail = False, methods=['get'], url_path='itemName')
+    # def retrieve_exercise_given_name(self, request):
+    #     name = request.GET.get('name', "")
+    #     try:
+    #         response_data = self._eService.get_exercise_by_exercise_name(name)
+    #         response = response_data.asdict()
+    #         return JsonResponse(response, safe = False)
+    #     except Exception as e:
+    #         return JsonResponse({"error log" : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
     
     #POST /exercise/
     @csrf_exempt

@@ -15,6 +15,12 @@ class ExerciseRepo:
         except Exercise.DoesNotExist:
             return None
         
+    def get_exercise_by_name(self, name):
+        try:
+            return Exercise.objects.get(exercisename=name)
+        except Exercise.DoesNotExist:
+            return None
+        
     """
         Method: Saves an exercise to the Exercise model.
     """

@@ -71,7 +71,7 @@ class ExerciseServiceTests(TestCase):
         self.assertTrue(all(isinstance(x, ExerciseDTO) for x in exercises))
 
     def test_get_exercise_by_id(self):
-        exercise = self._test_exercise_service.get_exercise_by_id(1)
+        exercise = self._test_exercise_service.get_exercise_by_id_or_name(1, "")
         self.assertEqual(exercise.exerciseName, "Barbell Bench Press")
         self.assertTrue(isinstance(exercise, ExerciseDTO))
 
@@ -79,7 +79,18 @@ class ExerciseServiceTests(TestCase):
         #id doesn't exist
         #should raise exception
         with self.assertRaises(Exception):
-            exercise = self._test_exercise_service.get_exercise_by_id(0)
+            exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "")
+
+    def test_get_exercise_by_name(self):
+        exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "Barbell Bench Press")
+        self.assertEqual(exercise.exerciseId, 1)
+        self.assertTrue(isinstance(exercise, ExerciseDTO))
+
+    def test_get_exercise_by_name_fault(self):
+        #name doesn't exist
+        #should raise exception
+        with self.assertRaises(Exception):
+            exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "Random Exercise")
 
     def test_add_exercise(self):
         exercise = self._test_exercise_service.add_exercise(ExerciseDTO(exerciseName = "Test Exercise 2"))
