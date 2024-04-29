@@ -8,32 +8,21 @@ import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import DropdownTable from "../components/DropdownTable";
 
 const HeaderOne = styled.h1``;
 
-const HeaderTwo = styled.h2``;
-
 const StyledTable = styled.table``;
-
-const TableBody = styled.tbody``;
-
-const TableHeader = styled.th`
-  padding: 1em 2em;
-`;
-
-const TableColumn = styled.td`
-  text-align: center;
-`;
-
-const TableRecord = styled.tr``;
-
-const TableHead = styled.thead``;
 
 const FlipButton = styled.button``;
 
-const CustomizeButton = styled.button``;
-
 const BackButton = styled.button``;
+
+const CreateNewWorkoutDiv = styled.div`
+  padding: 3em 0em;
+`;
+
+const CreateNewWorkoutButton = styled.button``;
 
 interface Props {
   authId: number;
@@ -45,12 +34,22 @@ const WorkoutTemplatesPage = ({ authId }: Props) => {
   //number of workouts the user already has
   const location = useLocation();
   const numberOfWorkouts = location.state;
+  console.log(numberOfWorkouts);
 
   const [templates, setTemplates] = useState<StandardizedWorkoutTemplate[]>([]);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [dropdowns, setDropdowns] = useState<boolean[]>([]);
   const [trigger, setTrigger] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const emptyWorkout = {
+    workoutName: "New Workout " + (numberOfWorkouts + 1),
+    weeks: 4,
+    days: [1],
+    exercises: [1],
+    sets: [3],
+    reps: [12],
+    rest: [120],
+  };
 
   if (authId == -10) {
     Navigate("/unauthorized");
@@ -100,62 +99,26 @@ const WorkoutTemplatesPage = ({ authId }: Props) => {
               <HeaderOne>{item.workoutName}</HeaderOne>
               <FlipButton onClick={() => FlipDrop(count)}>flip</FlipButton>
               {dropdowns[count] ? (
-                <>
-                  <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
-                  <StyledTable>
-                    <TableHead>
-                      <TableRecord>
-                        <TableHeader>Day</TableHeader>
-                        <TableHeader>Exercise</TableHeader>
-                        <TableHeader>Sets</TableHeader>
-                        <TableHeader>Reps</TableHeader>
-                        <TableHeader>Rest</TableHeader>
-                      </TableRecord>
-                    </TableHead>
-                    {item.days.map((day, count) => (
-                      <>
-                        <TableBody>
-                          <TableRecord>
-                            {item.days[count] !== item.days[count - 1] ? (
-                              <TableColumn>{day}</TableColumn>
-                            ) : (
-                              <TableColumn></TableColumn>
-                            )}
-
-                            {
-                              <TableColumn>
-                                {
-                                  exercises.find(
-                                    (element: Exercise) =>
-                                      element.exerciseId ===
-                                      item.exercises[count]
-                                  )?.exerciseName
-                                }
-                              </TableColumn>
-                            }
-                            {<TableColumn>{item.sets[count]}</TableColumn>}
-                            {<TableColumn>{item.reps[count]}</TableColumn>}
-                            {<TableColumn>{item.rest[count]}</TableColumn>}
-                          </TableRecord>
-                        </TableBody>
-                      </>
-                    ))}
-                  </StyledTable>
-                  <CustomizeButton>
-                    <Link
-                      to="/customize"
-                      state={[item, exercises, numberOfWorkouts]}
-                    >
-                      {" "}
-                      Customize Workout{" "}
-                    </Link>
-                  </CustomizeButton>
-                </>
+                <DropdownTable
+                  item={item}
+                  exercises={exercises}
+                  numberOfWorkouts={numberOfWorkouts}
+                />
               ) : (
                 <StyledTable></StyledTable>
               )}
             </>
           ))}
+          <CreateNewWorkoutDiv>
+            <CreateNewWorkoutButton>
+              <Link
+                to="/customize"
+                state={[emptyWorkout, exercises, numberOfWorkouts]}
+              >
+                Create From Scratch
+              </Link>
+            </CreateNewWorkoutButton>
+          </CreateNewWorkoutDiv>
         </>
       )}
     </>

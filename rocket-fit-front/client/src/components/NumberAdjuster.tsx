@@ -9,6 +9,7 @@ interface Props {
 
 const AdjusterDiv = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 const WeeksAdjusterDiv = styled.h2`
