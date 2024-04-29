@@ -5,4 +5,11 @@ export interface Exercise {
   exerciseId: number;
 }
 
+export interface ExerciseData {
+  exerciseId: number;
+  sets: number;
+  reps: number;
+  rest: number;
+}
+
 export default create("/exercise");

@@ -15,11 +15,24 @@ class ExerciseService:
     def get_all_exercises(self) -> list[ExerciseDTO]:
         return list(map(lambda x : self._eMapper.map_to_dto(x), self._eRepo.get_all()))
     
-    def get_exercise_by_id(self, id):
-        exerciseItem = self._eRepo.get_exercise_by_id(id)
+    def get_exercise_by_id_or_name(self, id, name):
+        if (id != 0):
+            exerciseItem = self._eRepo.get_exercise_by_id(id)
+            dto = self._eMapper.map_to_dto(exerciseItem)
+            if (dto == None):
+                raise Exception("Exercise Does Not Exist with ID")
+        else:
+            exerciseItem = self._eRepo.get_exercise_by_name(name)
+            dto = self._eMapper.map_to_dto(exerciseItem)
+            if (dto == None):
+                raise Exception("Exercise Does Not Exist with Name")
+        return dto
+    
+    def get_exercise_by_exercise_name(self, name):
+        exerciseItem = self._eRepo.get_exercise_by_name(name)
         dto = self._eMapper.map_to_dto(exerciseItem)
         if (dto == None):
-            raise Exception("Exercise Does Not Exist with ID")
+            raise Exception("Exercise Does Not Exist with Name")
         return dto
     
     """

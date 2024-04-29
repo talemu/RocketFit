@@ -115,6 +115,19 @@ class ExerciseViewSetTests(TestCase):
         #expected error message
         self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Exercise Does Not Exist with ID")
 
+    def test_retrieve_exercise_given_name(self):
+        response = self.client.get(self.url + "/exercise/item?name=Barbell Squats", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('exerciseId'), 2)
+    
+    def test_retrieve_exercise_given_name_fault(self):
+        response = self.client.get(self.url + "/exercise/item?name=Barbell Squat", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #expected error message
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Exercise Does Not Exist with Name")
+
     def test_create(self):
         pre_inserted_exercise = self.client.get(self.url + "/exercise/")
         response = self.client.post(self.url + "/exercise/", data = {"exerciseName" : "Test Exercise tdb"})

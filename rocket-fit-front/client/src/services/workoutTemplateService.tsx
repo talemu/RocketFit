@@ -21,10 +21,8 @@ export interface StandardizedWorkoutTemplate {
 }
 
 export const standardizeWorkoutTemplates = (item: WorkoutTemplate[]) => {
-  console.log(item);
   let newTemplates: any[] = [];
   let newDropdowns: any[] = [];
-  console.log(item);
 
   item.forEach((element) => {
     const standardWT = {

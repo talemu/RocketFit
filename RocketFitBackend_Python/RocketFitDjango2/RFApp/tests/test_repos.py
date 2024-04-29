@@ -58,6 +58,14 @@ class ExerciseRepoTests(TestCase):
         exercise = self._test_exercise_repo.get_exercise_by_id(100)
         self.assertEqual(exercise, None)
 
+    def test_get_exercise_by_name(self):
+        exercise = self._test_exercise_repo.get_exercise_by_name("Barbell Bench Press")
+        self.assertEqual(exercise.exerciseid, 1)
+    
+    def test_get_exercise_by_name_fault(self):
+        exercise = self._test_exercise_repo.get_exercise_by_name("Non-Existent Exercise")
+        self.assertEqual(exercise, None)
+
     def test_save_exercise(self):
         exercise = Exercise(exercisename="test exercise")
         self._test_exercise_repo.save_exercise(exercise)
