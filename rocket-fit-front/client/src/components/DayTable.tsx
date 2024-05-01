@@ -2,12 +2,11 @@ import { WorkoutItem } from "../services/workoutExerciseService";
 import styled from "styled-components";
 import Timer from "./Timer";
 import { ChangeEvent, useEffect, useState } from "react";
-import exerciseRecordService, {
-  ExerciseRecord,
-} from "../services/exerciseRecordService";
+import exerciseRecordService from "../services/exerciseRecordService";
 import exerciseService, { Exercise } from "../services/exerciseService";
 import Spinner from "./Spinner";
 import { Dict } from "styled-components/dist/types";
+import DayTableHeader from "./WorkoutPageComponents/DayTableHeader";
 
 interface Props {
   exerciseItems: WorkoutItem[];
@@ -20,17 +19,11 @@ const StyledTable = styled.table``;
 
 const TableBody = styled.tbody``;
 
-const TableHeader = styled.th`
-  padding: 1em 2em;
-`;
-
 const TableColumn = styled.td`
   text-align: center;
 `;
 
 const TableRecord = styled.tr``;
-
-const TableHead = styled.thead``;
 
 const TableInput = styled.input`
   text-align: center;
@@ -47,7 +40,7 @@ const TableWeightArrayItems = styled.div`
 
 const TableWeightArrayItem = styled.div``;
 
-const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
+const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
   const [initial, setInitial] = useState<number[]>([]);
   const [weight, setWeight] = useState<number[]>(
     new Array(exerciseItems.length).fill(-1)
@@ -109,6 +102,13 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
     setLoading(false);
   };
 
+  const updateWeight = (index: number, e: ChangeEvent<HTMLInputElement>) => {
+    //editing weight edited in app
+    const newWeights = [...weight];
+    newWeights[index] = parseInt(e.target.value);
+    setWeight(newWeights);
+  };
+
   const UpdateWeightArray = (
     weight_entered: number,
     target_weight: number,
@@ -147,16 +147,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
   return (
     <>
       <StyledTable>
-        <TableHead>
-          <TableRecord>
-            <TableHeader>Exercise</TableHeader>
-            <TableHeader>Sets</TableHeader>
-            <TableHeader>Reps</TableHeader>
-            <TableHeader>Target Weight</TableHeader>
-            <TableHeader>Weight(lbs)</TableHeader>
-            <TableHeader>Rest</TableHeader>
-          </TableRecord>
-        </TableHead>
+        <DayTableHeader />
         {loading ? (
           <Spinner />
         ) : (
@@ -186,14 +177,10 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
                           : String(weight[index])
                       }
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        //editing weight edited in app
-                        const newWeights = [...weight];
-                        newWeights[index] = parseInt(e.target.value);
-                        setWeight(newWeights);
+                        updateWeight(index, e);
                       }}
                       disabled={isInputDisabled[index]}
                     ></TableInput>
-
                     <TableWeightArrayItems>
                       {weightDictionary[exerciseItem.exercise].length != 0 ? (
                         <TableWeightArrayItem>
@@ -208,7 +195,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum, week }: Props) => {
                     <Timer
                       exercises={exercises}
                       authId={authId}
-                      //Development time set at 2 sec, will be exerciseItem.rest
+                      //Dev time set at 2 sec, will be exerciseItem.rest
                       //initialTimeInSec={exerciseItem.rest}
                       initialTimeInSec={2}
                       weight={weight[index]}
