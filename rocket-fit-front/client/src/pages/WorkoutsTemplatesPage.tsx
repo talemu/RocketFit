@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
-import workoutTemplateService, {
-  StandardizedWorkoutTemplate,
-  WorkoutTemplate,
-  standardizeWorkoutTemplates,
-} from "../services/workoutTemplateService";
 import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
-import DropdownTable from "../components/DropdownTable";
 import Templates from "../components/WorkoutTemplateComponents/Templates";
 import CreateFromScratch from "../components/WorkoutTemplateComponents/CreateFromScratch";
 

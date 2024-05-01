@@ -11,8 +11,8 @@ interface Props {
   sendToCustomize: (data: ExerciseData, show: boolean, index: number) => void;
 }
 
-const AddExercisePopUp = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+const AddExercisePopUp = styled.div<{ isopen: boolean }>`
+  display: ${(props) => (props.isopen ? "flex" : "none")};
   position: fixed;
   z-index: 1;
   left: 0;
@@ -137,7 +137,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
 
   return (
     <>
-      <AddExercisePopUp isOpen={showModal}>
+      <AddExercisePopUp isopen={showModal}>
         <ModalContent>
           Add Exercise{" "}
           <NewWorkoutItemDiv>

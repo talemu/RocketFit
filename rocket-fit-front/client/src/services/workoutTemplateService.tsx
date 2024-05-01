@@ -47,6 +47,10 @@ export const standardizeWorkoutTemplates = (item: WorkoutTemplate[]) => {
   return [newTemplates, newDropdowns];
 };
 
+export const range = (start: number, end: number) => {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+};
+
 //.NET create
 // export default create("/WorkoutsExercise");
 
