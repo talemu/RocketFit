@@ -128,6 +128,12 @@ class ExerciseViewSetTests(TestCase):
         #expected error message
         self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Exercise Does Not Exist with Name")
 
+    def test_query_exercise_by_name_substring(self):
+        response = self.client.get(self.url + "/exercise/query?name=Bar", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 8)
+
     def test_create(self):
         pre_inserted_exercise = self.client.get(self.url + "/exercise/")
         response = self.client.post(self.url + "/exercise/", data = {"exerciseName" : "Test Exercise tdb"})

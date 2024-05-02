@@ -35,6 +35,10 @@ class ExerciseService:
             raise Exception("Exercise Does Not Exist with Name")
         return dto
     
+    def get_query_exercise_by_name_substring(self, name):
+        exercises = self._eRepo.query_exercise_by__name_substring(name)
+        return list(map(lambda x : self._eMapper.map_to_dto(x), exercises))
+    
     """
         Method: Validates the Exercise sent from the client side. If the record is valid, it is saved to the database (sent to repo class).
 
