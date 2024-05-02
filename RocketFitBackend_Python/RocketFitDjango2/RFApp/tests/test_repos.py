@@ -66,6 +66,14 @@ class ExerciseRepoTests(TestCase):
         exercise = self._test_exercise_repo.get_exercise_by_name("Non-Existent Exercise")
         self.assertEqual(exercise, None)
 
+    def test_query_exercise_by_name_substring(self):
+        exercises = self._test_exercise_repo.query_exercise_by__name_substring("Barbell")
+        self.assertEqual(len(exercises), 7)
+
+    def test_query_exercise_by_name_empty_substring(self):
+        exercises = self._test_exercise_repo.query_exercise_by__name_substring("")
+        self.assertEqual(len(exercises), 35)
+
     def test_save_exercise(self):
         exercise = Exercise(exercisename="test exercise")
         self._test_exercise_repo.save_exercise(exercise)
