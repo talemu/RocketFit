@@ -15,7 +15,6 @@ const CustomizeWorkout = ({ authId }: Props) => {
 
   const location = useLocation();
   const workoutData = location.state;
-  console.log(workoutData[0]);
   const [change, setChange] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ const CustomizeWorkout = ({ authId }: Props) => {
   }, [change]);
 
   const HandleHeaderChange = (workoutName: string, weeks: number) => {
-    console.log(workoutName, weeks);
     workoutData[0].workoutName = workoutName;
     workoutData[0].weeks = weeks;
     setChange(!change);
@@ -47,6 +45,7 @@ const CustomizeWorkout = ({ authId }: Props) => {
       />
       <CustomizeWorkoutTable
         workoutData={workoutData[0]}
+        exercises={workoutData[1]}
         authId={authId}
         workoutNum={workoutData[2] + 1}
       />
