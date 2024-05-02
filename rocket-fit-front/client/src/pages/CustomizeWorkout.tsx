@@ -15,7 +15,6 @@ const CustomizeWorkout = ({ authId }: Props) => {
 
   const location = useLocation();
   const workoutData = location.state;
-  console.log(workoutData[0]);
   const [change, setChange] = useState<boolean>(false);
 
   useEffect(() => {
@@ -47,6 +46,7 @@ const CustomizeWorkout = ({ authId }: Props) => {
       />
       <CustomizeWorkoutTable
         workoutData={workoutData[0]}
+        exercises={workoutData[1]}
         authId={authId}
         workoutNum={workoutData[2] + 1}
       />

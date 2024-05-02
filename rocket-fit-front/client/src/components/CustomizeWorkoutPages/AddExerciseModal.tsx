@@ -8,6 +8,7 @@ import exerciseService, {
 interface Props {
   index: number;
   showModal: boolean;
+  exercises: Exercise[];
   sendToCustomize: (data: ExerciseData, show: boolean, index: number) => void;
 }
 
@@ -50,11 +51,18 @@ const CloseButton = styled.button``;
 
 const CreateExerciseButton = styled.button``;
 
-const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
+const AddExerciseModal = ({
+  index,
+  showModal,
+  sendToCustomize,
+  exercises,
+}: Props) => {
+  console.log(exercises);
   const [exerciseName, setExerciseName] = useState("");
   const [exerciseSets, setExerciseSets] = useState(0);
   const [exerciseReps, setExerciseReps] = useState(0);
   const [exerciseRest, setExerciseRest] = useState(0);
+  const [isopen, setIsopen] = useState<boolean>(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -63,6 +71,9 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     if (inputVariable === "exerciseName") {
       const textValue: string = (event.target as HTMLInputElement).value;
       setExerciseName(textValue);
+
+      if (textValue.length > 2) {
+      }
     } else if (inputVariable === "exerciseSets") {
       const textValue: number = parseInt(
         (event.target as HTMLInputElement).value
