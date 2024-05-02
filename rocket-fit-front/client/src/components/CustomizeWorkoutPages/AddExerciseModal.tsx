@@ -8,7 +8,6 @@ import exerciseService, {
 interface Props {
   index: number;
   showModal: boolean;
-  exercises: Exercise[];
   sendToCustomize: (data: ExerciseData, show: boolean, index: number) => void;
 }
 
@@ -47,21 +46,45 @@ const ButtonsDiv = styled.div`
 
 const NewWorkoutItemInput = styled.input``;
 
+const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
+  display: ${(props) => (props.isopen ? "flex" : "none")};
+  flex-direction: column;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  z-index: 1;
+  border: 1px solid #ccc;
+  border-top: none;
+`;
+
+const ExerciseNameDiv = styled.div`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 0.5em 0em;
+`;
+
+const ExerciseButton = styled.button`
+  padding: 0.5em;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
 const CloseButton = styled.button``;
 
 const CreateExerciseButton = styled.button``;
 
-const AddExerciseModal = ({
-  index,
-  showModal,
-  sendToCustomize,
-  exercises,
-}: Props) => {
-  console.log(exercises);
+const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
   const [exerciseName, setExerciseName] = useState("");
   const [exerciseSets, setExerciseSets] = useState(0);
   const [exerciseReps, setExerciseReps] = useState(0);
   const [exerciseRest, setExerciseRest] = useState(0);
+  const [dropdownExercises, setDropdownExercises] = useState<Exercise[]>([]);
   const [isopen, setIsopen] = useState<boolean>(false);
 
   const handleInputChange = (
@@ -71,8 +94,19 @@ const AddExerciseModal = ({
     if (inputVariable === "exerciseName") {
       const textValue: string = (event.target as HTMLInputElement).value;
       setExerciseName(textValue);
-
       if (textValue.length > 2) {
+        const { request } = exerciseService.getAll(
+          "/query/?name=" +
+            textValue.replace(/\b\w/g, (char) => char.toUpperCase())
+        );
+        request
+          .then((response) => {
+            setDropdownExercises(response.data as unknown as Exercise[]);
+            setIsopen(true);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        setIsopen(false);
       }
     } else if (inputVariable === "exerciseSets") {
       const textValue: number = parseInt(
@@ -96,7 +130,6 @@ const AddExerciseModal = ({
     const { request } = exerciseService.getAll("/item?name=" + exerciseName);
     request
       .then((response) => {
-        console.log(response.data);
         const exercise = response.data as unknown as Exercise;
         if (
           exerciseName != "" &&
@@ -128,7 +161,8 @@ const AddExerciseModal = ({
   //Creates exercise if it doesn't exist
   const addExercise = () => {
     const { request } = exerciseService.postItem("/", {
-      exerciseName: exerciseName,
+      //capitalize first letter of each word
+      exerciseName: exerciseName.replace(/\b\w/g, (char) => char.toUpperCase()),
     });
     request
       .then((response) => {
@@ -152,12 +186,27 @@ const AddExerciseModal = ({
         <ModalContent>
           Add Exercise{" "}
           <NewWorkoutItemDiv>
-            <NewWorkoutItemInput
-              type="text"
-              value={exerciseName}
-              placeholder="Exercise Name"
-              onChange={(e) => handleInputChange(e, "exerciseName")}
-            />
+            <ExerciseNameDiv>
+              <NewWorkoutItemInput
+                type="text"
+                value={exerciseName}
+                placeholder="Exercise Name"
+                onChange={(e) => handleInputChange(e, "exerciseName")}
+              />
+              <DropdownExercisesDiv isopen={isopen}>
+                {dropdownExercises.map((exercise) => (
+                  <ExerciseButton
+                    key={exercise.exerciseId}
+                    onClick={() => {
+                      setExerciseName(exercise.exerciseName);
+                      setIsopen(false);
+                    }}
+                  >
+                    {exercise.exerciseName}
+                  </ExerciseButton>
+                ))}
+              </DropdownExercisesDiv>
+            </ExerciseNameDiv>
             <NewWorkoutItemInput
               type="number"
               value={exerciseSets == 0 ? "" : exerciseSets}

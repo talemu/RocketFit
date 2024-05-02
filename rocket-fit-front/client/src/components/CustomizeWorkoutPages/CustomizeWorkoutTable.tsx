@@ -10,7 +10,6 @@ import workoutExerciseService, {
   Workout,
 } from "../../services/workoutExerciseService";
 import { useNavigate } from "react-router-dom";
-import Spinner from "../Spinner";
 
 const StyledTable = styled.table``;
 
@@ -50,22 +49,17 @@ const DeleteExerciseButton = styled.button``;
 
 interface Props {
   workoutData: any;
-  exercises: Exercise[];
   authId: number;
   workoutNum: number;
 }
 
-const CustomizeWorkoutTable = ({
-  workoutData,
-  exercises,
-  authId,
-  workoutNum,
-}: Props) => {
+const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   const Navigate = useNavigate();
   const [change, setChange] = useState<boolean>(false);
   const [addExercisePopUpClicked, setAddExercisePopUpClicked] =
     useState<boolean>(false);
   const [itemClickedIndex, setItemClickedIndex] = useState<number>(-1);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
 
   const UpdateCurrent = (data: number, count: number, array: number[]) => {
     if (count != -1) {
@@ -75,6 +69,14 @@ const CustomizeWorkoutTable = ({
     }
     setChange(!change);
   };
+
+  useEffect(() => {
+    //must rerender the page when new exercise is added and need to pull exercises
+    const { request } = exerciseService.getAll("/");
+    request.then((response) => {
+      setExercises(response.data as Exercise[]);
+    });
+  }, [change]);
 
   const AddWorkoutToUser = () => {
     const proposedWorkout = {
@@ -118,6 +120,7 @@ const CustomizeWorkoutTable = ({
       setAddExercisePopUpClicked(show);
       return;
     }
+    console.log(exercise);
     workoutData.days.splice(index + 1, 0, workoutData.days[index]);
     workoutData.exercises.splice(index + 1, 0, exercise.exerciseId);
     workoutData.sets.splice(index + 1, 0, exercise.sets);
@@ -126,6 +129,7 @@ const CustomizeWorkoutTable = ({
     setAddExercisePopUpClicked(show);
     setChange(!change);
   };
+  console.log(workoutData);
 
   const ShowModal = (tf: boolean, index: number) => {
     setAddExercisePopUpClicked(tf);
@@ -238,7 +242,6 @@ const CustomizeWorkoutTable = ({
                   <AddExerciseModal
                     index={itemClickedIndex}
                     showModal={addExercisePopUpClicked}
-                    exercises={exercises.slice(0, 34)}
                     sendToCustomize={(exercise, show, index) =>
                       HandleModalData(exercise, show, index)
                     }
@@ -256,7 +259,6 @@ const CustomizeWorkoutTable = ({
             <AddExerciseModal
               index={itemClickedIndex}
               showModal={addExercisePopUpClicked}
-              exercises={exercises}
               sendToCustomize={(exercise, show, index) =>
                 HandleModalData(exercise, show, index)
               }
