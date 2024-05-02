@@ -92,6 +92,11 @@ class ExerciseServiceTests(TestCase):
         with self.assertRaises(Exception):
             exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "Random Exercise")
 
+    def test_query_exercise_by_name_substring(self):
+        exercises = self._test_exercise_service.get_query_exercise_by_name_substring("Bench")
+        self.assertEqual(len(exercises), 4)
+        self.assertTrue(all(isinstance(exercise, ExerciseDTO) for exercise in exercises))
+
     def test_add_exercise(self):
         exercise = self._test_exercise_service.add_exercise(ExerciseDTO(exerciseName = "Test Exercise 2"))
         exercises = self._test_exercise_service.get_all_exercises()
