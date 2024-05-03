@@ -120,7 +120,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
       setAddExercisePopUpClicked(show);
       return;
     }
-    console.log(exercise);
     workoutData.days.splice(index + 1, 0, workoutData.days[index]);
     workoutData.exercises.splice(index + 1, 0, exercise.exerciseId);
     workoutData.sets.splice(index + 1, 0, exercise.sets);
@@ -129,7 +128,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
     setAddExercisePopUpClicked(show);
     setChange(!change);
   };
-  console.log(workoutData);
 
   const ShowModal = (tf: boolean, index: number) => {
     setAddExercisePopUpClicked(tf);
@@ -153,6 +151,20 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   const DeleteExercise = (count: number) => {
     //removing record from workoutData
     workoutData.exercises.splice(count, 1);
+    if (workoutData.days.length > count + 1) {
+      if (workoutData.days[count] === workoutData.days[count + 1]) {
+      } else if (
+        count != 0 &&
+        workoutData.days[count] === workoutData.days[count - 1]
+      ) {
+      } else {
+        console.log(count);
+        let firstSlice = workoutData.days.slice(0, count + 1);
+        let secondSlice = workoutData.days.slice(count + 1);
+        secondSlice = secondSlice.map((day: number) => day - 1);
+        workoutData.days = firstSlice.concat(secondSlice);
+      }
+    }
     workoutData.days.splice(count, 1);
     workoutData.sets.splice(count, 1);
     workoutData.reps.splice(count, 1);
@@ -251,22 +263,14 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
             </TableBody>
           </>
         ))}
-        {workoutData.days.length === 0 ? (
-          <AddAndStartDiv>
-            <AddExerciseButton onClick={() => ShowModal(true, 0)}>
-              Add Exercise
-            </AddExerciseButton>
-            <AddExerciseModal
-              index={itemClickedIndex}
-              showModal={addExercisePopUpClicked}
-              sendToCustomize={(exercise, show, index) =>
-                HandleModalData(exercise, show, index)
-              }
-            />
-          </AddAndStartDiv>
-        ) : null}
       </StyledTable>
-      <AddDayButton onClick={AddDay}>Add Day</AddDayButton>
+      {workoutData.days[workoutData.days.length - 1] !== 7 ? (
+        <AddDayButton onClick={AddDay}>Add Day</AddDayButton>
+      ) : (
+        <AddDayButton onClick={AddDay} disabled={true}>
+          Add Day
+        </AddDayButton>
+      )}
       <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
     </>
   );
