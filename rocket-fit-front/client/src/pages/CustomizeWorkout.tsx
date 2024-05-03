@@ -45,7 +45,6 @@ const CustomizeWorkout = ({ authId }: Props) => {
       />
       <CustomizeWorkoutTable
         workoutData={workoutData[0]}
-        exercises={workoutData[1]}
         authId={authId}
         workoutNum={workoutData[2] + 1}
       />
