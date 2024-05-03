@@ -151,18 +151,27 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   const DeleteExercise = (count: number) => {
     //removing record from workoutData
     workoutData.exercises.splice(count, 1);
-    if (workoutData.days.length > count + 1) {
-      if (workoutData.days[count] === workoutData.days[count + 1]) {
-      } else if (
+    console.log(workoutData.days.length, count);
+    //checks if the day is the last day, if it is, this if statement will be skipped
+    if (workoutData.days.length >= count + 1) {
+      //checks if the day matches exercise befor and after
+      if (
         count != 0 &&
-        workoutData.days[count] === workoutData.days[count - 1]
+        workoutData.days[count] !== workoutData.days[count + 1] &&
+        workoutData.days[count] !== workoutData.days[count - 1]
       ) {
-      } else {
-        console.log(count);
-        let firstSlice = workoutData.days.slice(0, count + 1);
-        let secondSlice = workoutData.days.slice(count + 1);
-        secondSlice = secondSlice.map((day: number) => day - 1);
-        workoutData.days = firstSlice.concat(secondSlice);
+        {
+          let firstSlice = workoutData.days.slice(0, count + 1);
+          let secondSlice = workoutData.days.slice(count + 1);
+          secondSlice = secondSlice.map((day: number) => day - 1);
+          workoutData.days = firstSlice.concat(secondSlice);
+        }
+        //checks if the day matches the exercise after, when the first element is removed
+      } else if (
+        count == 0 &&
+        workoutData.days[count] !== workoutData.days[count + 1]
+      ) {
+        workoutData.days = workoutData.days.map((day: number) => day - 1);
       }
     }
     workoutData.days.splice(count, 1);
