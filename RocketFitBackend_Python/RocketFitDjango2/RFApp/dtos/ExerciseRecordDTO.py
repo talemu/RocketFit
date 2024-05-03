@@ -23,6 +23,7 @@ class ExerciseRecordDTO:
         self.day = kwargs["day"]
         self.workoutNumber = kwargs["workoutNumber"]
         self.targetWeight = kwargs["targetWeight"]
+        self.createdDate = kwargs["createdDate"]
 
     def asdict(self):
         return {
@@ -33,5 +34,6 @@ class ExerciseRecordDTO:
             "authId" : self.authId,
             "day" : self.day,
             "workoutNumber" : self.workoutNumber,
-            "targetWeight" : self.targetWeight
+            "targetWeight" : self.targetWeight,
+            "createdDate" : self.createdDate
         }

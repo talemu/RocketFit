@@ -23,7 +23,8 @@ class ExerciseRecordMapper:
             authId=exerciserecord.auth_id,
             day=exerciserecord.day,
             workoutNumber=exerciserecord.workout_number,
-            targetWeight=exerciserecord.target_weight
+            targetWeight=exerciserecord.target_weight,
+            createdDate=exerciserecord.created_date
         )
 
     def map_to_er(self, exerciserecorddto: ExerciseRecordDTO):

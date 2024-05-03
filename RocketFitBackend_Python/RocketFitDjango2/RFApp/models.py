@@ -34,6 +34,7 @@ class Exerciserecord(models.Model):
     day = models.IntegerField()
     workout_number = models.IntegerField()
     target_weight = models.FloatField()
+    created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False
