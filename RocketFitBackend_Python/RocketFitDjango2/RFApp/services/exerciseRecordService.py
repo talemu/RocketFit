@@ -9,10 +9,14 @@ class ExerciseRecordService():
 
     _erRepo = ExerciseRecordRepo()
     _erMapper = ExerciseRecordMapper()
+
     
     def get_all_exercise_records(self) -> list[ExerciseRecordDTO]:
-        er = list(map(lambda x: self._erMapper.map_to_dto(x), self._erRepo.get_all()))
-        return er
+        try:
+            er = list(map(lambda x: self._erMapper.map_to_dto(x), self._erRepo.get_all()))
+            return er
+        except Exception as e:
+            raise Exception(e.args[0])
     
     def get_ExerciseRecord_based_on_exercise_day_wn_id(self, exercise: str, day: int, workoutNum: int, auth:int) -> list[ExerciseRecordDTO]:
         record = self._erRepo.get_er_based_on_exercise_day_wn_id(exercise, day, workoutNum, auth)

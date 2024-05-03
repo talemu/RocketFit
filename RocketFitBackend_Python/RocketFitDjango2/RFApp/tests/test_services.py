@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 
 from ..dtos.ExerciseDTO import ExerciseDTO
@@ -40,7 +41,7 @@ class ExerciseRecordsServiceTests(TestCase):
 
     def test_exerciseRecord_track_workout(self):
         pre_added_er = self._test_er_service.get_all_exercise_records()
-        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1, targetWeight = 0)
+        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1, targetWeight = 0, createdDate = datetime.datetime.now())
         returned_dto = self._test_er_service.exerciseRecord_track_workout(er)
         post_added_er = self._test_er_service.get_all_exercise_records()
         #Check item added to repo

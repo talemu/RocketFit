@@ -88,7 +88,7 @@ class ExerciseRecordViewTest(TestCase):
         #ensuring the no exercise record was inserted into the database
         self.assertEqual(len(json.loads(post_inserted_er.content.decode('utf-8'))), len(json.loads(pre_inserted_er.content.decode('utf-8'))))
         #expected error message
-        self.assertEqual(response.content.decode('utf-8'), '{"error log": "Missing property: exerciseName"}')
+        self.assertEqual(response.content.decode('utf-8'), '{"error log": "Request Mapper Issue: exerciseName"}')
 
 class ExerciseViewSetTests(TestCase):
     def setUp(self):
@@ -230,7 +230,7 @@ class RFAuthUserViewSetTests(TestCase):
         #ensuring the user was inserted into the database
         self.assertEqual(len(json.loads(pre_inserted_users.content.decode('utf-8'))), len(json.loads(post_inserted_users.content.decode('utf-8'))))
         #expected error message
-        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Missing property: username")
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Request Mapper Issue: username")
 
 class WorkoutExerciseViewSetTests(TestCase):
     def setUp(self):
