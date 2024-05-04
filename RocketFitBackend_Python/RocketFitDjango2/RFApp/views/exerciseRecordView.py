@@ -52,7 +52,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
     
     #GET /exerciseRecord/record?params
     @action(detail=False, methods=['get'], url_path='record')
-    def retrieve_records(self, request):
+    def retrieve_records_based_on_exerciseName_id_range(self, request):
         exerciseName = request.query_params.get('exerciseName', '')
         startDate = request.query_params.get('startDate', '')
         endDate = request.query_params.get('endDate', '')
@@ -63,7 +63,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
     
     #GET /exerciseRecord/unique?params
     @action(detail=False, methods=['get'], url_path='uniqueERN')
-    def retrieve_unique(self, request):
+    def retrieve_unique_subname(self, request):
         subName = request.query_params.get('subName', '')
         auth_id = request.query_params.get('authId', 0)
         response = self._erService.get_exercise_Record_by_unique_exercise_record(subName, auth_id)
