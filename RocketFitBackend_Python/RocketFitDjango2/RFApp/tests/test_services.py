@@ -39,6 +39,23 @@ class ExerciseRecordsServiceTests(TestCase):
         average_weight = self._test_er_service.get_ExerciseRecord_average_based_on_name_id("Test Case", 0)
         self.assertEqual(average_weight, 0)
 
+    def test_get_exercise_record_by_name_startdate_enddate_id(self):
+        exercise_records = self._test_er_service.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 1)
+        self.assertEqual(exercise_records[0].exerciseName, "Test Case")
+        self.assertTrue(all(isinstance(item, ExerciseRecordDTO) for item in exercise_records))
+
+    def test_get_exercise_record_by_name_startdate_enddate_id_fault(self):
+        exercise_records = self._test_er_service.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 5)
+        self.assertEqual(len(exercise_records), 0)
+
+    def test_get_exercise_Record_by_unique_exercise_record(self):
+        exercise_records = self._test_er_service.get_exercise_Record_by_unique_exercise_record("Test", 1)
+        self.assertEqual(exercise_records[0], "Test Case")
+    
+    def test_get_exercise_Record_by_unique_exercise_record_empty(self):
+        exercise_records = self._test_er_service.get_exercise_Record_by_unique_exercise_record("Test", 5)
+        self.assertEqual(len(exercise_records), 0)
+
     def test_exerciseRecord_track_workout(self):
         pre_added_er = self._test_er_service.get_all_exercise_records()
         er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1, targetWeight = 0, createdDate = datetime.datetime.now())
