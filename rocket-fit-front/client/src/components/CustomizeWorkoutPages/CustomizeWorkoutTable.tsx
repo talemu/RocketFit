@@ -154,7 +154,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
     console.log(workoutData.days.length, count);
     //checks if the day is the last day, if it is, this if statement will be skipped
     if (workoutData.days.length >= count + 1) {
-      //checks if the day matches exercise befor and after
+      //checks if the day matches exercise before and after
       if (
         count != 0 &&
         workoutData.days[count] !== workoutData.days[count + 1] &&
