@@ -49,6 +49,25 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
         id = request.query_params.get('auth', 0)
         response = self._erService.get_ExerciseRecord_average_based_on_name_id(name, id)
         return JsonResponse(response, safe=False)
+    
+    #GET /exerciseRecord/record?params
+    @action(detail=False, methods=['get'], url_path='record')
+    def retrieve_records(self, request):
+        exerciseName = request.query_params.get('exerciseName', '')
+        startDate = request.query_params.get('startDate', '')
+        endDate = request.query_params.get('endDate', '')
+        authId = request.query_params.get('authId', 0)
+        response_data = self._erService.get_exercise_record_by_name_startdate_enddate_id(exerciseName, startDate, endDate, authId)
+        response = list(map(lambda x: x.asdict(), response_data))
+        return JsonResponse(response, safe=False)
+    
+    #GET /exerciseRecord/unique?params
+    @action(detail=False, methods=['get'], url_path='uniqueERN')
+    def retrieve_unique(self, request):
+        subName = request.query_params.get('subName', '')
+        auth_id = request.query_params.get('authId', 0)
+        response = self._erService.get_exercise_Record_by_unique_exercise_record(subName, auth_id)
+        return JsonResponse(response, safe=False)
         
     #POST /exerciseRecord/
     @csrf_exempt 

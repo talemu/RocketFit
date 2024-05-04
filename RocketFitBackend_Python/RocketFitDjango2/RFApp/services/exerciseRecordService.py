@@ -37,6 +37,20 @@ class ExerciseRecordService():
             for item in er:
                 sum += item.weight * (1 + 0.025 * item.reps)
             return sum / len(er)
+        
+    def get_exercise_record_by_name_startdate_enddate_id(self, exerciseName, startDate, endDate, authId) -> list[ExerciseRecordDTO]:
+        try:
+            record = self._erRepo.get_exercise_record_by_name_startdate_enddate_id(exerciseName, startDate, endDate, authId)
+            return list(map(lambda x: self._erMapper.map_to_dto(x), record))
+        except Exception as e:
+            raise Exception(e.args[0])
+        
+    def get_exercise_Record_by_unique_exercise_record(self, substring:str, auth_id:int) -> list[str]:
+        try:
+            record = self._erRepo.get_exercise_record_unique_exercise_record(substring, auth_id)
+            return list(record)
+        except Exception as e:
+            raise Exception(e.args[0])
     
     """
         Method: Validates the Exercise Record sent from the client side. If the record is valid, it is saved to the database (sent to repo class).

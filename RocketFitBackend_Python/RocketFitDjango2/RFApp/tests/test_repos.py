@@ -31,6 +31,26 @@ class ExerciseRecordsRepoTests(TestCase):
         obj = self._test_er_repo.get_er_based_on_exercise_day_wn_id("Empty", 0, 0, 1)
         self.assertEqual(len(obj), 0)
 
+    # get all exercise records within the start and end date with the given exercise name and auth id
+    def test_get_exercise_record_by_name_startdate_enddate_id(self):
+        obj = self._test_er_repo.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 1)
+        self.assertEqual(len(obj), 1)
+        self.assertEqual(obj[0].exercise_name, "Test Case")
+
+    def test_get_exercise_record_by_name_startdate_enddate_id_empty(self):
+        obj = self._test_er_repo.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 5)
+        self.assertEqual(len(obj), 0)
+
+    # get all unique exercise records with the given substring and auth id
+    def test_get_exercise_record_unique_exercise_record(self):
+        obj = self._test_er_repo.get_exercise_record_unique_exercise_record("Test", 1)
+        self.assertEqual(len(obj), 1)
+        self.assertEqual(obj[0], "Test Case")
+
+    def test_get_exercise_record_unique_exercise_record_empty(self):
+        obj = self._test_er_repo.get_exercise_record_unique_exercise_record("Random", 1)
+        self.assertEqual(len(obj), 0)
+
     # save a new record and ensure it is saved in the test database
     def test_save_new_exercise_record(self):
         new_record = Exerciserecord(exercise_name="New Record", sets=1, reps=1, weight=10, day=1, workout_number=1, auth_id=1, target_weight=0)

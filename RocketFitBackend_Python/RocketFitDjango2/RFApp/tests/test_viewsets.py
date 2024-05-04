@@ -52,6 +52,30 @@ class ExerciseRecordViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual((json.loads(response.content.decode('utf-8'))), 0.0)
 
+    def test_get_exercise_record_by_name_startdate_enddate_id(self):
+        response = self.client.get(self.url + "/exerciserecord/record/?exerciseName=Test Case&startDate=2024-05-02&endDate=2024-05-03&authId=1", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8'))[0].get('exerciseName'), "Test Case")
+
+    def test_get_exercise_record_by_name_startdate_enddate_id_empty(self):
+        response = self.client.get(self.url + "/exerciserecord/record/?exerciseName=Test Case&startDate=2021-05-02&endDate=2024-05-03&authId=5", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
+
+    def test_get_exercise_record_unique_exercise_record(self):
+        response = self.client.get(self.url + "/exerciserecord/uniqueERN/?subName=Test&authId=1", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8'))[0], "Test Case")
+    
+    def test_get_exercise_record_unique_exercise_record_empty(self):
+        response = self.client.get(self.url + "/exerciserecord/uniqueERN/?subName=Random&authId=5", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
+
     def test_create(self):
         pre_inserted_er = self.client.get(self.url + '/exerciserecord/')
         data = {
