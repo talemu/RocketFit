@@ -97,7 +97,14 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
       if (textValue.length > 2) {
         const { request } = exerciseService.getAll(
           "/query/?name=" +
-            textValue.replace(/\b\w/g, (char) => char.toUpperCase())
+            //formatting to capitalize first letter of each word
+            textValue
+              .split(" ")
+              .map(
+                (word) =>
+                  word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+              )
+              .join(" ")
         );
         request
           .then((response) => {
@@ -161,8 +168,13 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
   //Creates exercise if it doesn't exist
   const addExercise = () => {
     const { request } = exerciseService.postItem("/", {
-      //capitalize first letter of each word
-      exerciseName: exerciseName.replace(/\b\w/g, (char) => char.toUpperCase()),
+      //formatting to capitalize first letter of each word
+      exerciseName: exerciseName
+        .split(" ")
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+        .join(" "),
     });
     request
       .then((response) => {

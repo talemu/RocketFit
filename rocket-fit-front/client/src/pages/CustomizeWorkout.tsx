@@ -12,44 +12,46 @@ interface Props {
 
 const CustomizeWorkout = ({ authId }: Props) => {
   const Navigate = useNavigate();
-
-  const location = useLocation();
-  const workoutData = location.state;
   const [change, setChange] = useState<boolean>(false);
-
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/authorized");
+      Navigate("/unauthorized");
     }
   }, [change]);
 
-  const HandleHeaderChange = (workoutName: string, weeks: number) => {
-    workoutData[0].workoutName = workoutName;
-    workoutData[0].weeks = weeks;
-    setChange(!change);
-  };
+  const location = useLocation();
+  if (location.state !== null) {
+    const workoutData = location.state;
 
-  return (
-    <>
-      <WorkoutsButton>
-        <Link to="/workouts" state={workoutData[2]}>
-          Back
-        </Link>
-      </WorkoutsButton>
-      <CustomizeWorkoutHeader
-        workoutName={workoutData[0].workoutName}
-        weeks={workoutData[0].weeks}
-        sendDataToParent={(workoutName, weeks) => {
-          HandleHeaderChange(workoutName, weeks);
-        }}
-      />
-      <CustomizeWorkoutTable
-        workoutData={workoutData[0]}
-        authId={authId}
-        workoutNum={workoutData[2] + 1}
-      />
-    </>
-  );
+    const HandleHeaderChange = (workoutName: string, weeks: number) => {
+      workoutData[0].workoutName = workoutName;
+      workoutData[0].weeks = weeks;
+      setChange(!change);
+    };
+
+    return (
+      <>
+        <WorkoutsButton>
+          <Link to="/workouts" state={workoutData[2]}>
+            Back
+          </Link>
+        </WorkoutsButton>
+        <CustomizeWorkoutHeader
+          workoutName={workoutData[0].workoutName}
+          weeks={workoutData[0].weeks}
+          sendDataToParent={(workoutName, weeks) => {
+            HandleHeaderChange(workoutName, weeks);
+          }}
+        />
+        <CustomizeWorkoutTable
+          workoutData={workoutData[0]}
+          authId={authId}
+          workoutNum={workoutData[2] + 1}
+        />
+      </>
+    );
+  }
+  return <div></div>;
 };
 
 export default CustomizeWorkout;

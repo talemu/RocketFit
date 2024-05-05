@@ -13,6 +13,7 @@ import CustomizeWorkout from "./pages/CustomizeWorkout";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RegistrationPage from "./pages/RegistrationPage";
+import TrackProgressPage from "./pages/TrackProgressPage";
 
 const Border = styled.div`
   padding: 1em;
@@ -35,13 +36,17 @@ function App() {
     <>
       <Border>
         <Router>
-          <Navbar sendDataToParent={handleLogoutData} />
+          <Navbar
+            authId={JSON.parse(localStorage.getItem("savedAuthId") || "{}")}
+            sendDataToParent={handleLogoutData}
+          />
           <Routes>
             <Route path="/" Component={Base} />
             <Route
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
             />
+            <Route path="/progress" Component={TrackProgressPage} />
             <Route path="/register" Component={RegistrationPage} />
             <Route
               path="/myworkouts"

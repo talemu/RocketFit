@@ -17,33 +17,38 @@ interface Props {
 
 const WorkoutPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
-  const location = useLocation();
-  const selectedWorkoutInformation = location.state;
-
   useEffect(() => {
     if (authId == -10) {
       Navigate("/unauthorized");
     }
   });
 
-  return (
-    <>
-      <BackToHomeButton>
-        <Link
-          to="/main"
-          state={[selectedWorkoutInformation[4], selectedWorkoutInformation[0]]}
-        >
-          Home
-        </Link>
-      </BackToHomeButton>
-      <DayTable
-        exerciseItems={selectedWorkoutInformation[1]}
-        authId={selectedWorkoutInformation[2]}
-        workoutNum={selectedWorkoutInformation[3]}
-        week={selectedWorkoutInformation[4]}
-      />
-    </>
-  );
+  const location = useLocation();
+  if (location.state !== null) {
+    const selectedWorkoutInformation = location.state;
+    return (
+      <>
+        <BackToHomeButton>
+          <Link
+            to="/main"
+            state={[
+              selectedWorkoutInformation[4],
+              selectedWorkoutInformation[0],
+            ]}
+          >
+            Home
+          </Link>
+        </BackToHomeButton>
+        <DayTable
+          exerciseItems={selectedWorkoutInformation[1]}
+          authId={selectedWorkoutInformation[2]}
+          workoutNum={selectedWorkoutInformation[3]}
+          week={selectedWorkoutInformation[4]}
+        />
+      </>
+    );
+  }
+  return <div></div>;
 };
 
 export default WorkoutPage;
