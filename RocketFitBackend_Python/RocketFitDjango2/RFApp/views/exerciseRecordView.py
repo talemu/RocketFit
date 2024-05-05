@@ -61,7 +61,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
         response = list(map(lambda x: x.asdict(), response_data))
         return JsonResponse(response, safe=False)
     
-    #GET /exerciseRecord/unique?params
+    #GET /exerciseRecord/uniqueERN/?params
     @action(detail=False, methods=['get'], url_path='uniqueERN')
     def retrieve_unique_subname(self, request):
         subName = request.query_params.get('subName', '')

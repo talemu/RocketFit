@@ -6,6 +6,9 @@ export interface ExerciseRecord {
   reps: number;
   weight: number;
   targetWeight: number;
+  createdDate: string;
+  workoutNumber: number;
+  day: number;
 }
 
 //.NET create
