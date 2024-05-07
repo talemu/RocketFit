@@ -1,8 +1,7 @@
-import { KeyboardEvent, useState } from "react";
-import authUserService from "../services/authUserService";
+import { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import AuthenticationInput from "../components/AuthenticationInput";
+import { Container, Box } from "@chakra-ui/react";
 
 const LoginHeader1 = styled.h1``;
 
@@ -11,6 +10,24 @@ const ErrorMessage = styled.div`
 `;
 
 const EmptyDiv = styled.div``;
+
+const ContainerDiv = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const BoxDiv = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  outline: 0.5px solid black;
+  padding: 1em;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 5px;
+`;
 
 interface Props {
   sendDataToParent: (data: number) => void;
@@ -31,13 +48,17 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
 
   return (
     <>
-      <LoginHeader1>Login</LoginHeader1>
-      {invalidLogin ? (
-        <ErrorMessage>Incorrect Username and/or Password</ErrorMessage>
-      ) : (
-        <EmptyDiv></EmptyDiv>
-      )}
-      <AuthenticationInput sendDataToPage={handleInputData} />
+      <ContainerDiv>
+        <BoxDiv>
+          <LoginHeader1>RocketFit Login</LoginHeader1>
+          {invalidLogin ? (
+            <ErrorMessage>Incorrect Username and/or Password</ErrorMessage>
+          ) : (
+            <EmptyDiv></EmptyDiv>
+          )}
+          <AuthenticationInput sendDataToPage={handleInputData} />
+        </BoxDiv>
+      </ContainerDiv>
     </>
   );
 };
