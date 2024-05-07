@@ -4,14 +4,18 @@ import authUserService from "../../services/authUserService";
 import { useNavigate } from "react-router-dom";
 
 const FormContent = styled.div`
-  margin-left: 5%;
+  width: 100%;
 `;
+
+const InputDiv = styled.div``;
 
 const InputHeader = styled.h2`
   margin: 1em 0em 0.5em 0em;
 `;
 
-const UserInput = styled.input``;
+const UserInput = styled.input`
+  width: 100%;
+`;
 
 const ShowPasswordDiv = styled.div`
   padding-top: 1em;
@@ -27,9 +31,15 @@ const SubmitDiv = styled.div`
 
 const ErrorDiv = styled.div`
   background-color: red;
+  height: 2em;
 `;
 
-const LoginInputs = () => {
+const NonErrorDiv = styled.div`
+  background-color: transparent;
+  height: 2em;
+`;
+
+const RegisterInputs = () => {
   const Navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -126,6 +136,11 @@ const LoginInputs = () => {
 
   return (
     <FormContent>
+      {errorMessage.length != 0 ? (
+        <ErrorDiv>{errorMessage}</ErrorDiv>
+      ) : (
+        <NonErrorDiv></NonErrorDiv>
+      )}
       <InputHeader>Email:</InputHeader>
       <UserInput
         type="email"
@@ -160,9 +175,8 @@ const LoginInputs = () => {
           checked={showPassword}
           onChange={() => setShowPassword(!showPassword)}
         />{" "}
-        Show Password
+        Show Passwords
       </ShowPasswordDiv>
-      {errorMessage.length != 0 ? <ErrorDiv>{errorMessage}</ErrorDiv> : null}
       <SubmitDiv>
         <SubmitButton onClick={ValidateRegistration}>Register</SubmitButton>
       </SubmitDiv>
@@ -170,4 +184,4 @@ const LoginInputs = () => {
   );
 };
 
-export default LoginInputs;
+export default RegisterInputs;

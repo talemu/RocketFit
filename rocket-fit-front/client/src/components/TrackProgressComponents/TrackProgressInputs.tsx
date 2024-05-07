@@ -3,6 +3,7 @@ import styled from "styled-components";
 import exerciseRecordService, {
   ExerciseRecord,
 } from "../../services/exerciseRecordService";
+import Spinner from "../Spinner";
 
 const ContentDiv = styled.div`
   display: flex;
@@ -34,6 +35,10 @@ const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
   border-top: none;
 `;
 
+const ErrorDiv = styled.div`
+  background-color: red;
+`;
+
 interface Props {
   authId: number;
   sendDataToParent: (records: ExerciseRecord[]) => void;
@@ -45,6 +50,8 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
   const [endDate, setEndDate] = useState<string>("");
   const [dropdownExercises, setDropdownExercises] = useState<string[]>([]);
   const [isopen, setIsOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [spinner, setSpinner] = useState<boolean>(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -84,23 +91,31 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
   };
 
   const handleViewProgress = () => {
-    const { request } = exerciseRecordService.getAll(
-      "/record/?exerciseName=" +
-        exercise +
-        "&startDate=" +
-        startDate +
-        "&endDate=" +
-        endDate +
-        "&authId=" +
-        authId
-    );
-    request
-      .then((response) => {
-        sendDataToParent(response.data as ExerciseRecord[]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setSpinner(true);
+    if (exercise != "" && startDate != "" && endDate != "" && authId != -10) {
+      setError("");
+      const { request } = exerciseRecordService.getAll(
+        "/record/?exerciseName=" +
+          exercise +
+          "&startDate=" +
+          startDate +
+          "&endDate=" +
+          endDate +
+          "&authId=" +
+          authId
+      );
+      request
+        .then((response) => {
+          sendDataToParent(response.data as ExerciseRecord[]);
+          setSpinner(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      setError("Please fill out all fields");
+      setSpinner(false);
+    }
   };
 
   const handleDropdownClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -112,6 +127,7 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
     <>
       <ContentDiv>
         <HeaderOne>Track Progress</HeaderOne>
+        {error.length > 0 ? <ErrorDiv>{error}</ErrorDiv> : null}
         <UserInput
           type="text"
           value={exercise}
@@ -139,9 +155,13 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
             onChange={(e) => handleInputChange(e, "end")}
           />
         </RangeDiv>
-        <ViewProgressButton onClick={handleViewProgress}>
-          View Progress
-        </ViewProgressButton>
+        {spinner ? (
+          <Spinner />
+        ) : (
+          <ViewProgressButton onClick={handleViewProgress}>
+            View Progress
+          </ViewProgressButton>
+        )}
       </ContentDiv>
     </>
   );

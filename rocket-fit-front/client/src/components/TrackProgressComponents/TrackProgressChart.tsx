@@ -27,7 +27,6 @@ interface Props {
 }
 
 const TrackProgressChart = ({ records }: Props) => {
-  console.log(records.map((record) => record.weight));
   const chartData = {
     labels: records.map((record) =>
       moment(record.createdDate).format("MMM DD YYYY")

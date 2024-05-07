@@ -2,25 +2,48 @@ import React, { KeyboardEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import authUserService from "../services/authUserService";
+import {
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
-const LoginHeader2 = styled.h2`
-  margin: 1em 0em 0em 0em;
-`;
-
-const LoginInput = styled.input`
+const LoginDiv = styled.div`
+  width: 100%;
   margin: 0em 0em 1em 0em;
 `;
 
-const SubmitButton = styled.button`
+const LoginHeader2 = styled.h6`
   margin: 1em 0em 0em 0em;
-  display: flex;
-  flex-direction: column;
 `;
 
-const RegisterButton = styled.button`
-  margin: 1em 0em;
-  text-decoration: none;
+const PasswordInputGroup = styled(InputGroup)``;
+
+const LoginInput = styled(Input)`
+  width: 100%;
 `;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const InputRight = styled(InputRightElement)`
+  display: block !important;
+`;
+
+const StyledEyeButton = styled(IconButton)`
+  background: transparent;
+  border: none;
+  margin-right: 0.5em;
+`;
+
+const SubmitButton = styled.button``;
+
+const RegisterButton = styled.button``;
 
 const ButtonLink = styled(Link)`
   text-decoration: none;
@@ -29,8 +52,6 @@ const ButtonLink = styled(Link)`
 
 const SpinnerDiv = styled.div`
   margin: 1em 0em 0em 0em;
-  display: flex;
-  flex-direction: column;
 `;
 
 const SpinnerSpan = styled.span``;
@@ -45,6 +66,7 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -89,37 +111,51 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
 
   return (
     <>
-      <LoginHeader2>Username:</LoginHeader2>
-      <LoginInput
-        key={1}
-        type="text"
-        placeholder=""
-        value={username}
-        onChange={(e) => handleInputChange(e, "username")}
-        onKeyDown={handleEnterDown}
-      />
-      <LoginHeader2>Password:</LoginHeader2>
-      <LoginInput
-        key={2}
-        type="password"
-        placeholder=""
-        value={password}
-        onChange={(e) => handleInputChange(e, "password")}
-        onKeyDown={handleEnterDown}
-      />
+      <LoginDiv>
+        <LoginHeader2>Username:</LoginHeader2>
+        <LoginInput
+          key={1}
+          type="text"
+          placeholder=""
+          value={username}
+          onChange={(e) => handleInputChange(e, "username")}
+          onKeyDown={handleEnterDown}
+        />
+      </LoginDiv>
+      <LoginDiv>
+        <LoginHeader2>Password:</LoginHeader2>
+        <PasswordInputGroup>
+          <InputRight>
+            <StyledEyeButton
+              variant="text"
+              aria-label={isOpen ? "Mask password" : "Reveal password"}
+              icon={isOpen ? <HiEyeOff /> : <HiEye />}
+              onClick={() => setIsOpen(!isOpen)}
+            />
+          </InputRight>
+          <LoginInput
+            key={2}
+            type={isOpen ? "text" : "password"}
+            placeholder=""
+            value={password}
+            onChange={(e) => handleInputChange(e, "password")}
+            onKeyDown={handleEnterDown}
+          />
+        </PasswordInputGroup>
+      </LoginDiv>
       {loading ? (
         <SpinnerDiv className="spinner-border text-dark" role="status">
           <SpinnerSpan className="sr-only"></SpinnerSpan>
         </SpinnerDiv>
       ) : (
-        <>
+        <ButtonDiv>
           <SubmitButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
             Submit
           </SubmitButton>
           <RegisterButton>
-            <ButtonLink to={"/register"}>New User? Register Here</ButtonLink>
+            <ButtonLink to={"/register"}>Register Here</ButtonLink>
           </RegisterButton>
-        </>
+        </ButtonDiv>
       )}
     </>
   );
