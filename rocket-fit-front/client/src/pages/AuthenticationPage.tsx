@@ -5,11 +5,12 @@ import { Container, Box } from "@chakra-ui/react";
 
 const LoginHeader1 = styled.h1``;
 
-const ErrorMessage = styled.div`
-  background-color: red;
+const ErrorMessage = styled.div<{ invalidLogin: boolean }>`
+  background: ${(props) => (props.invalidLogin ? "red" : "transparent")};
+  height: 2em;
+  width: 100%;
+  text-align: center;
 `;
-
-const EmptyDiv = styled.div``;
 
 const ContainerDiv = styled(Container)`
   display: flex;
@@ -24,7 +25,7 @@ const BoxDiv = styled(Box)`
   align-items: center;
   width: max-content;
   outline: 0.5px solid black;
-  padding: 1em;
+  padding: 2em;
   box-shadow: 5px 5px 5px grey;
   border-radius: 5px;
 `;
@@ -52,9 +53,11 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         <BoxDiv>
           <LoginHeader1>RocketFit Login</LoginHeader1>
           {invalidLogin ? (
-            <ErrorMessage>Incorrect Username and/or Password</ErrorMessage>
+            <ErrorMessage invalidLogin={invalidLogin}>
+              Incorrect Login
+            </ErrorMessage>
           ) : (
-            <EmptyDiv></EmptyDiv>
+            <ErrorMessage invalidLogin={false}></ErrorMessage>
           )}
           <AuthenticationInput sendDataToPage={handleInputData} />
         </BoxDiv>

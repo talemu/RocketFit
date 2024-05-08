@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 
 const Nav = styled.nav`
   text-align: right;
-  padding-right: 2em;
+  padding: 1em 2em 2em 0em;
+  background-color: #2196f3;
 `;
 
 const NavButton = styled.button`
@@ -23,7 +24,10 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
   const [show, setShow] = useState<boolean>(true);
 
   useEffect(() => {
-    if (window.location.href.includes("login")) {
+    if (
+      window.location.href.includes("login") ||
+      window.location.href.includes("register")
+    ) {
       setShow(false);
     } else {
       setShow(true);
