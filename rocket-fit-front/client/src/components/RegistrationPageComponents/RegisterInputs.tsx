@@ -2,12 +2,12 @@ import React, { KeyboardEvent, useState } from "react";
 import styled from "styled-components";
 import authUserService from "../../services/authUserService";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../Spinner";
+import { Button } from "@chakra-ui/react";
 
 const FormContent = styled.div`
   width: 100%;
 `;
-
-const InputDiv = styled.div``;
 
 const InputHeader = styled.h2`
   margin: 1em 0em 0.5em 0em;
@@ -21,12 +21,16 @@ const ShowPasswordDiv = styled.div`
   padding-top: 1em;
 `;
 
-const SubmitButton = styled.button`
+const PageButton = styled(Button)`
   margin: 1em 0em 0em 0em;
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
 `;
 
-const SubmitDiv = styled.div`
-  margin: 1em 0em;
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ErrorDiv = styled.div`
@@ -47,6 +51,7 @@ const RegisterInputs = () => {
   const [passwordTwo, setPasswordTwo] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [spinner, setSpinner] = useState<boolean>(false);
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -76,6 +81,7 @@ const RegisterInputs = () => {
 
   const ValidateRegistration = () => {
     //email validation
+    setSpinner(true);
     if (
       email.length < 8 ||
       !email.includes("@") ||
@@ -85,22 +91,22 @@ const RegisterInputs = () => {
         !email.includes(".edu") &&
         !email.includes(".org"))
     ) {
-      setErrorMessage("Invalid Email Address");
+      handleError("Invalid Email Address");
       return;
     }
     //username validation
     if (username.length < 3) {
-      setErrorMessage("Username must be at least 3 characters long");
+      handleError("Username must be at least 3 characters long");
       return;
     }
     //password validation
     if (password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long");
+      handleError("Password must be at least 8 characters long");
       return;
     }
     //password match validation
     if (password !== passwordTwo) {
-      setErrorMessage("Passwords Do Not Match");
+      handleError("Passwords Do Not Match");
       return;
     }
     // checking if email or username exists in database
@@ -112,7 +118,7 @@ const RegisterInputs = () => {
       if (validity == "Valid") {
         SubmitRegistration();
       }
-      setErrorMessage(validity);
+      handleError(validity);
     });
   };
 
@@ -128,10 +134,20 @@ const RegisterInputs = () => {
         console.log(response.data);
         console.log("Submitted");
         Navigate("/login");
+        setSpinner(false);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    setSpinner(false);
+  };
+
+  const NavigateToLogin = () => {
+    Navigate("/login");
   };
 
   return (
@@ -177,9 +193,16 @@ const RegisterInputs = () => {
         />{" "}
         Show Passwords
       </ShowPasswordDiv>
-      <SubmitDiv>
-        <SubmitButton onClick={ValidateRegistration}>Register</SubmitButton>
-      </SubmitDiv>
+      {spinner ? (
+        <Spinner />
+      ) : (
+        <ButtonDiv>
+          <PageButton onClick={ValidateRegistration}>Register</PageButton>
+          <PageButton onClick={NavigateToLogin}>
+            Already Have an Account? Login.
+          </PageButton>
+        </ButtonDiv>
+      )}
     </FormContent>
   );
 };

@@ -7,6 +7,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Button,
 } from "@chakra-ui/react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
 
@@ -41,13 +42,15 @@ const StyledEyeButton = styled(IconButton)`
   margin-right: 0.5em;
 `;
 
-const SubmitButton = styled.button``;
-
-const RegisterButton = styled.button``;
+const PageButton = styled(Button)`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+`;
 
 const ButtonLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: white;
 `;
 
 const SpinnerDiv = styled.div`
@@ -112,7 +115,7 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
   return (
     <>
       <LoginDiv>
-        <LoginHeader2>Username:</LoginHeader2>
+        <LoginHeader2>Username/Email:</LoginHeader2>
         <LoginInput
           key={1}
           type="text"
@@ -149,12 +152,12 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
         </SpinnerDiv>
       ) : (
         <ButtonDiv>
-          <SubmitButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
+          <PageButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
             Submit
-          </SubmitButton>
-          <RegisterButton>
+          </PageButton>
+          <PageButton>
             <ButtonLink to={"/register"}>Register Here</ButtonLink>
-          </RegisterButton>
+          </PageButton>
         </ButtonDiv>
       )}
     </>

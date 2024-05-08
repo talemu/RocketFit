@@ -10,14 +10,11 @@ import styled from "styled-components";
 import WorkoutTemplatesPage from "./pages/WorkoutsTemplatesPage";
 import Base from "./components/Base";
 import CustomizeWorkout from "./pages/CustomizeWorkout";
-import "bootstrap/dist/css/bootstrap.min.css";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import TrackProgressPage from "./pages/TrackProgressPage";
 
-const Border = styled.div`
-  padding: 1em;
-`;
+const Border = styled.div``;
 
 function App() {
   const [trigger, setTrigger] = useState<boolean>(true);
@@ -46,8 +43,8 @@ function App() {
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
             />
-            <Route path="/progress" Component={TrackProgressPage} />
             <Route path="/register" Component={RegistrationPage} />
+            <Route path="/progress" Component={TrackProgressPage} />
             <Route
               path="/myworkouts"
               element={
