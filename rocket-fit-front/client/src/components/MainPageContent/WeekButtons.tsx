@@ -14,7 +14,7 @@ const WeekButtonDiv = styled.div`
 `;
 
 const NewPageButton = styled(Button)`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin-right: 1em;
@@ -26,7 +26,7 @@ const NewPageButton = styled(Button)`
 `;
 
 const ExitWorkoutButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin: 2em 0em 0em 2em;

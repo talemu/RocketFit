@@ -37,14 +37,16 @@ const TableRecord = styled.tr``;
 
 const TableHead = styled.thead``;
 
-const AddAndStartDiv = styled.div`
+const AddAndStart = styled.tr`
   display: flex;
   flex-direction: column;
 `;
 
+const TableItem = styled.td``;
+
 const StartButton = styled.button`
   margin: 0.5em;
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 
@@ -55,7 +57,7 @@ const StartButton = styled.button`
 `;
 
 const AddExerciseButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 
@@ -67,7 +69,7 @@ const AddExerciseButton = styled.button`
 `;
 
 const AddDayButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 
@@ -79,7 +81,7 @@ const AddDayButton = styled.button`
 `;
 
 const DeleteExerciseButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 
@@ -248,73 +250,72 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                 <TableHeader></TableHeader>
               </TableRecord>
             </TableHead>
-            <TableBody>
-              {workoutData.days.map((day: number, count: number) => (
-                <>
-                  <TableRecord>
-                    {workoutData.days[count] !== workoutData.days[count - 1] ? (
-                      <TableColumn>{day}</TableColumn>
-                    ) : (
-                      <TableColumn></TableColumn>
-                    )}
-                    {
-                      <TableColumn>
-                        {
-                          exercises.find(
-                            (element: Exercise) =>
-                              element.exerciseId ===
-                              workoutData.exercises[count]
-                          )?.exerciseName
-                        }
-                      </TableColumn>
-                    }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          sendDataToParent={(current) => {
-                            console.log(current, count);
-                            UpdateCurrent(current, count, workoutData.sets);
-                          }}
-                          current={workoutData.sets[count]}
-                          increment={1}
-                        />{" "}
-                      </TableColumn>
-                    }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData.reps)
-                          }
-                          current={workoutData.reps[count]}
-                          increment={1}
-                        />
-                      </TableColumn>
-                    }
+            {workoutData.days.map((day: number, count: number) => (
+              <TableBody key={count}>
+                <TableRecord>
+                  {workoutData.days[count] !== workoutData.days[count - 1] ? (
+                    <TableColumn>{day}</TableColumn>
+                  ) : (
+                    <TableColumn></TableColumn>
+                  )}
+                  {
                     <TableColumn>
                       {
-                        <NumberAdjuster
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData.rest)
-                          }
-                          current={workoutData.rest[count]}
-                          increment={15}
-                        />
+                        exercises.find(
+                          (element: Exercise) =>
+                            element.exerciseId === workoutData.exercises[count]
+                        )?.exerciseName
                       }
                     </TableColumn>
+                  }
+                  {
                     <TableColumn>
-                      <DeleteExerciseButton
-                        onClick={() => DeleteExercise(count)}
-                      >
-                        X
-                      </DeleteExerciseButton>
+                      <NumberAdjuster
+                        sendDataToParent={(current) => {
+                          console.log(current, count);
+                          UpdateCurrent(current, count, workoutData.sets);
+                        }}
+                        current={workoutData.sets[count]}
+                        increment={1}
+                      />{" "}
                     </TableColumn>
-                  </TableRecord>
-                  {workoutData.days[count] !== workoutData.days[count + 1] ? (
-                    <AddAndStartDiv>
+                  }
+                  {
+                    <TableColumn>
+                      <NumberAdjuster
+                        sendDataToParent={(current) =>
+                          UpdateCurrent(current, count, workoutData.reps)
+                        }
+                        current={workoutData.reps[count]}
+                        increment={1}
+                      />
+                    </TableColumn>
+                  }
+                  <TableColumn>
+                    {
+                      <NumberAdjuster
+                        sendDataToParent={(current) =>
+                          UpdateCurrent(current, count, workoutData.rest)
+                        }
+                        current={workoutData.rest[count]}
+                        increment={15}
+                      />
+                    }
+                  </TableColumn>
+                  <TableColumn>
+                    <DeleteExerciseButton onClick={() => DeleteExercise(count)}>
+                      X
+                    </DeleteExerciseButton>
+                  </TableColumn>
+                </TableRecord>
+                {workoutData.days[count] !== workoutData.days[count + 1] ? (
+                  <AddAndStart>
+                    <TableItem>
                       <AddExerciseButton onClick={() => ShowModal(true, count)}>
                         Add Exercise
                       </AddExerciseButton>
+                    </TableItem>
+                    <TableItem>
                       <AddExerciseModal
                         index={itemClickedIndex}
                         showModal={addExercisePopUpClicked}
@@ -322,11 +323,11 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                           HandleModalData(exercise, show, index)
                         }
                       />
-                    </AddAndStartDiv>
-                  ) : null}
-                </>
-              ))}
-            </TableBody>
+                    </TableItem>
+                  </AddAndStart>
+                ) : null}
+              </TableBody>
+            ))}
           </StyledTable>
           {workoutData.days[workoutData.days.length - 1] !== 7 ? (
             <AddDayButton onClick={AddDay}>Add Day</AddDayButton>

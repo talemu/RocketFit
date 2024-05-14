@@ -17,7 +17,7 @@ const WorkoutNameInput = styled(Input)`
 `;
 
 const EditWorkoutButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 

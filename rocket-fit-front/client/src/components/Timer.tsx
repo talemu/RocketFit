@@ -44,7 +44,16 @@ const TimerText = styled.p`
   font-size: 1em;
 `;
 
-const TimerButton = styled.button``;
+const TimerButton = styled.button`
+  border-radius: 0.5em;
+  background-color: red;
+  color: white;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
 
 const Timer = ({
   exercises,

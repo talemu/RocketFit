@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { WorkoutItem } from "../../services/workoutExerciseService";
 import { Slide } from "react-awesome-reveal";
+import { useEffect } from "react";
 
 const WeekHeader = styled.h1`
   padding: 0em 0em 0em 1em;
@@ -16,6 +17,9 @@ const DayButton = styled.button`
   padding: 1em;
   text-align: start;
   width: 50%;
+  border-radius: 0.5em;
+  background-color: red;
+  color: white;
 
   display: inline-block;
   vertical-align: middle;
@@ -45,13 +49,16 @@ interface Props {
 }
 
 const WeekContent = ({ authId, week, workout, workoutArray }: Props) => {
+  useEffect(() => {
+    workoutArray.map(() => {});
+  }, []);
   return (
     <>
       <WeekHeader>Week {week}</WeekHeader>{" "}
       <Content>
         {[...new Set(workoutArray.map((item) => item.day))].map(
           (item, count) => (
-            <SlideDiv delay={count * 50}>
+            <SlideDiv key={count} delay={count * 50}>
               <Link
                 to="/workout"
                 state={[

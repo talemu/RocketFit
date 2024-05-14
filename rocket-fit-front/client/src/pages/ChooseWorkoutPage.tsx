@@ -37,6 +37,9 @@ const WorkoutButton = styled.button`
   padding: 1em;
   text-align: start;
   width: 100%;
+  border-radius: 0.5em;
+  background-color: red;
+  color: white;
 
   display: inline-block;
   vertical-align: middle;
@@ -104,8 +107,8 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
                 </ButtonLink>
               </CreatedSlideDiv>
             </HeaderDiv>
-            {workoutArray?.map((item: Workout, count: number) => (
-              <SlideDiv direction="left" delay={count * 50}>
+            {workoutArray?.map((item: Workout, index: number) => (
+              <SlideDiv key={index} direction="left" delay={index * 50}>
                 <ButtonLink to={"/main"} state={[0, item]}>
                   <WorkoutButton>{item.workoutName}</WorkoutButton>
                 </ButtonLink>

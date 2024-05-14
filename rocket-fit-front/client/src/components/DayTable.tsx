@@ -21,7 +21,7 @@ const TableDiv = styled.div`
   margin: 1em 1em;
 
   @media only screen and (min-width: 1000px) {
-    font-size: 1.5em;
+    font-size: 1.2em;
   }
   @media only screen and (max-width: 700px) {
     margin: 0.1em;
@@ -44,7 +44,7 @@ const TableInput = styled.input`
   text-align: center;
 `;
 
-const TableWeightArray = styled.div`
+const TableWeightArray = styled.td`
   display: flex;
   flex-direction: column;
   height: 3em;
@@ -172,7 +172,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
               <DayTableHeader />
               <TableBody>
                 {exerciseItems.map((exerciseItem, index) => (
-                  <TableRecord>
+                  <TableRecord key={index}>
                     {
                       <TableColumn>
                         {

@@ -16,9 +16,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-const StyledAccordion = styled(Accordion)`
-  width: 50%;
-`;
+const AccordionContainer = styled.div``;
 
 const StyledAccordionItem = styled(AccordionItem)`
   margin-bottom: 1em;
@@ -66,8 +64,8 @@ const Templates = ({
   return (
     <>
       <Accordion allowMultiple>
-        {templates.map((item) => (
-          <>
+        {templates.map((item, index: number) => (
+          <AccordionContainer key={index}>
             <StyledAccordionItem>
               <StyledAccordionButton>
                 <Box as="span" flex="1" textAlign="left">
@@ -83,7 +81,7 @@ const Templates = ({
                 />
               </StyledAccordionPanel>
             </StyledAccordionItem>
-          </>
+          </AccordionContainer>
         ))}
       </Accordion>
     </>

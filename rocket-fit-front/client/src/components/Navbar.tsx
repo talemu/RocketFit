@@ -7,7 +7,7 @@ const Nav = styled.nav`
   display: flex;
   justify-content: flex-end;
   padding: 1em 2em 2em 0em;
-  background-color: #2196f3;
+  background-color: red;
 
   @media only screen and (max-width: 768px) {
     justify-content: center;
@@ -16,7 +16,7 @@ const Nav = styled.nav`
 `;
 
 const NavButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin-right: 0.5em;
@@ -28,7 +28,7 @@ const ButtonLink = styled(Link)`
 `;
 
 const LogoutButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 `;

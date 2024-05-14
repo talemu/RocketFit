@@ -44,7 +44,7 @@ const StyledEyeButton = styled(IconButton)`
 `;
 
 const SubmitButton = styled(Button)`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 `;
@@ -54,13 +54,13 @@ const RegistrationButton = styled(Button)`
   border: none;
   font: inherit;
   cursor: pointer;
-  color: blue;
+  color: red;
   text-decoration: underline;
 `;
 
 const ButtonLink = styled(Link)`
   text-decoration: none;
-  color: blue;
+  color: red;
 `;
 
 const SpinnerDiv = styled.div`

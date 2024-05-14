@@ -29,7 +29,7 @@ const ExerciseNameDiv = styled.div`
 const UserInput = styled.input``;
 
 const ViewProgressButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin: 1em;
@@ -152,8 +152,8 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
             onChange={(e) => handleInputChange(e, "exercise")}
           />
           <DropdownExercisesDiv isopen={isopen}>
-            {dropdownExercises.map((item) => (
-              <DropdownButtonClicked onClick={handleDropdownClick}>
+            {dropdownExercises.map((item, count: number) => (
+              <DropdownButtonClicked key={count} onClick={handleDropdownClick}>
                 {item}
               </DropdownButtonClicked>
             ))}

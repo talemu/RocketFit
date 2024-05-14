@@ -7,7 +7,7 @@ const CreateNewWorkoutDiv = styled.div`
 `;
 
 const CreateNewWorkoutButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin: 0.5em;

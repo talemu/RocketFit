@@ -5,7 +5,7 @@ import DayTable from "../components/DayTable";
 import { useEffect } from "react";
 
 const BackToHomeButton = styled.button`
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
   margin: 0.5em;

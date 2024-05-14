@@ -28,7 +28,7 @@ const ShowPasswordDiv = styled.div`
 
 const SubmitButton = styled(Button)`
   margin: 1em 0em 0em 0em;
-  background-color: #2196f3;
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 `;
@@ -39,7 +39,7 @@ const LoginButton = styled(Button)`
   margin: 1em 0em 0em 0em;
   font: inherit;
   cursor: pointer;
-  color: blue;
+  color: red;
   text-decoration: underline;
 `;
 
