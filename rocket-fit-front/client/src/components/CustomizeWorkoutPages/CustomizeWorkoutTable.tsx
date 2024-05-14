@@ -10,6 +10,13 @@ import workoutExerciseService, {
   Workout,
 } from "../../services/workoutExerciseService";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../Spinner";
+
+//allows for table overflow
+const TableWrapper = styled.div`
+  overflow-x: scroll;
+  width: 100%;
+`;
 
 const StyledTable = styled.table``;
 
@@ -20,32 +27,69 @@ const TableHeader = styled.th`
 `;
 
 const TableColumn = styled.td`
+  text-wrap: nowrap;
   text-align: center;
   align-items: center;
+  padding-top: 0.5em;
 `;
 
 const TableRecord = styled.tr``;
 
 const TableHead = styled.thead``;
 
-const AddAndStartDiv = styled.div`
+const AddAndStart = styled.tr`
   display: flex;
   flex-direction: column;
 `;
 
+const TableItem = styled.td``;
+
 const StartButton = styled.button`
   margin: 0.5em;
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
 `;
 
 const AddExerciseButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
   margin: 1em 0em 0em 0.5em;
 `;
 
 const AddDayButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
   margin: 1em 0em 0em 2em;
 `;
 
-const DeleteExerciseButton = styled.button``;
+const DeleteExerciseButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
 
 interface Props {
   workoutData: any;
@@ -60,6 +104,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
     useState<boolean>(false);
   const [itemClickedIndex, setItemClickedIndex] = useState<number>(-1);
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const UpdateCurrent = (data: number, count: number, array: number[]) => {
     if (count != -1) {
@@ -73,9 +118,15 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   useEffect(() => {
     //must rerender the page when new exercise is added and need to pull exercises
     const { request } = exerciseService.getAll("/");
-    request.then((response) => {
-      setExercises(response.data as Exercise[]);
-    });
+    request
+      .then((response) => {
+        setExercises(response.data as Exercise[]);
+        setLoading(false);
+        console.log(workoutData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [change]);
 
   const AddWorkoutToUser = () => {
@@ -182,106 +233,113 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   };
 
   return (
-    <>
-      <StyledTable>
-        <TableHead>
-          <TableRecord>
-            <TableHeader>Day</TableHeader>
-            <TableHeader>Exercise</TableHeader>
-            <TableHeader>Sets</TableHeader>
-            <TableHeader>Reps</TableHeader>
-            <TableHeader>Rest (seconds) </TableHeader>
-            <TableHeader></TableHeader>
-          </TableRecord>
-        </TableHead>
-        {workoutData.days.map((day: number, count: number) => (
-          <>
-            <TableBody>
-              <TableRecord>
-                {workoutData.days[count] !== workoutData.days[count - 1] ? (
-                  <TableColumn>{day}</TableColumn>
-                ) : (
-                  <TableColumn></TableColumn>
-                )}
-                {
+    <TableWrapper>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {" "}
+          <StyledTable>
+            <TableHead>
+              <TableRecord className="sticky-header">
+                <TableHeader>Day</TableHeader>
+                <TableHeader>Exercise</TableHeader>
+                <TableHeader>Sets</TableHeader>
+                <TableHeader>Reps</TableHeader>
+                <TableHeader>Rest (seconds) </TableHeader>
+                <TableHeader></TableHeader>
+              </TableRecord>
+            </TableHead>
+            {workoutData.days.map((day: number, count: number) => (
+              <TableBody key={count}>
+                <TableRecord>
+                  {workoutData.days[count] !== workoutData.days[count - 1] ? (
+                    <TableColumn>{day}</TableColumn>
+                  ) : (
+                    <TableColumn></TableColumn>
+                  )}
+                  {
+                    <TableColumn>
+                      {
+                        exercises.find(
+                          (element: Exercise) =>
+                            element.exerciseId === workoutData.exercises[count]
+                        )?.exerciseName
+                      }
+                    </TableColumn>
+                  }
+                  {
+                    <TableColumn>
+                      <NumberAdjuster
+                        sendDataToParent={(current) => {
+                          console.log(current, count);
+                          UpdateCurrent(current, count, workoutData.sets);
+                        }}
+                        current={workoutData.sets[count]}
+                        increment={1}
+                      />{" "}
+                    </TableColumn>
+                  }
+                  {
+                    <TableColumn>
+                      <NumberAdjuster
+                        sendDataToParent={(current) =>
+                          UpdateCurrent(current, count, workoutData.reps)
+                        }
+                        current={workoutData.reps[count]}
+                        increment={1}
+                      />
+                    </TableColumn>
+                  }
                   <TableColumn>
                     {
-                      exercises.find(
-                        (element: Exercise) =>
-                          element.exerciseId === workoutData.exercises[count]
-                      )?.exerciseName
+                      <NumberAdjuster
+                        sendDataToParent={(current) =>
+                          UpdateCurrent(current, count, workoutData.rest)
+                        }
+                        current={workoutData.rest[count]}
+                        increment={15}
+                      />
                     }
                   </TableColumn>
-                }
-                {
                   <TableColumn>
-                    <NumberAdjuster
-                      weeksFlag={false}
-                      sendDataToParent={(current) =>
-                        UpdateCurrent(current, count, workoutData.sets)
-                      }
-                      current={workoutData.sets[count]}
-                      increment={1}
-                    />{" "}
+                    <DeleteExerciseButton onClick={() => DeleteExercise(count)}>
+                      X
+                    </DeleteExerciseButton>
                   </TableColumn>
-                }
-                {
-                  <TableColumn>
-                    <NumberAdjuster
-                      weeksFlag={false}
-                      sendDataToParent={(current) =>
-                        UpdateCurrent(current, count, workoutData.reps)
-                      }
-                      current={workoutData.reps[count]}
-                      increment={1}
-                    />
-                  </TableColumn>
-                }
-                <TableColumn>
-                  {
-                    <NumberAdjuster
-                      weeksFlag={false}
-                      sendDataToParent={(current) =>
-                        UpdateCurrent(current, count, workoutData.rest)
-                      }
-                      current={workoutData.rest[count]}
-                      increment={15}
-                    />
-                  }
-                </TableColumn>
-                <TableColumn>
-                  <DeleteExerciseButton onClick={() => DeleteExercise(count)}>
-                    X
-                  </DeleteExerciseButton>
-                </TableColumn>
-              </TableRecord>
-              {workoutData.days[count] !== workoutData.days[count + 1] ? (
-                <AddAndStartDiv>
-                  <AddExerciseButton onClick={() => ShowModal(true, count)}>
-                    Add Exercise
-                  </AddExerciseButton>
-                  <AddExerciseModal
-                    index={itemClickedIndex}
-                    showModal={addExercisePopUpClicked}
-                    sendToCustomize={(exercise, show, index) =>
-                      HandleModalData(exercise, show, index)
-                    }
-                  />
-                </AddAndStartDiv>
-              ) : null}
-            </TableBody>
-          </>
-        ))}
-      </StyledTable>
-      {workoutData.days[workoutData.days.length - 1] !== 7 ? (
-        <AddDayButton onClick={AddDay}>Add Day</AddDayButton>
-      ) : (
-        <AddDayButton onClick={AddDay} disabled={true}>
-          Add Day
-        </AddDayButton>
+                </TableRecord>
+                {workoutData.days[count] !== workoutData.days[count + 1] ? (
+                  <AddAndStart>
+                    <TableItem>
+                      <AddExerciseButton onClick={() => ShowModal(true, count)}>
+                        Add Exercise
+                      </AddExerciseButton>
+                    </TableItem>
+                    <TableItem>
+                      <AddExerciseModal
+                        index={itemClickedIndex}
+                        showModal={addExercisePopUpClicked}
+                        sendToCustomize={(exercise, show, index) =>
+                          HandleModalData(exercise, show, index)
+                        }
+                      />
+                    </TableItem>
+                  </AddAndStart>
+                ) : null}
+              </TableBody>
+            ))}
+          </StyledTable>
+          {workoutData.days[workoutData.days.length - 1] !== 7 ? (
+            <AddDayButton onClick={AddDay}>Add Day</AddDayButton>
+          ) : (
+            <AddDayButton onClick={AddDay} disabled={true}>
+              Add Day
+            </AddDayButton>
+          )}
+          <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
+        </>
       )}
-      <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
-    </>
+    </TableWrapper>
   );
 };
 

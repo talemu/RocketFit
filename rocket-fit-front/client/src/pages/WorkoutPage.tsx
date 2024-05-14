@@ -5,10 +5,20 @@ import DayTable from "../components/DayTable";
 import { useEffect } from "react";
 
 const BackToHomeButton = styled.button`
-  a {
-    text-decoration: none;
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
     color: black;
   }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
 `;
 
 interface Props {
@@ -29,7 +39,7 @@ const WorkoutPage = ({ authId }: Props) => {
     return (
       <>
         <BackToHomeButton>
-          <Link
+          <ButtonLink
             to="/main"
             state={[
               selectedWorkoutInformation[4],
@@ -37,7 +47,7 @@ const WorkoutPage = ({ authId }: Props) => {
             ]}
           >
             Home
-          </Link>
+          </ButtonLink>
         </BackToHomeButton>
         <DayTable
           exerciseItems={selectedWorkoutInformation[1]}

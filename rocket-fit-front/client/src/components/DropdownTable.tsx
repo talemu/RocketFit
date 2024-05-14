@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Exercise } from "../services/exerciseService";
 import { Link } from "react-router-dom";
@@ -15,13 +14,31 @@ const TableHeader = styled.th`
 
 const TableColumn = styled.td`
   text-align: center;
+  text-wrap: nowrap;
 `;
 
-const TableRecord = styled.tr``;
+const TableRecord = styled.tr<{ isdifferentday: boolean }>`
+  border-top: ${(props) => (props.isdifferentday ? "1px solid black" : "none")};
+`;
 
 const TableHead = styled.thead``;
 
-const CustomizeButton = styled.button``;
+const CustomizeButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   item: any;
@@ -35,7 +52,7 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
       <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
       <StyledTable>
         <TableHead>
-          <TableRecord>
+          <TableRecord isdifferentday={false}>
             <TableHeader>Day</TableHeader>
             <TableHeader>Exercise</TableHeader>
             <TableHeader>Sets</TableHeader>
@@ -44,38 +61,40 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
           </TableRecord>
         </TableHead>
         {item.days.map((day: number, count: number) => (
-          <>
-            <TableBody>
-              <TableRecord>
-                {item.days[count] !== item.days[count - 1] ? (
-                  <TableColumn>{day}</TableColumn>
-                ) : (
-                  <TableColumn></TableColumn>
-                )}
+          <TableBody key={count}>
+            <TableRecord
+              isdifferentday={
+                item.days[count] !== item.days[count - 1] ? true : false
+              }
+            >
+              {item.days[count] !== item.days[count - 1] ? (
+                <TableColumn>{day}</TableColumn>
+              ) : (
+                <TableColumn></TableColumn>
+              )}
 
-                {
-                  <TableColumn>
-                    {
-                      exercises.find(
-                        (element: Exercise) =>
-                          element.exerciseId === item.exercises[count]
-                      )?.exerciseName
-                    }
-                  </TableColumn>
-                }
-                {<TableColumn>{item.sets[count]}</TableColumn>}
-                {<TableColumn>{item.reps[count]}</TableColumn>}
-                {<TableColumn>{item.rest[count]}</TableColumn>}
-              </TableRecord>
-            </TableBody>
-          </>
+              {
+                <TableColumn>
+                  {
+                    exercises.find(
+                      (element: Exercise) =>
+                        element.exerciseId === item.exercises[count]
+                    )?.exerciseName
+                  }
+                </TableColumn>
+              }
+              {<TableColumn>{item.sets[count]}</TableColumn>}
+              {<TableColumn>{item.reps[count]}</TableColumn>}
+              {<TableColumn>{item.rest[count]}</TableColumn>}
+            </TableRecord>
+          </TableBody>
         ))}
       </StyledTable>
       <CustomizeButton>
-        <Link to="/customize" state={[item, exercises, numberOfWorkouts]}>
+        <ButtonLink to="/customize" state={[item, exercises, numberOfWorkouts]}>
           {" "}
           Customize Workout{" "}
-        </Link>
+        </ButtonLink>
       </CustomizeButton>
     </>
   );

@@ -7,12 +7,32 @@ import workoutTemplateService, {
 import DropdownTable from "../DropdownTable";
 import { Exercise } from "../../services/exerciseService";
 import { useEffect, useState } from "react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+} from "@chakra-ui/react";
 
-const HeaderOne = styled.h1``;
+const AccordionContainer = styled.div``;
 
-const StyledTable = styled.table``;
+const StyledAccordionItem = styled(AccordionItem)`
+  margin-bottom: 1em;
+`;
 
-const FlipButton = styled.button``;
+const StyledAccordionButton = styled(AccordionButton)`
+  font-size: 1.5em;
+  background-color: grey;
+  border: 1px solid black;
+`;
+
+const StyledAccordionPanel = styled(AccordionPanel)`
+  padding: 0.5em 0em 0em em;
+  background-color: lightgrey;
+  overflow-x: auto;
+`;
 
 interface Props {
   exercises: Exercise[];
@@ -25,16 +45,7 @@ const Templates = ({
   numberOfWorkouts,
   sendDataToParent,
 }: Props) => {
-  //sendToParent: (loading: boolean) => void;
-
-  const [dropdowns, setDropdowns] = useState<boolean[]>([]);
   const [templates, setTemplates] = useState<StandardizedWorkoutTemplate[]>([]);
-
-  const flipDrop = (count: number) => {
-    const newItems = [...dropdowns];
-    newItems[count] = !newItems[count];
-    setDropdowns(newItems);
-  };
 
   useEffect(() => {
     const { request } = workoutTemplateService.getAll("");
@@ -45,31 +56,34 @@ const Templates = ({
         const standardTemplatesAndDropdowns =
           standardizeWorkoutTemplates(workoutTemplates);
         setTemplates(standardTemplatesAndDropdowns[0]);
-        setDropdowns(standardTemplatesAndDropdowns[1]);
         sendDataToParent(false);
       })
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {}, [dropdowns]);
-
   return (
     <>
-      {templates.map((item, count) => (
-        <>
-          <HeaderOne>{item.workoutName}</HeaderOne>
-          <FlipButton onClick={() => flipDrop(count)}>flip</FlipButton>
-          {dropdowns[count] ? (
-            <DropdownTable
-              item={item}
-              exercises={exercises}
-              numberOfWorkouts={numberOfWorkouts}
-            />
-          ) : (
-            <StyledTable></StyledTable>
-          )}
-        </>
-      ))}
+      <Accordion allowMultiple>
+        {templates.map((item, index: number) => (
+          <AccordionContainer key={index}>
+            <StyledAccordionItem>
+              <StyledAccordionButton>
+                <Box as="span" flex="1" textAlign="left">
+                  {item.workoutName}
+                </Box>
+                <AccordionIcon />
+              </StyledAccordionButton>{" "}
+              <StyledAccordionPanel pb={4}>
+                <DropdownTable
+                  item={item}
+                  exercises={exercises}
+                  numberOfWorkouts={numberOfWorkouts}
+                />
+              </StyledAccordionPanel>
+            </StyledAccordionItem>
+          </AccordionContainer>
+        ))}
+      </Accordion>
     </>
   );
 };

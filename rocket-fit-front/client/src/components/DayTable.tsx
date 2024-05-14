@@ -15,6 +15,19 @@ interface Props {
   week: number;
 }
 
+const TableDiv = styled.div`
+  overflow-x: auto;
+  font-size: 1em;
+  margin: 1em 1em;
+
+  @media only screen and (min-width: 1000px) {
+    font-size: 1.2em;
+  }
+  @media only screen and (max-width: 700px) {
+    margin: 0.1em;
+  }
+`;
+
 const StyledTable = styled.table``;
 
 const TableBody = styled.tbody``;
@@ -23,15 +36,19 @@ const TableColumn = styled.td`
   text-align: center;
 `;
 
-const TableRecord = styled.tr``;
+const TableRecord = styled.tr`
+  border-bottom: 1px solid black;
+`;
 
 const TableInput = styled.input`
   text-align: center;
 `;
 
-const TableWeightArray = styled.div`
+const TableWeightArray = styled.td`
   display: flex;
   flex-direction: column;
+  height: 3em;
+  margin: 2em 0em;
 `;
 
 const TableWeightArrayItems = styled.div`
@@ -146,71 +163,75 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
 
   return (
     <>
-      <StyledTable>
-        <DayTableHeader />
-        {loading ? (
-          <Spinner />
-        ) : (
-          <>
-            <TableBody>
-              {exerciseItems.map((exerciseItem, index) => (
-                <TableRecord>
-                  {
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <TableDiv>
+            <StyledTable>
+              <DayTableHeader />
+              <TableBody>
+                {exerciseItems.map((exerciseItem, index) => (
+                  <TableRecord key={index}>
+                    {
+                      <TableColumn>
+                        {
+                          exercises.find(
+                            (element) =>
+                              element.exerciseId === exerciseItem.exercise
+                          )?.exerciseName
+                        }
+                      </TableColumn>
+                    }
+                    {<TableColumn>{exerciseItem.sets}</TableColumn>}
+                    {<TableColumn>{exerciseItem.reps}</TableColumn>}
+                    {<TableColumn>{initial[index].toFixed(1)}</TableColumn>}
+                    <TableWeightArray>
+                      <TableInput
+                        type="number"
+                        placeholder={
+                          weight[index] == -1 || isNaN(weight[index])
+                            ? "Enter"
+                            : String(weight[index])
+                        }
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          updateWeight(index, e);
+                        }}
+                        disabled={isInputDisabled[index]}
+                      ></TableInput>
+                      <TableWeightArrayItems>
+                        {weightDictionary[exerciseItem.exercise].length != 0 ? (
+                          <TableWeightArrayItem>
+                            {"[" +
+                              weightDictionary[exerciseItem.exercise] +
+                              "]"}
+                          </TableWeightArrayItem>
+                        ) : (
+                          <TableWeightArrayItem />
+                        )}
+                      </TableWeightArrayItems>
+                    </TableWeightArray>
                     <TableColumn>
-                      {
-                        exercises.find(
-                          (element) =>
-                            element.exerciseId === exerciseItem.exercise
-                        )?.exerciseName
-                      }
+                      <Timer
+                        exercises={exercises}
+                        authId={authId}
+                        //Dev time set at 2 sec, will be exerciseItem.rest
+                        //initialTimeInSec={exerciseItem.rest}
+                        initialTimeInSec={2}
+                        weight={weight[index]}
+                        workout={exerciseItem}
+                        workoutNum={workoutNum}
+                        sendDataToParent={UpdateWeightArray}
+                        index={index}
+                      />
                     </TableColumn>
-                  }
-                  {<TableColumn>{exerciseItem.sets}</TableColumn>}
-                  {<TableColumn>{exerciseItem.reps}</TableColumn>}
-                  {<TableColumn>{initial[index].toFixed(1)}</TableColumn>}
-                  <TableWeightArray>
-                    <TableInput
-                      type="number"
-                      placeholder={
-                        weight[index] == -1 || isNaN(weight[index])
-                          ? "Enter"
-                          : String(weight[index])
-                      }
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        updateWeight(index, e);
-                      }}
-                      disabled={isInputDisabled[index]}
-                    ></TableInput>
-                    <TableWeightArrayItems>
-                      {weightDictionary[exerciseItem.exercise].length != 0 ? (
-                        <TableWeightArrayItem>
-                          {"[" + weightDictionary[exerciseItem.exercise] + "]"}
-                        </TableWeightArrayItem>
-                      ) : (
-                        <TableWeightArrayItem />
-                      )}
-                    </TableWeightArrayItems>
-                  </TableWeightArray>
-                  <TableColumn>
-                    <Timer
-                      exercises={exercises}
-                      authId={authId}
-                      //Dev time set at 2 sec, will be exerciseItem.rest
-                      //initialTimeInSec={exerciseItem.rest}
-                      initialTimeInSec={2}
-                      weight={weight[index]}
-                      workout={exerciseItem}
-                      workoutNum={workoutNum}
-                      sendDataToParent={UpdateWeightArray}
-                      index={index}
-                    />
-                  </TableColumn>
-                </TableRecord>
-              ))}
-            </TableBody>
-          </>
-        )}
-      </StyledTable>
+                  </TableRecord>
+                ))}
+              </TableBody>
+            </StyledTable>
+          </TableDiv>
+        </>
+      )}
     </>
   );
 };

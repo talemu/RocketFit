@@ -50,7 +50,7 @@ const TrackProgressChart = ({ records }: Props) => {
       },
       title: {
         display: true,
-        text: "Chart.js Line Chart",
+        text: "Progress",
       },
     },
   };

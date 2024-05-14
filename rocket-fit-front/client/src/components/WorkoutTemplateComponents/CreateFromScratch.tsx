@@ -6,7 +6,22 @@ const CreateNewWorkoutDiv = styled.div`
   padding: 3em 0em;
 `;
 
-const CreateNewWorkoutButton = styled.button``;
+const CreateNewWorkoutButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   exercises: Exercise[];
@@ -26,12 +41,12 @@ const CreateFromScratch = ({ exercises, numberOfWorkouts }: Props) => {
   return (
     <CreateNewWorkoutDiv>
       <CreateNewWorkoutButton>
-        <Link
+        <ButtonLink
           to="/customize"
           state={[emptyWorkout, exercises, numberOfWorkouts]}
         >
           Create From Scratch
-        </Link>
+        </ButtonLink>
       </CreateNewWorkoutButton>
     </CreateNewWorkoutDiv>
   );

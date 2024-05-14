@@ -19,20 +19,35 @@ const RangeDiv = styled.div`
 
 const HeaderOne = styled.h1``;
 
+const ExerciseNameDiv = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5em 0em;
+`;
+
 const UserInput = styled.input``;
 
-const ViewProgressButton = styled.button``;
+const ViewProgressButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 1em;
+`;
 
 const DropdownButtonClicked = styled.button``;
 
 const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
   display: ${(props) => (props.isopen ? "flex" : "none")};
+  text-wrap: nowrap;
   flex-direction: column;
+  position: absolute;
+  margin-top: 1.8em;
   background-color: #f9f9f9;
-  min-width: 160px;
   z-index: 1;
   border: 1px solid #ccc;
   border-top: none;
+  width: 100%;
 `;
 
 const ErrorDiv = styled.div`
@@ -106,6 +121,7 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
       );
       request
         .then((response) => {
+          if (response.data.length == 0) setError("No Records Found");
           sendDataToParent(response.data as ExerciseRecord[]);
           setSpinner(false);
         })
@@ -128,19 +144,21 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
       <ContentDiv>
         <HeaderOne>Track Progress</HeaderOne>
         {error.length > 0 ? <ErrorDiv>{error}</ErrorDiv> : null}
-        <UserInput
-          type="text"
-          value={exercise}
-          placeholder="Enter Exercise"
-          onChange={(e) => handleInputChange(e, "exercise")}
-        />
-        <DropdownExercisesDiv isopen={isopen}>
-          {dropdownExercises.map((item) => (
-            <DropdownButtonClicked onClick={handleDropdownClick}>
-              {item}
-            </DropdownButtonClicked>
-          ))}
-        </DropdownExercisesDiv>
+        <ExerciseNameDiv>
+          <UserInput
+            type="text"
+            value={exercise}
+            placeholder="Enter Exercise"
+            onChange={(e) => handleInputChange(e, "exercise")}
+          />
+          <DropdownExercisesDiv isopen={isopen}>
+            {dropdownExercises.map((item, count: number) => (
+              <DropdownButtonClicked key={count} onClick={handleDropdownClick}>
+                {item}
+              </DropdownButtonClicked>
+            ))}
+          </DropdownExercisesDiv>
+        </ExerciseNameDiv>
         <RangeDiv>
           <UserInput
             type="date"

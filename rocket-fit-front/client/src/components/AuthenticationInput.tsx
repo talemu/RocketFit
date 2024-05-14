@@ -18,6 +18,7 @@ const LoginDiv = styled.div`
 
 const LoginHeader2 = styled.h6`
   margin: 1em 0em 0em 0em;
+  font-size: 1em;
 `;
 
 const PasswordInputGroup = styled(InputGroup)``;
@@ -42,15 +43,24 @@ const StyledEyeButton = styled(IconButton)`
   margin-right: 0.5em;
 `;
 
-const PageButton = styled(Button)`
-  background-color: #2196f3;
+const SubmitButton = styled(Button)`
+  background-color: red;
   color: white;
   border-radius: 0.5em;
 `;
 
+const RegistrationButton = styled(Button)`
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: red;
+  text-decoration: underline;
+`;
+
 const ButtonLink = styled(Link)`
   text-decoration: none;
-  color: white;
+  color: red;
 `;
 
 const SpinnerDiv = styled.div`
@@ -152,12 +162,12 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
         </SpinnerDiv>
       ) : (
         <ButtonDiv>
-          <PageButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
+          <SubmitButton onClick={SubmitLogin} onKeyDown={handleEnterDown}>
             Submit
-          </PageButton>
-          <PageButton>
+          </SubmitButton>
+          <RegistrationButton>
             <ButtonLink to={"/register"}>Register Here</ButtonLink>
-          </PageButton>
+          </RegistrationButton>
         </ButtonDiv>
       )}
     </>

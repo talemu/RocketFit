@@ -11,8 +11,8 @@ interface Props {
   sendToCustomize: (data: ExerciseData, show: boolean, index: number) => void;
 }
 
-const AddExercisePopUp = styled.div<{ isOpen: boolean }>`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+const AddExercisePopUp = styled.div<{ isopen: boolean }>`
+  display: ${(props) => (props.isopen ? "flex" : "none")};
   position: fixed;
   z-index: 1;
   left: 0;
@@ -44,14 +44,15 @@ const ButtonsDiv = styled.div`
   padding: 1em 0em;
 `;
 
-const NewWorkoutItemInput = styled.input``;
+const NewWorkoutItemInput = styled.input`
+  width: 100%;
+`;
 
 const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
   display: ${(props) => (props.isopen ? "flex" : "none")};
   flex-direction: column;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
   z-index: 1;
   border: 1px solid #ccc;
   border-top: none;
@@ -137,6 +138,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     const { request } = exerciseService.getAll("/item?name=" + exerciseName);
     request
       .then((response) => {
+        console.log("hi");
         const exercise = response.data as unknown as Exercise;
         if (
           exerciseName != "" &&
@@ -194,7 +196,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
 
   return (
     <>
-      <AddExercisePopUp isOpen={showModal}>
+      <AddExercisePopUp isopen={showModal}>
         <ModalContent>
           Add Exercise{" "}
           <NewWorkoutItemDiv>
