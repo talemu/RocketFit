@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -12,15 +13,22 @@ const WeekButtonDiv = styled.div`
   padding: 2em 0em 0em 2em;
 `;
 
-const PreviousWeekButton = styled.button`
+const NewPageButton = styled(Button)`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
   margin-right: 1em;
-`;
 
-const NextWeekButton = styled.button`
-  margin-right: 1em;
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
 `;
 
 const ExitWorkoutButton = styled.button`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
   margin: 2em 0em 0em 2em;
 `;
 
@@ -30,8 +38,8 @@ const WeekButtons = ({
   week,
   sendWeekToParent,
 }: Props) => {
-  console.log(week);
   const Navigate = useNavigate();
+  console.log(isPreviousButtonDisabled, isNextButtonDisabled);
 
   const PreviousButtonClick = () => {
     localStorage.setItem("savedWeekNumber", JSON.stringify(week - 1));
@@ -50,18 +58,18 @@ const WeekButtons = ({
   return (
     <>
       <WeekButtonDiv>
-        <PreviousWeekButton
+        <NewPageButton
           onClick={PreviousButtonClick}
-          disabled={isPreviousButtonDisabled}
+          isDisabled={isPreviousButtonDisabled}
         >
-          Previous Week{" "}
-        </PreviousWeekButton>
-        <NextWeekButton
+          {"<<< "}Previous Week
+        </NewPageButton>
+        <NewPageButton
           onClick={NextButtonClick}
-          disabled={isNextButtonDisabled}
+          isDisabled={isNextButtonDisabled}
         >
-          Next Week{" "}
-        </NextWeekButton>
+          Next Week{" >>>"}
+        </NewPageButton>
       </WeekButtonDiv>{" "}
       <ExitWorkoutButton onClick={ExitWorkoutClick}>
         Exit Workout

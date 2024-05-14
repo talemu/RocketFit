@@ -4,7 +4,8 @@ import exerciseRecordService, {
   ExerciseRecord,
 } from "../services/exerciseRecordService";
 import { WorkoutItem } from "../services/workoutExerciseService";
-import exerciseService, { Exercise } from "../services/exerciseService";
+import { Exercise } from "../services/exerciseService";
+import { CheckIcon } from "@chakra-ui/icons";
 
 interface Props {
   exercises: Exercise[];
@@ -24,11 +25,14 @@ interface Props {
 }
 
 const LiftCompleteDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1em;
   margin-bottom: 1em;
 `;
 
 const TimerDiv = styled.div`
-  margin-bottom: 0.5em;
   display: flex;
 `;
 
@@ -188,7 +192,9 @@ const Timer = ({
   return (
     <>
       {isWorkoutComplete ? (
-        <LiftCompleteDiv>Lift Complete</LiftCompleteDiv>
+        <LiftCompleteDiv>
+          <CheckIcon /> Complete
+        </LiftCompleteDiv>
       ) : (
         <TimerDiv>
           {minutes === 0 && seconds === 0 ? (

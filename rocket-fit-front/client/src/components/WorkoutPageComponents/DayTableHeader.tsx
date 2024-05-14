@@ -1,13 +1,16 @@
-import React from "react";
 import styled from "styled-components";
 
+const TableHead = styled.thead`
+  border-bottom: 2px solid black;
+  margin: 1em 0em;
+`;
+
 const TableHeader = styled.th`
-  padding: 1em 2em;
+  padding: 0em 2em;
+  margin: 3em;
 `;
 
 const TableRecord = styled.tr``;
-
-const TableHead = styled.thead``;
 
 const DayTableHeader = () => {
   return (

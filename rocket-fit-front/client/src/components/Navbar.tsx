@@ -4,15 +4,34 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Nav = styled.nav`
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
   padding: 1em 2em 2em 0em;
   background-color: #2196f3;
+
+  @media only screen and (max-width: 768px) {
+    justify-content: center;
+    padding: 1em 0em;
+  }
 `;
 
 const NavButton = styled.button`
-  margin-right: 1em;
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+  margin-right: 0.5em;
 `;
-const LogoutButton = styled.button``;
+
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+const LogoutButton = styled.button`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+`;
 
 interface Props {
   authId: number;
@@ -42,14 +61,14 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
             <>
               <NavButton>
                 {" "}
-                <Link to="/myworkouts" state={authId}>
+                <ButtonLink to="/myworkouts" state={authId}>
                   My Workouts{" "}
-                </Link>
+                </ButtonLink>
               </NavButton>
               <NavButton>
-                <Link to="/progress" state={authId}>
+                <ButtonLink to="/progress" state={authId}>
                   Track Progress
-                </Link>
+                </ButtonLink>
               </NavButton>{" "}
             </>
           ) : (

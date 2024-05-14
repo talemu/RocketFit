@@ -4,7 +4,26 @@ import styled from "styled-components";
 import CustomizeWorkoutHeader from "../components/CustomizeWorkoutPages/CustomizeWorkoutHeader";
 import CustomizeWorkoutTable from "../components/CustomizeWorkoutPages/CustomizeWorkoutTable";
 
-const WorkoutsButton = styled.button``;
+const ContentDiv = styled.div`
+  margin: 0.5em;
+`;
+
+const BackButton = styled.button`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   authId: number;
@@ -30,12 +49,12 @@ const CustomizeWorkout = ({ authId }: Props) => {
     };
 
     return (
-      <>
-        <WorkoutsButton>
-          <Link to="/workouts" state={workoutData[2]}>
+      <ContentDiv>
+        <BackButton>
+          <ButtonLink to="/workouts" state={workoutData[2]}>
             Back
-          </Link>
-        </WorkoutsButton>
+          </ButtonLink>
+        </BackButton>
         <CustomizeWorkoutHeader
           workoutName={workoutData[0].workoutName}
           weeks={workoutData[0].weeks}
@@ -48,10 +67,10 @@ const CustomizeWorkout = ({ authId }: Props) => {
           authId={authId}
           workoutNum={workoutData[2] + 1}
         />
-      </>
+      </ContentDiv>
     );
   }
-  return <div></div>;
+  return <></>;
 };
 
 export default CustomizeWorkout;

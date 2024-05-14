@@ -5,6 +5,7 @@ import workoutExerciseService, {
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import { Slide } from "react-awesome-reveal";
 
 interface Props {
   authId: number;
@@ -15,14 +16,32 @@ const ContentDiv = styled.div`
   flex-direction: column;
 `;
 
+const HeaderDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 1em 1em;
+`;
+
+const PageHeader = styled.h1``;
+
+const SlideDiv = styled(Slide)`
+  direction = left
+`;
+
+const CreatedSlideDiv = styled(Slide)`
+  font-size: 0.8em;
+`;
+
 const WorkoutButton = styled.button`
-  margin: 1em;
+  margin: 1em 1em;
+  padding: 1em;
   text-align: start;
+  width: 100%;
 
   display: inline-block;
   vertical-align: middle;
-  -webkit-transform: perspective(0.5em) translateZ(0);
-  transform: perspective(0.5em) translateZ(0);
+  -webkit-transform: perspective(0.5em);
+  transform: perspective(0.5em);
   box-shadow: 0 0 0.5em rgba(0, 0, 0, 0);
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
@@ -38,6 +57,7 @@ const WorkoutButton = styled.button`
 `;
 
 const ButtonLink = styled(Link)`
+  width: 90%;
   display: block;
   text-decoration: none;
   color: black;
@@ -57,7 +77,7 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
     request
       .then((response) => {
         const workouts = response.data as unknown[] as Workout[];
-        setWorkouts(workouts);
+        setWorkouts(workouts.reverse());
         setLoading(false);
       })
       .catch((error) => {
@@ -73,19 +93,24 @@ const ChooseWorkoutPage = ({ authId }: Props) => {
           <Spinner />
         ) : (
           <>
-            {workoutArray?.map((item: Workout) => (
-              <WorkoutButton>
-                <ButtonLink to={"/main"} state={[0, item]}>
-                  {" "}
-                  {item.workoutName}
+            <HeaderDiv>
+              <PageHeader>Workouts</PageHeader>
+              <CreatedSlideDiv
+                direction="right"
+                delay={workoutArray.length * 50}
+              >
+                <ButtonLink to={"/workouts"} state={workoutArray.length}>
+                  <WorkoutButton>Create New Workout</WorkoutButton>
                 </ButtonLink>
-              </WorkoutButton>
+              </CreatedSlideDiv>
+            </HeaderDiv>
+            {workoutArray?.map((item: Workout, count: number) => (
+              <SlideDiv direction="left" delay={count * 50}>
+                <ButtonLink to={"/main"} state={[0, item]}>
+                  <WorkoutButton>{item.workoutName}</WorkoutButton>
+                </ButtonLink>
+              </SlideDiv>
             ))}
-            <WorkoutButton>
-              <ButtonLink to={"/workouts"} state={workoutArray.length}>
-                Choose New Workout
-              </ButtonLink>
-            </WorkoutButton>
           </>
         )}
       </ContentDiv>

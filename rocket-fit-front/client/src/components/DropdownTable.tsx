@@ -15,13 +15,31 @@ const TableHeader = styled.th`
 
 const TableColumn = styled.td`
   text-align: center;
+  text-wrap: nowrap;
 `;
 
-const TableRecord = styled.tr``;
+const TableRecord = styled.tr<{ isDifferentDay: boolean }>`
+  border-top: ${(props) => (props.isDifferentDay ? "1px solid black" : "none")};
+`;
 
 const TableHead = styled.thead``;
 
-const CustomizeButton = styled.button``;
+const CustomizeButton = styled.button`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   item: any;
@@ -35,7 +53,7 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
       <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
       <StyledTable>
         <TableHead>
-          <TableRecord>
+          <TableRecord isDifferentDay={false}>
             <TableHeader>Day</TableHeader>
             <TableHeader>Exercise</TableHeader>
             <TableHeader>Sets</TableHeader>
@@ -46,7 +64,11 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
         {item.days.map((day: number, count: number) => (
           <>
             <TableBody>
-              <TableRecord>
+              <TableRecord
+                isDifferentDay={
+                  item.days[count] !== item.days[count - 1] ? true : false
+                }
+              >
                 {item.days[count] !== item.days[count - 1] ? (
                   <TableColumn>{day}</TableColumn>
                 ) : (
@@ -72,10 +94,10 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
         ))}
       </StyledTable>
       <CustomizeButton>
-        <Link to="/customize" state={[item, exercises, numberOfWorkouts]}>
+        <ButtonLink to="/customize" state={[item, exercises, numberOfWorkouts]}>
           {" "}
           Customize Workout{" "}
-        </Link>
+        </ButtonLink>
       </CustomizeButton>
     </>
   );

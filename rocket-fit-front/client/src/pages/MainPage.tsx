@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import WeekButtons from "../components/MainPageContent/WeekButtons";
 import WeekContent from "../components/MainPageContent/WeekContent";
+import Spinner from "../components/Spinner";
+import {
+  StandardizeWorkouts,
+  WorkoutItem,
+} from "../services/workoutExerciseService";
 
 interface Props {
   authId: number;
@@ -24,37 +29,51 @@ const MainPage = ({ authId }: Props) => {
   //data incoming from WorkoutPage returning back to main page
   if (location.state !== null) {
     const workout = location.state[1];
-    const [week, setWeek] = useState<number>(
-      location.state[0] == 0 ? 1 : location.state[0]
+    const [week, setWeek] = useState(
+      localStorage.getItem("savedWeekNumber") === "null"
+        ? 1
+        : JSON.parse(localStorage.getItem("savedWeekNumber") || "{}")
     );
     const [isPreviousButtonDisabled, setPreviousButtonDisabled] =
       useState<boolean>(week <= 1);
     const [isNextButtonDisabled, setNextButtonDisabled] =
       useState<boolean>(false);
+    const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+      setWorkoutArray(StandardizeWorkouts(workout, week));
+      setPreviousButtonDisabled(week <= 1);
+      setNextButtonDisabled(week >= workout.weeks);
+      setLoading(false);
+    }, [week]);
 
     const handleWeekData = (data: number) => {
+      window.location.reload();
       setWeek(data);
     };
 
-    const handleContentData = (previous: boolean, next: boolean) => {
-      setPreviousButtonDisabled(previous);
-      setNextButtonDisabled(next);
-    };
     return (
       <>
-        {" "}
-        <WeekContent
-          authId={authId}
-          week={week}
-          workout={workout}
-          sendDataToParent={handleContentData}
-        />
-        <WeekButtons
-          isPreviousButtonDisabled={isPreviousButtonDisabled}
-          isNextButtonDisabled={isNextButtonDisabled}
-          week={week}
-          sendWeekToParent={handleWeekData}
-        />{" "}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {" "}
+            <WeekContent
+              authId={authId}
+              week={week}
+              workout={workout}
+              workoutArray={workoutArray}
+            />
+            <WeekButtons
+              isPreviousButtonDisabled={isPreviousButtonDisabled}
+              isNextButtonDisabled={isNextButtonDisabled}
+              week={week}
+              sendWeekToParent={handleWeekData}
+            />{" "}
+          </>
+        )}
       </>
     );
   }

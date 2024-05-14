@@ -1,18 +1,27 @@
 import { useEffect, useState } from "react";
-import workoutTemplateService, {
-  StandardizedWorkoutTemplate,
-  WorkoutTemplate,
-  standardizeWorkoutTemplates,
-} from "../services/workoutTemplateService";
 import styled from "styled-components";
 import exerciseService, { Exercise } from "../services/exerciseService";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
-import DropdownTable from "../components/DropdownTable";
 import Templates from "../components/WorkoutTemplateComponents/Templates";
 import CreateFromScratch from "../components/WorkoutTemplateComponents/CreateFromScratch";
 
-const BackButton = styled.button``;
+const BackButton = styled.button`
+  background-color: #2196f3;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   authId: number;
@@ -45,7 +54,7 @@ const WorkoutTemplatesPage = ({ authId }: Props) => {
   return (
     <>
       <BackButton>
-        <Link to="/myworkouts">Back</Link>
+        <ButtonLink to="/myworkouts">Back</ButtonLink>
       </BackButton>
       <Templates
         exercises={exercises}

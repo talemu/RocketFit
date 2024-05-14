@@ -3,7 +3,11 @@ import styled from "styled-components";
 import AuthenticationInput from "../components/AuthenticationInput";
 import { Container, Box } from "@chakra-ui/react";
 
-const LoginHeader1 = styled.h1``;
+const LoginHeader1 = styled.h1`
+  @media only screen and (min-width: 768px) {
+    font-size: 2em;
+  }
+`;
 
 const ErrorMessage = styled.div<{ invalidLogin: boolean }>`
   background: ${(props) => (props.invalidLogin ? "red" : "transparent")};
@@ -28,6 +32,10 @@ const BoxDiv = styled(Box)`
   padding: 2em;
   box-shadow: 5px 5px 5px grey;
   border-radius: 5px;
+
+  @media only screen and (min-width: 1000px) and (min-height: 1200px) {
+    font-size: 2em;
+  }
 `;
 
 interface Props {
