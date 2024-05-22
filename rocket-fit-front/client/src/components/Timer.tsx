@@ -38,10 +38,15 @@ const TimerDiv = styled.div`
 
 const TimerItemDiv = styled.div`
   width: 5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const TimerText = styled.p`
   font-size: 1em;
+  text-align: center;
+  margin: 0.5em;
 `;
 
 const TimerButton = styled.button`
@@ -211,11 +216,7 @@ const Timer = ({
               <TimerItemDiv>
                 <TimerText>TIME!!</TimerText>
               </TimerItemDiv>
-              <TimerItemDiv>
-                <TimerButton onClick={resetTimer} disabled={isResetDisabled}>
-                  reset
-                </TimerButton>
-              </TimerItemDiv>
+
               {isResetDisabled ? (
                 <TimerItemDiv>
                   <TimerButton onClick={completeWorkout}>
@@ -223,7 +224,11 @@ const Timer = ({
                   </TimerButton>
                 </TimerItemDiv>
               ) : (
-                <div></div>
+                <TimerItemDiv>
+                  <TimerButton onClick={resetTimer} disabled={isResetDisabled}>
+                    reset
+                  </TimerButton>
+                </TimerItemDiv>
               )}
             </>
           ) : (

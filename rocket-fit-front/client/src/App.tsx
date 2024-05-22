@@ -14,7 +14,9 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import TrackProgressPage from "./pages/TrackProgressPage";
 
-const Border = styled.div``;
+const Border = styled.div`
+  padding-top: 1em;
+`;
 
 function App() {
   const [trigger, setTrigger] = useState<boolean>(true);
@@ -31,12 +33,12 @@ function App() {
 
   return (
     <>
-      <Border>
-        <Router>
-          <Navbar
-            authId={JSON.parse(localStorage.getItem("savedAuthId") || "{}")}
-            sendDataToParent={handleLogoutData}
-          />
+      <Router>
+        <Navbar
+          authId={JSON.parse(localStorage.getItem("savedAuthId") || "{}")}
+          sendDataToParent={handleLogoutData}
+        />
+        <Border>
           <Routes>
             <Route path="/" Component={Base} />
             <Route
@@ -97,8 +99,8 @@ function App() {
             />
             <Route path="/unauthorized" Component={UnauthorizedPage} />
           </Routes>
-        </Router>
-      </Border>
+        </Border>
+      </Router>
     </>
   );
 }

@@ -23,8 +23,9 @@ const TableDiv = styled.div`
   @media only screen and (min-width: 1000px) {
     font-size: 1.2em;
   }
-  @media only screen and (max-width: 700px) {
+  @media only screen and (max-width: 768px) {
     margin: 0.1em;
+    font-size: 0.8em;
   }
 `;
 
@@ -53,6 +54,9 @@ const TableWeightArray = styled.td`
 
 const TableWeightArrayItems = styled.div`
   display: flex;
+  justify-content: center; /* Align items horizontally */
+  text-align: center;
+  font-weight: bold;
 `;
 
 const TableWeightArrayItem = styled.div``;
@@ -87,7 +91,6 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
 
   //fetches the average weight for each exercise for the Target Weight field
   const getAverageWeightsAndSetInitials = async (exercises: Exercise[]) => {
-    console.log(exerciseItems);
     const promises = exerciseItems.map((exerciseItem, index) => {
       return new Promise((resolve, reject) => {
         const { request } = exerciseRecordService.getAll(
@@ -202,9 +205,9 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
                       <TableWeightArrayItems>
                         {weightDictionary[exerciseItem.exercise].length != 0 ? (
                           <TableWeightArrayItem>
-                            {"[" +
+                            {"|" +
                               weightDictionary[exerciseItem.exercise] +
-                              "]"}
+                              "|"}
                           </TableWeightArrayItem>
                         ) : (
                           <TableWeightArrayItem />
@@ -217,7 +220,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
                         authId={authId}
                         //Dev time set at 2 sec, will be exerciseItem.rest
                         //initialTimeInSec={exerciseItem.rest}
-                        initialTimeInSec={2}
+                        initialTimeInSec={100}
                         weight={weight[index]}
                         workout={exerciseItem}
                         workoutNum={workoutNum}

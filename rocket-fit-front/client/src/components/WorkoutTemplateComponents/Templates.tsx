@@ -18,20 +18,20 @@ import {
 
 const AccordionContainer = styled.div``;
 
-const StyledAccordionItem = styled(AccordionItem)`
-  margin-bottom: 1em;
-`;
+const StyledAccordionItem = styled(AccordionItem)``;
 
 const StyledAccordionButton = styled(AccordionButton)`
   font-size: 1.5em;
-  background-color: grey;
+  background-color: red;
   border: 1px solid black;
+  color: white;
 `;
 
 const StyledAccordionPanel = styled(AccordionPanel)`
-  padding: 0.5em 0em 0em em;
-  background-color: lightgrey;
-  overflow-x: auto;
+  padding: 1em;
+  background-color: #ff6d6a;
+  overflow-x: scroll;
+  color: lightgrey;
 `;
 
 interface Props {
