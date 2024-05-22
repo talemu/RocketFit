@@ -23,8 +23,9 @@ const TableDiv = styled.div`
   @media only screen and (min-width: 1000px) {
     font-size: 1.2em;
   }
-  @media only screen and (max-width: 700px) {
+  @media only screen and (max-width: 768px) {
     margin: 0.1em;
+    font-size: 0.8em;
   }
 `;
 
@@ -53,6 +54,9 @@ const TableWeightArray = styled.td`
 
 const TableWeightArrayItems = styled.div`
   display: flex;
+  justify-content: center; /* Align items horizontally */
+  text-align: center;
+  font-weight: bold;
 `;
 
 const TableWeightArrayItem = styled.div``;
@@ -202,9 +206,9 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
                       <TableWeightArrayItems>
                         {weightDictionary[exerciseItem.exercise].length != 0 ? (
                           <TableWeightArrayItem>
-                            {"[" +
+                            {"|" +
                               weightDictionary[exerciseItem.exercise] +
-                              "]"}
+                              "|"}
                           </TableWeightArrayItem>
                         ) : (
                           <TableWeightArrayItem />

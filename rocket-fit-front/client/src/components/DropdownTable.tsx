@@ -27,7 +27,7 @@ const CustomizeButton = styled.button`
   background-color: red;
   color: white;
   border-radius: 0.5em;
-  margin: 0.5em;
+  margin-bottom: 1em;
 
   &:disabled {
     background-color: #cccccc;
@@ -49,6 +49,12 @@ interface Props {
 const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
   return (
     <>
+      <CustomizeButton>
+        <ButtonLink to="/customize" state={[item, exercises, numberOfWorkouts]}>
+          {" "}
+          Customize Workout{" "}
+        </ButtonLink>
+      </CustomizeButton>
       <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
       <StyledTable>
         <TableHead>
@@ -90,12 +96,6 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
           </TableBody>
         ))}
       </StyledTable>
-      <CustomizeButton>
-        <ButtonLink to="/customize" state={[item, exercises, numberOfWorkouts]}>
-          {" "}
-          Customize Workout{" "}
-        </ButtonLink>
-      </CustomizeButton>
     </>
   );
 };

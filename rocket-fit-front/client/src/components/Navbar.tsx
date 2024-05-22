@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -8,18 +8,41 @@ const Nav = styled.nav`
   justify-content: flex-end;
   padding: 1em 2em 2em 0em;
   background-color: red;
+  z-index: 1000;
 
   @media only screen and (max-width: 768px) {
     justify-content: center;
-    padding: 1em 0em;
+    bottom: 0;
+    padding: 0em;
+    position: fixed;
+    width: 100%;
   }
 `;
-
-const NavButton = styled.button`
+const NavButton = styled.button<{ active?: boolean }>`
   background-color: red;
   color: white;
   border-radius: 0.5em;
   margin-right: 0.5em;
+
+  @media only screen and (max-width: 768px) {
+    flex: 1;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+    border-radius: 0;
+    margin: 0;
+    padding: 1em;
+    cursor: pointer;
+    ${(props) =>
+      props.active &&
+      css`
+        color: red;
+        background-color: gray;
+        border: none;
+        border-radius: 0;
+      `};
+  }
 `;
 
 const ButtonLink = styled(Link)`
@@ -27,11 +50,11 @@ const ButtonLink = styled(Link)`
   color: white;
 `;
 
-const LogoutButton = styled.button`
-  background-color: red;
-  color: white;
-  border-radius: 0.5em;
-`;
+// const LogoutButton = styled.button`
+//   background-color: red;
+//   color: white;
+//   border-radius: 0.5em;
+// `;
 
 interface Props {
   authId: number;
@@ -52,6 +75,7 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
       setShow(true);
     }
   });
+  console.log(location.pathname);
 
   return (
     <>
@@ -59,13 +83,12 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
         <Nav>
           {authId !== -10 ? (
             <>
-              <NavButton>
-                {" "}
+              <NavButton active={location.pathname === "/myworkouts"}>
                 <ButtonLink to="/myworkouts" state={authId}>
-                  My Workouts{" "}
+                  My Workouts
                 </ButtonLink>
               </NavButton>
-              <NavButton>
+              <NavButton active={location.pathname === "/progress"}>
                 <ButtonLink to="/progress" state={authId}>
                   Track Progress
                 </ButtonLink>
@@ -75,7 +98,8 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
             <></>
           )}
 
-          <LogoutButton
+          <NavButton
+            active={false}
             onClick={() => {
               //logging out
               sendDataToParent(-10);
@@ -83,7 +107,7 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
             }}
           >
             Logout
-          </LogoutButton>
+          </NavButton>
         </Nav>
       ) : (
         <div></div>

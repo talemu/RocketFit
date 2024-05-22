@@ -47,11 +47,13 @@ const TrackProgressChart = ({ records }: Props) => {
     plugins: {
       legend: {
         position: "top" as const,
+        display: false,
       },
       title: {
         display: true,
-        text: "Progress",
+        text: "Progress (Weight in lbs)",
       },
+      scales: {},
     },
   };
 

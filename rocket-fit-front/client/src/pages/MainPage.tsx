@@ -40,6 +40,7 @@ const MainPage = ({ authId }: Props) => {
       useState<boolean>(false);
     const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    console.log(workoutArray);
 
     useEffect(() => {
       setWorkoutArray(StandardizeWorkouts(workout, week));

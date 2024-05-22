@@ -3,7 +3,7 @@ import { Exercise } from "../../services/exerciseService";
 import { Link } from "react-router-dom";
 
 const CreateNewWorkoutDiv = styled.div`
-  padding: 3em 0em;
+  padding: 1em 0em;
 `;
 
 const CreateNewWorkoutButton = styled.button`
