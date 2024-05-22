@@ -91,7 +91,6 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
 
   //fetches the average weight for each exercise for the Target Weight field
   const getAverageWeightsAndSetInitials = async (exercises: Exercise[]) => {
-    console.log(exerciseItems);
     const promises = exerciseItems.map((exerciseItem, index) => {
       return new Promise((resolve, reject) => {
         const { request } = exerciseRecordService.getAll(
@@ -221,7 +220,7 @@ const DayTable = ({ exerciseItems, authId, workoutNum }: Props) => {
                         authId={authId}
                         //Dev time set at 2 sec, will be exerciseItem.rest
                         //initialTimeInSec={exerciseItem.rest}
-                        initialTimeInSec={2}
+                        initialTimeInSec={100}
                         weight={weight[index]}
                         workout={exerciseItem}
                         workoutNum={workoutNum}

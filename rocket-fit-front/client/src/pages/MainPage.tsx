@@ -7,6 +7,8 @@ import {
   StandardizeWorkouts,
   WorkoutItem,
 } from "../services/workoutExerciseService";
+import exerciseRecordService from "../services/exerciseRecordService";
+import exerciseService, { Exercise } from "../services/exerciseService";
 
 interface Props {
   authId: number;
@@ -40,7 +42,6 @@ const MainPage = ({ authId }: Props) => {
       useState<boolean>(false);
     const [workoutArray, setWorkoutArray] = useState<WorkoutItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    console.log(workoutArray);
 
     useEffect(() => {
       setWorkoutArray(StandardizeWorkouts(workout, week));
@@ -48,6 +49,39 @@ const MainPage = ({ authId }: Props) => {
       setNextButtonDisabled(week >= workout.weeks);
       setLoading(false);
     }, [week]);
+
+    // useEffect(() => {
+    //   const { request } = exerciseService.getAll("/");
+    //   request.then((response) => {
+    //     const response_exercises = response.data as unknown[] as Exercise[];
+    //     setExercises(response_exercises);
+    //   });
+    // });
+
+    // useEffect(() => {
+    //   console.log(workoutArray);
+    //   workoutArray.map((workoutItem: WorkoutItem) => {
+    //     const fetchData = async () => {
+    //       const response2 = await exerciseRecordService.getAll(
+    //         "/item?exercise=" +
+    //           exercises.find(
+    //             (element: Exercise) =>
+    //               element.exerciseId === workoutItem.exercise
+    //           )?.exerciseName +
+    //           "&day=" +
+    //           workoutItem.day +
+    //           "&workoutNum=" +
+    //           workout.workoutNumber +
+    //           "&auth=" +
+    //           authId
+    //       ).request;
+
+    //       const exercise_record_value = response2.data;
+    //       console.log(exercise_record_value);
+    //     };
+    //     fetchData();
+    //   });
+    // }, [workoutArray]);
 
     const handleWeekData = (data: number) => {
       window.location.reload();

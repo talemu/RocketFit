@@ -39,7 +39,6 @@ const WeekButtons = ({
   sendWeekToParent,
 }: Props) => {
   const Navigate = useNavigate();
-  console.log(isPreviousButtonDisabled, isNextButtonDisabled);
 
   const PreviousButtonClick = () => {
     localStorage.setItem("savedWeekNumber", JSON.stringify(week - 1));
