@@ -8,6 +8,7 @@ from RFApp.dtos.ExerciseRecordDTO import ExerciseRecordDTO
 from RFApp.dtos.RFAuthUserDTO import RfAuthUserDTO
 from RFApp.dtos.WorkoutExerciseDTO import WorkoutExerciseDTO
 from RFApp.dtos.WorkoutTemplateDTO import WorkoutTemplateDTO
+from RFApp.dtos.MotivationalQuoteDTO import MotivationalQuoteDTO
 
 
 class TransformRequestMapper:
@@ -121,6 +122,25 @@ class TransformRequestMapper:
                 rest = json_dict['rest'],
                 days = json_dict['days'],
                 weeks= json_dict['weeks']
+            )
+        except Exception as e:
+            raise Exception("Request Mapper Issue: " + e.args[0])
+        
+    @staticmethod
+    def to_mq_dto(json_dict: Dict):
+        """
+        Converts a JSON dictionary (from the API request body) to a MotivationalQuoteDTO object.
+
+        Args:
+            json_dict (Dict): The JSON dictionary containing the data.
+
+        Returns:
+            MotivationalQuoteDTO: The converted MotivationalQuoteDTO object.
+        """
+        try:
+            return MotivationalQuoteDTO(
+                quote = json_dict['quote'],
+                author = json_dict['author']
             )
         except Exception as e:
             raise Exception("Request Mapper Issue: " + e.args[0])

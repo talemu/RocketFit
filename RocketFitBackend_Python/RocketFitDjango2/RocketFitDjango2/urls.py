@@ -6,6 +6,7 @@ from RFApp.views.exerciseRecordView import ExerciseRecordViewSet
 from RFApp.views.workoutTemplateView import WorkoutTemplateViewSet
 from RFApp.views.rfAuthUserView import RFAuthUserViewSet
 from RFApp.views.exerciseView import ExerciseViewSet
+from RFApp.views.motivationalQuoteView import MotivationalQuoteViewSet
 from rest_framework.routers import DefaultRouter
 
 """
@@ -21,6 +22,7 @@ router.register(r"exerciserecord", ExerciseRecordViewSet, basename='exercisereco
 router.register(r"workouttemplate", WorkoutTemplateViewSet, basename='workouttemplate')
 router.register(r"auth",RFAuthUserViewSet, basename='rfauthuser' )
 router.register(r"exercise", ExerciseViewSet, basename='exercise')
+router.register(r"motivationalquote", MotivationalQuoteViewSet, basename='motivationalquote')
 
 urlpatterns = [
     #WorkoutExercise

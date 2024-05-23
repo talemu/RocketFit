@@ -130,6 +130,15 @@ class Workouttemplate(models.Model):
             or self.reps is (None or '') or self.rest is (None or '') or self.weeks is (None or '')
             or self.workoutname is (None or '')):
             raise AssertionError("WorkoutTemplate is missing value/values")
+        
+class Motivationalquote(models.Model):
+    motivation_id = models.AutoField(db_column='motivation_id', primary_key=True, blank=False, null=False)
+    quote = models.CharField(db_column='quote',max_length=1000, blank=False, null=False)
+    author = models.CharField(db_column='author',max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'MotivationalQuote'
 
 
 class AuthGroup(models.Model):
