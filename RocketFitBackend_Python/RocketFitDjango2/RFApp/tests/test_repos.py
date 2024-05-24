@@ -6,6 +6,7 @@ from ..repositories.exerciseRepository import ExerciseRepo
 from ..repositories.rfAuthUserRepository import RfauthUserRepo
 from ..repositories.workoutExerciseRepository import WorkoutExerciseRepo
 from ..repositories.workoutTemplateRepository import WorkoutTemplateRepo
+from ..repositories.motivationalQuoteRepo import MotivationalQuoteRepo
 
 
 class ExerciseRecordsRepoTests(TestCase):
@@ -195,3 +196,27 @@ class WorkoutTemplateRepoTest(TestCase):
         self._test_wt_repo.save_template(template)
         templates = self._test_wt_repo.get_all()
         self.assertEqual(templates[len(templates) - 1].workoutname, 'Test Workout')
+
+class MotivationalQuoteRepoTests(TestCase):
+    """
+    This class contains unit tests for the MotivationalQuoteRepo class.
+    It tests various methods of the MotivationalQuoteRepo class to ensure their correctness.
+    """
+
+    _test_mq_repo = MotivationalQuoteRepo()
+
+    def test_get_all(self):
+        quotes = self._test_mq_repo.get_all()
+        self.assertEqual(len(quotes) > 0, True)
+    
+    def test_get_quotes_motivation_ids(self):
+        ids = self._test_mq_repo.get_quotes_motivation_ids()
+        self.assertEqual(ids[0], 1)
+
+    def test_get_motivation_quote_by_id(self):
+        quote = self._test_mq_repo.get_motivation_quote_by_id(1)
+        self.assertEqual(quote.motivation_id, 1)
+
+    def test_get_motivation_quote_by_id_fault(self):
+        quote = self._test_mq_repo.get_motivation_quote_by_id(100)
+        self.assertEqual(quote, None)

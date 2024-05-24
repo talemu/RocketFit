@@ -1,6 +1,7 @@
 from ..services.motivationalQuoteService import MotivationalQuoteService
 from django.http import JsonResponse
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 
 
 class MotivationalQuoteViewSet(viewsets.ViewSet):
@@ -15,9 +16,10 @@ class MotivationalQuoteViewSet(viewsets.ViewSet):
         except Exception as e:
             return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
         
-    def retrieve(self, request, pk=None):
+    @action(detail=False, methods=['get'], url_path='item')
+    def get_random_item(self, request):
         try:
-            quote = self._mqService.get_motivational_quote_by_id(pk)
+            quote = self._mqService.get_random_motivational_quote()
             response = quote.asdict()
             return JsonResponse(response, safe=False)
         except Exception as e:
