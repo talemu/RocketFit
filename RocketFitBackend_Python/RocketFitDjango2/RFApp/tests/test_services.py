@@ -6,12 +6,14 @@ from ..dtos.ExerciseRecordDTO import ExerciseRecordDTO
 from ..dtos.RFAuthUserDTO import RfAuthUserDTO
 from ..dtos.WorkoutExerciseDTO import WorkoutExerciseDTO
 from ..dtos.WorkoutTemplateDTO import WorkoutTemplateDTO
+from ..dtos.MotivationalQuoteDTO import MotivationalQuoteDTO
 
 from ..services.exerciseRecordService import ExerciseRecordService
 from ..services.exerciseService import ExerciseService
 from ..services.rfAuthUserService import RfauthUserService
 from ..services.workoutExerciseService import WorkoutExerciseService
 from ..services.workoutTemplateService import WorkoutTemplateService
+from ..services.motivationalQuoteService import MotivationalQuoteService
 
 
 class ExerciseRecordsServiceTests(TestCase):
@@ -260,3 +262,16 @@ class WorkoutTemplateServiceTests(TestCase):
             new_workout_template = self._test_wt_service.add_template(WorkoutTemplateDTO(exercises = "1", sets = "1", reps = "1", rest = "1", weeks = 1, workoutName = "Test Workout"))
         post_workout_templates = self._test_wt_service.get_all_workout_templates()
         self.assertEqual(len(pre_workout_templates), len(post_workout_templates))
+
+class MotivationalQuoteServiceTests(TestCase):
+
+    _test_mq_service = MotivationalQuoteService()
+
+    def test_get_all_motivational_quotes(self):
+        quotes = self._test_mq_service.get_all_motivational_quotes()
+        self.assertEqual(len(quotes), 1)
+        self.assertTrue(all(isinstance(quote, MotivationalQuoteDTO) for quote in quotes))
+
+    def test_get_motivational_quote(self):
+        quote = self._test_mq_service.get_random_motivational_quote()
+        self.assertTrue(isinstance(quote, MotivationalQuoteDTO))
