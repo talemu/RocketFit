@@ -13,9 +13,14 @@ import CustomizeWorkout from "./pages/CustomizeWorkout";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import TrackProgressPage from "./pages/TrackProgressPage";
+import AccountPage from "./pages/AccountPage";
 
 const Border = styled.div`
   padding-top: 1em;
+
+  @media (max-width: 768px) {
+    padding-bottom: 5em;
+  }
 `;
 
 function App() {
@@ -44,6 +49,16 @@ function App() {
             <Route
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
+            />
+            <Route
+              path="/account"
+              element={
+                <AccountPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
             />
             <Route path="/register" Component={RegistrationPage} />
             <Route path="/progress" Component={TrackProgressPage} />

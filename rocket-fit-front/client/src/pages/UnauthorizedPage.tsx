@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const LoginDiv = styled.div``;
-
-const LoginButton = styled.button`
+const LoginDiv = styled.div`
   margin: 2em 0em 0em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
+
+const LoginButton = styled.button``;
 
 const UnauthorizedPage = () => {
   const Navigate = useNavigate();
@@ -15,8 +18,10 @@ const UnauthorizedPage = () => {
   };
   return (
     <>
-      <LoginDiv>Please Login</LoginDiv>
-      <LoginButton onClick={LoginClick}>Login</LoginButton>
+      <LoginDiv>
+        Please Login
+        <LoginButton onClick={LoginClick}>Login</LoginButton>
+      </LoginDiv>
     </>
   );
 };
