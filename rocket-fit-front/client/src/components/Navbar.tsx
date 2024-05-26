@@ -38,7 +38,7 @@ const NavButton = styled.button<{ active?: boolean }>`
     ${(props) =>
       props.active &&
       css`
-        color: red;
+        color: white;
         background-color: gray;
         border: none;
         border-radius: 0;
@@ -107,14 +107,12 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
                 }
               />
               <NavButton
-                active={false}
+                active={location.pathname === "/account"}
                 onClick={() => {
-                  //logging out
-                  sendDataToParent(-10);
-                  navigate("/login");
+                  navigate("/account");
                 }}
               >
-                Logout
+                Account
               </NavButton>
             </>
           ) : (
