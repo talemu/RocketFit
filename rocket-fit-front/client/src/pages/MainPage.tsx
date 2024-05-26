@@ -7,8 +7,6 @@ import {
   StandardizeWorkouts,
   WorkoutItem,
 } from "../services/workoutExerciseService";
-import exerciseRecordService from "../services/exerciseRecordService";
-import exerciseService, { Exercise } from "../services/exerciseService";
 
 interface Props {
   authId: number;

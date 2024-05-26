@@ -2,13 +2,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled, { css } from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MotivationModal from "./NavbarComponents/MotivationModal";
 
 const Nav = styled.nav`
   display: flex;
   justify-content: flex-end;
   padding: 1em 2em 2em 0em;
   background-color: red;
-  z-index: 1000;
+  z-index: 100;
 
   @media only screen and (max-width: 768px) {
     justify-content: center;
@@ -64,6 +65,7 @@ interface Props {
 const Navbar = ({ authId, sendDataToParent }: Props) => {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (
@@ -75,7 +77,6 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
       setShow(true);
     }
   });
-  console.log(location.pathname);
 
   return (
     <>
@@ -93,21 +94,32 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
                   Track Progress
                 </ButtonLink>
               </NavButton>{" "}
+              <NavButton
+                active={location.pathname === ""}
+                onClick={() => setModalOpen(!modalOpen)}
+              >
+                Motivate Me
+              </NavButton>
+              <MotivationModal
+                isOpen={modalOpen}
+                sendDataToParent={(modalStatus: boolean) =>
+                  setModalOpen(modalStatus)
+                }
+              />
+              <NavButton
+                active={false}
+                onClick={() => {
+                  //logging out
+                  sendDataToParent(-10);
+                  navigate("/login");
+                }}
+              >
+                Logout
+              </NavButton>
             </>
           ) : (
-            <></>
+            <div></div>
           )}
-
-          <NavButton
-            active={false}
-            onClick={() => {
-              //logging out
-              sendDataToParent(-10);
-              navigate("/login");
-            }}
-          >
-            Logout
-          </NavButton>
         </Nav>
       ) : (
         <div></div>
