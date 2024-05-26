@@ -7,6 +7,20 @@ class RfauthUserRepo:
     def get_all(self):
         return Rfauthuser.objects.all()
     
+    def get_user_by_id(self, id):
+        try:
+            return Rfauthuser.objects.get(id = id)
+        except Rfauthuser.DoesNotExist:
+            return None
+        
+    def change_user_password(self, id, password):
+        try:
+            user = Rfauthuser.objects.get(id = id)
+            user.password = password
+            user.save()
+        except Rfauthuser.DoesNotExist:
+            return None
+    
     """
         Method: Authenticate a user by checking if the loginKey and password match a user in the Rfauthuser model.
     """

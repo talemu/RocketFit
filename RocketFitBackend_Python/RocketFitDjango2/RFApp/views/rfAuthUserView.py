@@ -22,6 +22,25 @@ class RFAuthUserViewSet(viewsets.ViewSet):
         response_data = self._rfAuthService.get_all_auth_users()
         response = list(map(lambda x : x.asdict(), response_data))
         return JsonResponse(response, safe = False)
+    
+    def retrieve(self, request, pk=None):
+        try:
+            response_data = self._rfAuthService.get_user_by_id(pk)
+            response = response_data.asdict()
+            return JsonResponse(response, safe = False)
+        except Exception as e:
+            return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
+        
+    #PUT /auth/changePassword?id=1&password=1
+    @action(detail=False, methods=['put'], url_path='changePassword')
+    def changePassword(self, request):
+        try:
+            id = request.GET.get('id', '')
+            password = request.GET.get('password', '')
+            response_data = self._rfAuthService.change_user_password(id, password)
+            return JsonResponse(response_data.asdict(), safe = False)
+        except Exception as e:
+            return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
 
     #GET /auth/login?loginKey=1&password=1
     @action(detail=False, methods=['get'], url_path='login')

@@ -57,6 +57,7 @@ function App() {
                   authId={JSON.parse(
                     localStorage.getItem("savedAuthId") || "{}"
                   )}
+                  sendDataToParent={handleLogoutData}
                 />
               }
             />
