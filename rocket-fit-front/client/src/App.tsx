@@ -14,6 +14,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import TrackProgressPage from "./pages/TrackProgressPage";
 import AccountPage from "./pages/AccountPage";
+import ContactSupport from "./pages/ContactSupport";
 
 const Border = styled.div`
   padding-top: 1em;
@@ -107,6 +108,16 @@ function App() {
               path="/workout"
               element={
                 <WorkoutPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
+            <Route
+              path="/support"
+              element={
+                <ContactSupport
                   authId={JSON.parse(
                     localStorage.getItem("savedAuthId") || "{}"
                   )}

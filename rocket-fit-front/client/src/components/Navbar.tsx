@@ -51,12 +51,6 @@ const ButtonLink = styled(Link)`
   color: white;
 `;
 
-// const LogoutButton = styled.button`
-//   background-color: red;
-//   color: white;
-//   border-radius: 0.5em;
-// `;
-
 interface Props {
   authId: number;
   sendDataToParent: (data: number) => void;
@@ -107,7 +101,10 @@ const Navbar = ({ authId, sendDataToParent }: Props) => {
                 }
               />
               <NavButton
-                active={location.pathname === "/account"}
+                active={
+                  location.pathname === "/account" ||
+                  location.pathname === "/support"
+                }
                 onClick={() => {
                   navigate("/account");
                 }}

@@ -60,7 +60,13 @@ const AccountPage = ({ authId, sendDataToParent }: Props) => {
             >
               Logout
             </AccountButton>
-            <AccountButton>Contact Support</AccountButton>
+            <AccountButton
+              onClick={() => {
+                navigate("/support");
+              }}
+            >
+              Contact Support
+            </AccountButton>
           </>
         )}
       </ContentDiv>
