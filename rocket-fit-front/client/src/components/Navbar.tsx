@@ -56,7 +56,7 @@ interface Props {
   sendDataToParent: (data: number) => void;
 }
 
-const Navbar = ({ authId, sendDataToParent }: Props) => {
+const Navbar = ({ authId }: Props) => {
   const navigate = useNavigate();
   const [show, setShow] = useState<boolean>(true);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
