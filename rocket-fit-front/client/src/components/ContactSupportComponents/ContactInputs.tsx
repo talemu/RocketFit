@@ -5,6 +5,7 @@ import Spinner from "../Spinner";
 import { useNavigate } from "react-router-dom";
 import authUserService from "../../services/authUserService";
 import { RfAuthUser } from "../../services/authUserService";
+import supportRequest from "../../services/supportRequest";
 
 const FormContent = styled.div`
   width: 100%;
@@ -39,14 +40,14 @@ const ButtonDiv = styled.div`
   }
 `;
 
-const ErrorDiv = styled.div`
-  background-color: red;
-  height: 2em;
+const PageMessageDiv = styled.div<{ bgcolor?: string }>`
+  background-color: ${(props) => props.bgcolor || "white"};
+  width: 100%;
+  text-align: center;
 `;
 
 const NonErrorDiv = styled.div`
-  background-color: transparent;
-  height: 2em;
+  background-color: white;
 `;
 
 interface Props {
@@ -55,7 +56,7 @@ interface Props {
 
 const ContactInputs = ({ authId }: Props) => {
   const Navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [pageMessage, setPageMessage] = useState("");
   const [email, setEmail] = useState("");
   const [emailDisabled, setEmailDisabled] = useState(false);
   const [subject, setSubject] = useState("");
@@ -121,10 +122,56 @@ const ContactInputs = ({ authId }: Props) => {
     }
   };
 
+  const validateInputs = () => {
+    if (
+      email.length < 8 ||
+      !email.includes("@") ||
+      email.split("@")[0].length == 0 ||
+      email.split("@")[1].split(".")[0].length == 0 ||
+      (!email.includes(".com") &&
+        !email.includes(".edu") &&
+        !email.includes(".org"))
+    ) {
+      setPageMessage("Invalid Email Address");
+    } else if (subject.length < 1) {
+      setPageMessage("The Subject cannot be empty");
+    } else if (description.length < 1) {
+      setPageMessage("The Description cannot be empty");
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = () => {
+    setSpinner(true);
+    const emailData = {
+      email: email,
+      subject: subject,
+      description: description,
+    };
+    console.log(emailData);
+    const { request } = supportRequest.postItem("/sendemail/", emailData);
+    request
+      .then((response) => {
+        console.log(response);
+        setSpinner(false);
+        setPageMessage(
+          "Successfully sent email to support. We will reach out ASAP"
+        );
+        //Navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error);
+        setSpinner(false);
+      });
+  };
+
   return (
     <FormContent>
-      {errorMessage.length != 0 ? (
-        <ErrorDiv>{errorMessage}</ErrorDiv>
+      {pageMessage.length != 0 ? (
+        <PageMessageDiv bgcolor={pageMessage[0] == "S" ? "green" : "red"}>
+          {pageMessage}
+        </PageMessageDiv>
       ) : (
         <NonErrorDiv></NonErrorDiv>
       )}
@@ -154,9 +201,7 @@ const ContactInputs = ({ authId }: Props) => {
         <Spinner />
       ) : (
         <ButtonDiv>
-          <SubmitButton onClick={() => console.log("submitted")}>
-            Submit
-          </SubmitButton>
+          <SubmitButton onClick={validateInputs}>Submit</SubmitButton>
         </ButtonDiv>
       )}
     </FormContent>
