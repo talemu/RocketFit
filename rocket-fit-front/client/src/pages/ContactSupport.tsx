@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { Container, Box } from "@chakra-ui/react";
 import ContactInputs from "../components/ContactSupportComponents/ContactInputs";
@@ -16,6 +15,7 @@ const ContainerDiv = styled(Container)`
 
 const BoxDiv = styled(Box)`
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   outline: 0.5px solid black;
