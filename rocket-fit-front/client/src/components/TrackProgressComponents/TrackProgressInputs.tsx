@@ -37,8 +37,8 @@ const ViewProgressButton = styled.button`
 
 const DropdownButtonClicked = styled.button``;
 
-const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
-  display: ${(props) => (props.isopen ? "flex" : "none")};
+const DropdownExercisesDiv = styled.div<{ isopen: string }>`
+  display: ${(props) => (props.isopen == "true" ? "flex" : "none")};
   text-wrap: nowrap;
   flex-direction: column;
   position: absolute;
@@ -151,7 +151,7 @@ const TrackProgressInputs = ({ authId, sendDataToParent }: Props) => {
             placeholder="Enter Exercise"
             onChange={(e) => handleInputChange(e, "exercise")}
           />
-          <DropdownExercisesDiv isopen={isopen}>
+          <DropdownExercisesDiv isopen={isopen.toString()}>
             {dropdownExercises.map((item, count: number) => (
               <DropdownButtonClicked key={count} onClick={handleDropdownClick}>
                 {item}

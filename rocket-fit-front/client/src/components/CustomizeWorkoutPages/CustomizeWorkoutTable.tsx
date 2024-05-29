@@ -11,6 +11,7 @@ import workoutExerciseService, {
 } from "../../services/workoutExerciseService";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../Spinner";
+import React from "react";
 
 //allows for table overflow
 const TableWrapper = styled.div`
@@ -37,9 +38,12 @@ const TableRecord = styled.tr`
   margin: 0em;
 `;
 
-const DayHeader = styled.h2`
+const DayHeader = styled.thead`
+  font-size: 1.5em;
   padding-top: 0.5em;
 `;
+
+const DayHeaderH = styled.th``;
 
 const AddAndStart = styled.tr`
   display: flex;
@@ -245,17 +249,23 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
           {" "}
           <StyledTable>
             {workoutData.days.map((day: number, count: number) => (
-              <>
+              <React.Fragment key={count}>
                 {workoutData.days[count] !== workoutData.days[count - 1] ? (
                   <>
-                    <DayHeader>Day {day}</DayHeader>
-                    <TableRecord className="sticky-header">
-                      <TableHeader>Exercise</TableHeader>
-                      <TableHeader>Sets</TableHeader>
-                      <TableHeader>Reps</TableHeader>
-                      <TableHeader>Rest (seconds) </TableHeader>
-                      <TableHeader></TableHeader>
-                    </TableRecord>
+                    <DayHeader>
+                      <TableRecord>
+                        <DayHeaderH>Day {day}</DayHeaderH>
+                      </TableRecord>
+                    </DayHeader>
+                    <TableBody>
+                      <TableRecord className="sticky-header">
+                        <TableHeader>Exercise</TableHeader>
+                        <TableHeader>Sets</TableHeader>
+                        <TableHeader>Reps</TableHeader>
+                        <TableHeader>Rest (seconds) </TableHeader>
+                        <TableHeader></TableHeader>
+                      </TableRecord>
+                    </TableBody>
                   </>
                 ) : null}
                 <TableBody key={count}>
@@ -334,7 +344,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                     </AddAndStart>
                   ) : null}
                 </TableBody>
-              </>
+              </React.Fragment>
             ))}
           </StyledTable>
           {workoutData.days[workoutData.days.length - 1] !== 7 ? (

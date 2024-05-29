@@ -9,8 +9,9 @@ const LoginHeader1 = styled.h1`
   }
 `;
 
-const ErrorMessage = styled.div<{ invalidlogin: boolean }>`
-  background: ${(props) => (props.invalidlogin ? "red" : "transparent")};
+const ErrorMessage = styled.div<{ invalidlogin: string }>`
+  background: ${(props) =>
+    props.invalidlogin == "true" ? "red" : "transparent"};
   height: 2em;
   width: 100%;
   text-align: center;
@@ -61,11 +62,11 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
         <BoxDiv>
           <LoginHeader1>RocketFit Login</LoginHeader1>
           {invalidLogin ? (
-            <ErrorMessage invalidlogin={invalidLogin}>
-              Incorrect Login
+            <ErrorMessage invalidlogin={invalidLogin.toString()}>
+              Invalid Login. Try Again
             </ErrorMessage>
           ) : (
-            <ErrorMessage invalidlogin={invalidLogin}></ErrorMessage>
+            <ErrorMessage invalidlogin={invalidLogin.toString()}></ErrorMessage>
           )}
           <AuthenticationInput sendDataToPage={handleInputData} />
         </BoxDiv>
