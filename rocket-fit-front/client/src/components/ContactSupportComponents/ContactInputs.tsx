@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import Spinner from "../Spinner";
-import { useNavigate } from "react-router-dom";
 import authUserService from "../../services/authUserService";
 import { RfAuthUser } from "../../services/authUserService";
 import supportRequest from "../../services/supportRequest";
@@ -22,6 +21,7 @@ const UserInput = styled(Input)`
 
 const UserTextArea = styled(Textarea)`
   width: 100%;
+  height: 10em;
 `;
 
 const SubmitButton = styled(Button)`
@@ -55,7 +55,6 @@ interface Props {
 }
 
 const ContactInputs = ({ authId }: Props) => {
-  const Navigate = useNavigate();
   const [pageMessage, setPageMessage] = useState("");
   const [email, setEmail] = useState("");
   const [emailDisabled, setEmailDisabled] = useState(false);
