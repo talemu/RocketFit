@@ -9,7 +9,7 @@ from ..services.contactSupportFormService import ContactSupportFormService
 
 class CustomerSupportFormViewSet(viewsets.ViewSet):
 
-    _csService = ContactSupportService()
+    _csService = ContactSupportFormService()
 
     @csrf_exempt
     @action(detail=False, methods=['post'], url_path='sendemail')
