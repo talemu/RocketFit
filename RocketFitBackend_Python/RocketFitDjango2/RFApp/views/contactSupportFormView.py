@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 
 
-from ..services.contactSupportService import ContactSupportService
+from ..services.contactSupportFormService import ContactSupportFormService
 
 class CustomerSupportFormViewSet(viewsets.ViewSet):
 

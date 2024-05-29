@@ -1,6 +1,6 @@
 import requests
 
-class ContactSupportService():
+class ContactSupportFormService():
 
     def sendEmail(self, email, subject, description):
         support_function_url = "https://iugyswfbelozgsctcjsqf5d2dy0ihary.lambda-url.us-east-1.on.aws/"
