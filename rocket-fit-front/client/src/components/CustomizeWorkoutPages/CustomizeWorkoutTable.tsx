@@ -130,7 +130,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
       .then((response) => {
         setExercises(response.data as Exercise[]);
         setLoading(false);
-        console.log(workoutData);
       })
       .catch((err) => {
         console.log(err);
@@ -152,7 +151,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
     const { request } = workoutExerciseService.postItem("/", proposedWorkout);
     request
       .then((response) => {
-        console.log("POST request successful", response.data);
         SendToMainPage(response.data);
       })
       .catch((error) => {
@@ -210,7 +208,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   const DeleteExercise = (count: number) => {
     //removing record from workoutData
     workoutData.exercises.splice(count, 1);
-    console.log(workoutData.days.length, count);
     //checks if the day is the last day, if it is, this if statement will be skipped
     if (workoutData.days.length >= count + 1) {
       //checks if the day matches exercise before and after
@@ -285,7 +282,6 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                       <TableColumn>
                         <NumberAdjuster
                           sendDataToParent={(current) => {
-                            console.log(current, count);
                             UpdateCurrent(current, count, workoutData.sets);
                           }}
                           current={workoutData.sets[count]}

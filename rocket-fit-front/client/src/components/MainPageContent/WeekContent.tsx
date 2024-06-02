@@ -49,31 +49,29 @@ interface Props {
 }
 
 const WeekContent = ({ authId, week, workout, workoutArray }: Props) => {
-  useEffect(() => {
-    workoutArray.map(() => {});
-  }, []);
+  const currentWeek = Number(week);
+  const dayItems = [...new Set(workoutArray.map((item) => item.day))];
+  useEffect(() => {}, []);
   return (
     <>
-      <WeekHeader>Week {week}</WeekHeader>{" "}
+      <WeekHeader>Week {currentWeek}</WeekHeader>{" "}
       <Content>
-        {[...new Set(workoutArray.map((item) => item.day))].map(
-          (item, count) => (
-            <SlideDiv key={count} delay={count * 50}>
-              <Link
-                to="/workout"
-                state={[
-                  workout,
-                  workoutArray.filter((item2) => item2.day === item),
-                  authId,
-                  workout.workoutNumber,
-                  week,
-                ]}
-              >
-                <DayButton>Day {item - (week - 1) * 7}</DayButton>
-              </Link>
-            </SlideDiv>
-          )
-        )}
+        {dayItems.map((item, count) => (
+          <SlideDiv key={count} delay={count * 50}>
+            <Link
+              to="/workout"
+              state={[
+                workout,
+                workoutArray.filter((item2) => item2.day === item),
+                authId,
+                workout.workoutNumber,
+                week,
+              ]}
+            >
+              <DayButton>Day {item - (week - 1) * 7}</DayButton>
+            </Link>
+          </SlideDiv>
+        ))}
       </Content>
     </>
   );

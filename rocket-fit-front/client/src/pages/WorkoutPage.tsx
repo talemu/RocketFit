@@ -1,5 +1,4 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import DayTable from "../components/DayTable";
 import styled from "styled-components";
 import DayTable from "../components/DayTable";
 import { useEffect } from "react";

@@ -25,7 +25,6 @@ const MainPage = ({ authId }: Props) => {
   useEffect(() => {
     if (location.state === null) Navigate("/myworkouts");
   }, []);
-
   //data incoming from WorkoutPage returning back to main page
   if (location.state !== null) {
     const workout = location.state[1];
@@ -47,39 +46,6 @@ const MainPage = ({ authId }: Props) => {
       setNextButtonDisabled(week >= workout.weeks);
       setLoading(false);
     }, [week]);
-
-    // useEffect(() => {
-    //   const { request } = exerciseService.getAll("/");
-    //   request.then((response) => {
-    //     const response_exercises = response.data as unknown[] as Exercise[];
-    //     setExercises(response_exercises);
-    //   });
-    // });
-
-    // useEffect(() => {
-    //   console.log(workoutArray);
-    //   workoutArray.map((workoutItem: WorkoutItem) => {
-    //     const fetchData = async () => {
-    //       const response2 = await exerciseRecordService.getAll(
-    //         "/item?exercise=" +
-    //           exercises.find(
-    //             (element: Exercise) =>
-    //               element.exerciseId === workoutItem.exercise
-    //           )?.exerciseName +
-    //           "&day=" +
-    //           workoutItem.day +
-    //           "&workoutNum=" +
-    //           workout.workoutNumber +
-    //           "&auth=" +
-    //           authId
-    //       ).request;
-
-    //       const exercise_record_value = response2.data;
-    //       console.log(exercise_record_value);
-    //     };
-    //     fetchData();
-    //   });
-    // }, [workoutArray]);
 
     const handleWeekData = (data: number) => {
       window.location.reload();

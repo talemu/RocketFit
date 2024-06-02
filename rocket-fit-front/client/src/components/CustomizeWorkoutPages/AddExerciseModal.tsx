@@ -138,7 +138,6 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     const { request } = exerciseService.getAll("/item?name=" + exerciseName);
     request
       .then((response) => {
-        console.log("hi");
         const exercise = response.data as unknown as Exercise;
         if (
           exerciseName != "" &&
@@ -180,7 +179,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     });
     request
       .then((response) => {
-        console.log(response.data);
+        response.data;
         addExerciseToWorkout();
       })
       .catch((error) => console.log(error.response.data));

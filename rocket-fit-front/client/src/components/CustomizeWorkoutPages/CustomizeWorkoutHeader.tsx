@@ -57,12 +57,10 @@ const CustomizeWorkoutHeader = ({
       setWorkoutName(editedWorkoutName);
       sendDataToParent(editedWorkoutName, weeks);
     }
-    console.log(editedWorkoutName);
     setEditWorkoutName(!editWorkoutName);
   };
 
   const UpdateWeek = (data: number) => {
-    console.log(editedWorkoutName);
     sendDataToParent(workoutName, data);
   };
 
