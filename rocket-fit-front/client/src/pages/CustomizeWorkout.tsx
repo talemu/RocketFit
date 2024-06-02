@@ -1,30 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Exercise } from "../services/exerciseService";
 import styled from "styled-components";
-import NumberAdjuster from "../components/NumberAdjuster";
+import CustomizeWorkoutHeader from "../components/CustomizeWorkoutPages/CustomizeWorkoutHeader";
+import CustomizeWorkoutTable from "../components/CustomizeWorkoutPages/CustomizeWorkoutTable";
 
-const HeaderOne = styled.h1``;
-
-const StyledTable = styled.table``;
-
-const TableBody = styled.tbody``;
-
-const TableHeader = styled.th`
-  padding: 1em 2em;
+const ContentDiv = styled.div`
+  margin: 0.5em;
 `;
 
-const TableColumn = styled.td`
-  text-align: center;
+const BackButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
 `;
 
-const TableRecord = styled.tr``;
-
-const TableHead = styled.thead``;
-
-const WorkoutsButton = styled.button``;
-
-const StartButton = styled.button``;
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   authId: number;
@@ -32,118 +31,46 @@ interface Props {
 
 const CustomizeWorkout = ({ authId }: Props) => {
   const Navigate = useNavigate();
-
-  const location = useLocation();
-  const workoutData = location.state;
-  const validAuthIdShow = authId != -10;
   const [change, setChange] = useState<boolean>(false);
-
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/main");
+      Navigate("/unauthorized");
     }
   }, [change]);
 
-  const UpdateCurrent = (data: number, count: number, array: number[]) => {
-    if (count != -1) {
-      array[count] = data;
-    } else {
-      workoutData[0].weeks = data;
-    }
-    setChange(!change);
-  };
+  const location = useLocation();
+  if (location.state !== null) {
+    const workoutData = location.state;
 
-  const AddWorkoutToUser = () => {};
+    const HandleHeaderChange = (workoutName: string, weeks: number) => {
+      workoutData[0].workoutName = workoutName;
+      workoutData[0].weeks = weeks;
+      setChange(!change);
+    };
 
-  return (
-    <>
-      {validAuthIdShow ? (
-        <>
-          <WorkoutsButton>
-            <Link to="/workouts">Back</Link>
-          </WorkoutsButton>
-          <HeaderOne>{workoutData[0].workoutName}</HeaderOne>
-          <NumberAdjuster
-            weeksFlag={true}
-            sendDataToParent={(current) =>
-              UpdateCurrent(current, -1, workoutData[0].weeks)
-            }
-            current={workoutData[0].weeks}
-          />
-          <StyledTable>
-            <TableHead>
-              <TableRecord>
-                <TableHeader>Day</TableHeader>
-                <TableHeader>Exercise</TableHeader>
-                <TableHeader>Sets</TableHeader>
-                <TableHeader>Reps</TableHeader>
-                <TableHeader>Rest</TableHeader>
-              </TableRecord>
-            </TableHead>
-            {workoutData[0].days.map((day: number, count: number) => (
-              <>
-                <TableBody>
-                  <TableRecord>
-                    {workoutData[0].days[count] !==
-                    workoutData[0].days[count - 1] ? (
-                      <TableColumn>{day}</TableColumn>
-                    ) : (
-                      <TableColumn></TableColumn>
-                    )}
-
-                    {
-                      <TableColumn>
-                        {
-                          workoutData[1].find(
-                            (element: Exercise) =>
-                              element.exerciseId === count + 1
-                          )?.exerciseName
-                        }
-                      </TableColumn>
-                    }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          weeksFlag={false}
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData[0].sets)
-                          }
-                          current={workoutData[0].sets[count]}
-                        />{" "}
-                      </TableColumn>
-                    }
-                    {
-                      <TableColumn>
-                        <NumberAdjuster
-                          weeksFlag={false}
-                          sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData[0].reps)
-                          }
-                          current={workoutData[0].reps[count]}
-                        />
-                      </TableColumn>
-                    }
-                    {
-                      <NumberAdjuster
-                        weeksFlag={false}
-                        sendDataToParent={(current) =>
-                          UpdateCurrent(current, count, workoutData[0].rest)
-                        }
-                        current={workoutData[0].rest[count]}
-                      />
-                    }
-                  </TableRecord>
-                </TableBody>
-              </>
-            ))}
-          </StyledTable>
-          <StartButton onClick={AddWorkoutToUser}>Start Workout</StartButton>{" "}
-        </>
-      ) : (
-        <div></div>
-      )}
-    </>
-  );
+    return (
+      <ContentDiv>
+        <BackButton>
+          <ButtonLink to="/workouts" state={workoutData[2]}>
+            Back
+          </ButtonLink>
+        </BackButton>
+        <CustomizeWorkoutHeader
+          workoutName={workoutData[0].workoutName}
+          weeks={workoutData[0].weeks}
+          sendDataToParent={(workoutName, weeks) => {
+            HandleHeaderChange(workoutName, weeks);
+          }}
+        />
+        <CustomizeWorkoutTable
+          workoutData={workoutData[0]}
+          authId={authId}
+          workoutNum={workoutData[2] + 1}
+        />
+      </ContentDiv>
+    );
+  }
+  return <></>;
 };
 
 export default CustomizeWorkout;

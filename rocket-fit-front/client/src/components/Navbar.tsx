@@ -1,44 +1,125 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import MotivationModal from "./NavbarComponents/MotivationModal";
 
 const Nav = styled.nav`
-  text-align: right;
-  padding-right: 2em;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1em 2em 2em 0em;
+  background-color: red;
+  z-index: 100;
+
+  @media only screen and (max-width: 768px) {
+    justify-content: center;
+    bottom: 0;
+    padding: 0em;
+    position: fixed;
+    width: 100%;
+  }
+`;
+const NavButton = styled.button<{ active?: boolean }>`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin-right: 0.5em;
+
+  @media only screen and (max-width: 768px) {
+    flex: 1;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+    border-radius: 0;
+    margin: 0;
+    padding: 1em;
+    cursor: pointer;
+    ${(props) =>
+      props.active &&
+      css`
+        color: white;
+        background-color: gray;
+        border: none;
+        border-radius: 0;
+      `};
+  }
 `;
 
-const LogoutButton = styled.button``;
+const ButtonLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
+
+const NavEmptyDiv = styled.div``;
 
 interface Props {
+  authId: number;
   sendDataToParent: (data: number) => void;
 }
 
-const Navbar = ({ sendDataToParent }: Props) => {
+const Navbar = ({ authId }: Props) => {
   const navigate = useNavigate();
-
   const [show, setShow] = useState<boolean>(true);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (window.location.href.includes("login")) {
+    if (
+      window.location.href.includes("login") ||
+      window.location.href.includes("register")
+    ) {
       setShow(false);
     } else {
       setShow(true);
     }
   });
 
-  const Logout = () => {
-    sendDataToParent(-10);
-    navigate("/login");
-  };
   return (
     <>
       {show ? (
         <Nav>
-          <LogoutButton onClick={Logout}>Logout</LogoutButton>
+          {authId !== -10 ? (
+            <>
+              <NavButton data-active={location.pathname === "/myworkouts"}>
+                <ButtonLink to="/myworkouts" state={authId}>
+                  My Workouts
+                </ButtonLink>
+              </NavButton>
+              <NavButton data-active={location.pathname === "/progress"}>
+                <ButtonLink to="/progress" state={authId}>
+                  Track Progress
+                </ButtonLink>
+              </NavButton>{" "}
+              <NavButton
+                data-active={location.pathname === ""}
+                onClick={() => setModalOpen(!modalOpen)}
+              >
+                Motivate Me
+              </NavButton>
+              <MotivationModal
+                isOpen={modalOpen}
+                sendDataToParent={(modalStatus: boolean) =>
+                  setModalOpen(modalStatus)
+                }
+              />
+              <NavButton
+                data-active={
+                  location.pathname === "/account" ||
+                  location.pathname === "/support"
+                }
+                onClick={() => {
+                  navigate("/account");
+                }}
+              >
+                Account
+              </NavButton>
+            </>
+          ) : (
+            <NavEmptyDiv></NavEmptyDiv>
+          )}
         </Nav>
       ) : (
-        <div></div>
+        <NavEmptyDiv></NavEmptyDiv>
       )}
     </>
   );

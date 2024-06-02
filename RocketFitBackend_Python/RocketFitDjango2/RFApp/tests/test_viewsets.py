@@ -43,7 +43,7 @@ class ExerciseRecordViewTest(TestCase):
         response = self.client.get(self.url + '/exerciserecord/averageweight?exercise=Test Case&auth=1', follow=True)
         self.assertTrue(isinstance(response, JsonResponse))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content.decode('utf-8')), 10.0)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), 10.25)
 
     def test_averageweight_fault(self):
         #record does not exist
@@ -51,6 +51,30 @@ class ExerciseRecordViewTest(TestCase):
         self.assertTrue(isinstance(response, JsonResponse))
         self.assertEqual(response.status_code, 200)
         self.assertEqual((json.loads(response.content.decode('utf-8'))), 0.0)
+
+    def test_get_exercise_record_by_name_startdate_enddate_id(self):
+        response = self.client.get(self.url + "/exerciserecord/record/?exerciseName=Test Case&startDate=2024-05-02&endDate=2024-05-03&authId=1", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8'))[0].get('exerciseName'), "Test Case")
+
+    def test_get_exercise_record_by_name_startdate_enddate_id_empty(self):
+        response = self.client.get(self.url + "/exerciserecord/record/?exerciseName=Test Case&startDate=2021-05-02&endDate=2024-05-03&authId=5", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
+
+    def test_get_exercise_record_unique_exercise_record(self):
+        response = self.client.get(self.url + "/exerciserecord/uniqueERN/?subName=Test&authId=1", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8'))[0], "Test Case")
+    
+    def test_get_exercise_record_unique_exercise_record_empty(self):
+        response = self.client.get(self.url + "/exerciserecord/uniqueERN/?subName=Random&authId=5", follow=True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
 
     def test_create(self):
         pre_inserted_er = self.client.get(self.url + '/exerciserecord/')
@@ -61,7 +85,8 @@ class ExerciseRecordViewTest(TestCase):
             "weight" : 100,
             "authId" : 1,
             "sets" : 3,
-            "reps" : 4
+            "reps" : 4,
+            "targetWeight" : "0.0"
         }
         response = self.client.post(self.url + '/exerciserecord/', data=data)
         post_inserted_er = self.client.get(self.url + '/exerciserecord/')
@@ -87,7 +112,7 @@ class ExerciseRecordViewTest(TestCase):
         #ensuring the no exercise record was inserted into the database
         self.assertEqual(len(json.loads(post_inserted_er.content.decode('utf-8'))), len(json.loads(pre_inserted_er.content.decode('utf-8'))))
         #expected error message
-        self.assertEqual(response.content.decode('utf-8'), '{"error log": "Missing property: exerciseName"}')
+        self.assertEqual(response.content.decode('utf-8'), '{"error log": "Request Mapper Issue: exerciseName"}')
 
 class ExerciseViewSetTests(TestCase):
     def setUp(self):
@@ -113,6 +138,25 @@ class ExerciseViewSetTests(TestCase):
         self.assertEqual(response.status_code, 400)
         #expected error message
         self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Exercise Does Not Exist with ID")
+
+    def test_retrieve_exercise_given_name(self):
+        response = self.client.get(self.url + "/exercise/item?name=Barbell Squats", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('exerciseId'), 2)
+    
+    def test_retrieve_exercise_given_name_fault(self):
+        response = self.client.get(self.url + "/exercise/item?name=Barbell Squat", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #expected error message
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Exercise Does Not Exist with Name")
+
+    def test_query_exercise_by_name_substring(self):
+        response = self.client.get(self.url + "/exercise/query?name=Bar", follow = True)
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 8)
 
     def test_create(self):
         pre_inserted_exercise = self.client.get(self.url + "/exercise/")
@@ -164,6 +208,24 @@ class RFAuthUserViewSetTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "LoginKey or Password is empty.")
 
+    def test_check_email_username_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabo@gmail.com&username=adminOn')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Valid")
+    
+    def test_check_email_username_exists_email_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabor@gmail.com&username=adminOn')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Email already exists.")
+    
+    def test_check_email_username_exists_username_exists(self):
+        response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabo@gmail.com&username=adminOne')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')), "Username already exists.")
+
     def test_create(self):
         pre_inserted_users = self.client.get(self.url + '/auth/')
         data = {
@@ -192,7 +254,7 @@ class RFAuthUserViewSetTests(TestCase):
         #ensuring the user was inserted into the database
         self.assertEqual(len(json.loads(pre_inserted_users.content.decode('utf-8'))), len(json.loads(post_inserted_users.content.decode('utf-8'))))
         #expected error message
-        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Missing property: username")
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Request Mapper Issue: username")
 
 class WorkoutExerciseViewSetTests(TestCase):
     def setUp(self):
@@ -219,6 +281,19 @@ class WorkoutExerciseViewSetTests(TestCase):
         self.assertEqual(response.status_code, 200)
         #no workout exercise with auth id 100
         self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 0)
+
+    def test_retrieve_we_based_on_auth_id_and_workout_num(self):
+        response = self.client.get(self.url + '/workoutexercise/item/?authId=100000&workoutNum=1')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('workoutName'), "Workout Name")
+
+    def test_retrieve_we_based_on_auth_id_and_workout_num_fault(self):
+        response = self.client.get(self.url + '/workoutexercise/item/?authId=100000&workoutNum=2')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #no workout exercise with auth id 100000 and workout number 2
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "Workout Exercise not found")
     
     def test_create(self):
         pre_inserted_workout_exercises = self.client.get(self.url + '/workoutexercise/')

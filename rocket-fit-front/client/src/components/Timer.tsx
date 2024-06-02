@@ -1,19 +1,36 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import exerciseRecordService from "../services/exerciseRecordService";
+import exerciseRecordService, {
+  ExerciseRecord,
+} from "../services/exerciseRecordService";
 import { WorkoutItem } from "../services/workoutExerciseService";
-import exerciseService, { Exercise } from "../services/exerciseService";
+import { Exercise } from "../services/exerciseService";
+import { CheckIcon } from "@chakra-ui/icons";
 
 interface Props {
-  id: number;
+  exercises: Exercise[];
+  authId: number;
   initialTimeInSec: number;
   weight: number;
-  sets: number;
-  reps: number;
   workout: WorkoutItem;
   workoutNum: number;
-  sendDataToParent: (data: number, start: boolean) => void;
+  sendDataToParent: (
+    weight_entered: number,
+    target_weight: number,
+    start: boolean,
+    index: number,
+    exercise: number
+  ) => void;
+  index: number;
 }
+
+const LiftCompleteDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 1em;
+  margin-bottom: 1em;
+`;
 
 const TimerDiv = styled.div`
   display: flex;
@@ -21,23 +38,37 @@ const TimerDiv = styled.div`
 
 const TimerItemDiv = styled.div`
   width: 5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const TimerText = styled.p`
   font-size: 1em;
+  text-align: center;
+  margin: 0.5em;
 `;
 
-const TimerButton = styled.button``;
+const TimerButton = styled.button`
+  border-radius: 0.5em;
+  background-color: red;
+  color: white;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
 
 const Timer = ({
-  id,
+  exercises,
+  authId,
   initialTimeInSec,
   weight,
-  sets,
-  reps,
   workout,
   workoutNum,
   sendDataToParent,
+  index,
 }: Props) => {
   const [minutes, setMinutes] = useState(Math.floor(initialTimeInSec / 60));
   const [seconds, setSeconds] = useState(initialTimeInSec % 60);
@@ -46,27 +77,14 @@ const Timer = ({
   const [isResetDisabled, setResetDisabled] = useState(false);
   const [isSkipDisabled, setSkipDisabled] = useState(true);
   const [weightArray, setWeightArray] = useState<number[]>([]);
+  const [targetWeight, setTargetWeight] = useState<number>(0);
   const [isWorkoutComplete, setWorkoutComplete] = useState<boolean>(false);
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-
-  useEffect(() => {
-    const { request } = exerciseService.getAll("");
-
-    request.then((response) => {
-      const exercises = response.data as unknown[] as Exercise[];
-      setExercises(exercises);
-    });
-    // setTrigger(!trigger);
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await exerciseService.getAll("").request;
-      const exercise_items = response.data as unknown as Exercise[];
-
       const response2 = await exerciseRecordService.getAll(
         "/item?exercise=" +
-          exercise_items.find(
+          exercises.find(
             (element: Exercise) => element.exerciseId === workout.exercise
           )?.exerciseName +
           "&day=" +
@@ -74,29 +92,39 @@ const Timer = ({
           "&workoutNum=" +
           workoutNum +
           "&auth=" +
-          id
+          authId
       ).request;
 
-      const exercise_record = response2.data as unknown as number;
+      const exercise_record_value = response2.data;
 
-      if (exercise_record != -10) {
-        sendDataToParent(exercise_record, false);
+      if (!(typeof exercise_record_value == "number")) {
+        const exercise_record =
+          exercise_record_value[0] as unknown as ExerciseRecord;
+        setTargetWeight(exercise_record.targetWeight);
+        sendDataToParent(
+          exercise_record.weight,
+          exercise_record.targetWeight,
+          false,
+          index,
+          0
+        );
         setWorkoutComplete(true);
+      } else {
+        setTargetWeight(0);
       }
     };
     fetchData();
   }, [exercises]);
 
+  //Timer Functionality
   useEffect(() => {
-    if (weight <= 0) {
-      setStartDisabled(true);
-    } else if (isNaN(weight)) {
-      setStartDisabled(true);
-    } else if (startFlag == true) {
-      setStartDisabled(true);
-    } else {
+    //enabling start button if weight is entered
+    if (weight > 0 && startFlag == false) {
       setStartDisabled(false);
+    } else {
+      setStartDisabled(true);
     }
+
     if (startFlag) {
       const interval = setInterval(() => {
         // eslint-disable-next-line no-debugger
@@ -116,15 +144,15 @@ const Timer = ({
         clearInterval(interval);
       };
     }
-  }, [startFlag, seconds, weight, isStartDisabled, isWorkoutComplete]);
+  }, [startFlag, seconds, weight, isWorkoutComplete]);
 
   const startTimer = () => {
-    sendDataToParent(weight, true);
+    sendDataToParent(weight, 0, true, index, workout.exercise);
     setWeightArray([...weightArray, weight]);
     setStartFlag(true);
     setStartDisabled(true);
     setSkipDisabled(false);
-    if (weightArray.length == sets - 1) {
+    if (weightArray.length == workout.sets - 1) {
       setResetDisabled(true);
     }
   };
@@ -132,7 +160,7 @@ const Timer = ({
   const skipTimer = () => {
     resetTimer();
     setSkipDisabled(true);
-    if (weightArray.length == sets) {
+    if (weightArray.length == workout.sets) {
       setResetDisabled(true);
       setSeconds(0);
       setMinutes(0);
@@ -147,26 +175,25 @@ const Timer = ({
   };
 
   const completeWorkout = () => {
-    const sum = weightArray.reduce((total, num) => total + num, 0);
-    const avg = sum / sets;
+    const avg =
+      weightArray.reduce((total, num) => total + num, 0) / workout.sets;
     const exerciseRecord = {
       exerciseName: exercises.find(
         (element) => element.exerciseId === workout.exercise
       )?.exerciseName,
-      sets: sets,
-      reps: reps,
+      sets: workout.sets,
+      reps: workout.reps,
       weight: parseFloat(avg.toFixed(1)),
-      authId: id,
+      authId: authId,
       day: workout.day,
       workoutNumber: workoutNum,
+      targetWeight: targetWeight,
     };
-    console.log(exerciseRecord);
     setWorkoutComplete(true);
-    sendDataToParent(parseFloat(avg.toFixed(1)), false);
+    sendDataToParent(parseFloat(avg.toFixed(1)), 0, false, index, 0);
     const { request } = exerciseRecordService.postItem("/", exerciseRecord);
     request
       .then((response) => {
-        console.log(response);
         console.log("POST request successful", response.data);
       })
       .catch((error) => {
@@ -177,7 +204,9 @@ const Timer = ({
   return (
     <>
       {isWorkoutComplete ? (
-        <div>Lift Complete</div>
+        <LiftCompleteDiv>
+          <CheckIcon /> Complete
+        </LiftCompleteDiv>
       ) : (
         <TimerDiv>
           {minutes === 0 && seconds === 0 ? (
@@ -185,11 +214,7 @@ const Timer = ({
               <TimerItemDiv>
                 <TimerText>TIME!!</TimerText>
               </TimerItemDiv>
-              <TimerItemDiv>
-                <TimerButton onClick={resetTimer} disabled={isResetDisabled}>
-                  reset
-                </TimerButton>
-              </TimerItemDiv>
+
               {isResetDisabled ? (
                 <TimerItemDiv>
                   <TimerButton onClick={completeWorkout}>
@@ -197,7 +222,11 @@ const Timer = ({
                   </TimerButton>
                 </TimerItemDiv>
               ) : (
-                <div></div>
+                <TimerItemDiv>
+                  <TimerButton onClick={resetTimer} disabled={isResetDisabled}>
+                    reset
+                  </TimerButton>
+                </TimerItemDiv>
               )}
             </>
           ) : (

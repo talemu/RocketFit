@@ -33,6 +33,8 @@ class Exerciserecord(models.Model):
     auth_id = models.IntegerField()
     day = models.IntegerField()
     workout_number = models.IntegerField()
+    target_weight = models.FloatField()
+    created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         managed = False
@@ -44,7 +46,7 @@ class Exerciserecord(models.Model):
     def clean(self):
         if (self.exercise_name is (None or '') or self.sets is (None or 0) or self.reps 
             is (None or 0) or self.weight is (None) or self.auth_id is (None) or self.day 
-            is (None) or self.workout_number is (None or 0)):
+            is (None) or self.workout_number is (None or 0) or self.target_weight is (None)):
             raise AssertionError("ExerciseRecord is missing value/values or invalid")
         if (float(self.weight) < 0 or float(self.auth_id) < 0):
             raise AssertionError("ExerciseRecord is invalid (ensure weight and authid are >= 0)")
@@ -128,6 +130,15 @@ class Workouttemplate(models.Model):
             or self.reps is (None or '') or self.rest is (None or '') or self.weeks is (None or '')
             or self.workoutname is (None or '')):
             raise AssertionError("WorkoutTemplate is missing value/values")
+        
+class Motivationalquote(models.Model):
+    motivation_id = models.AutoField(db_column='motivation_id', primary_key=True, blank=False, null=False)
+    quote = models.CharField(db_column='quote',max_length=1000, blank=False, null=False)
+    author = models.CharField(db_column='author',max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'MotivationalQuote'
 
 
 class AuthGroup(models.Model):

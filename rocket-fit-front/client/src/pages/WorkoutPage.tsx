@@ -1,11 +1,24 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import DayTable from "../components/DayTable";
 import styled from "styled-components";
 import DayTable from "../components/DayTable";
-import { WorkoutItem } from "../services/workoutExerciseService";
 import { useEffect } from "react";
 
-const BackToHomeButton = styled.button``;
+const BackToHomeButton = styled.button`
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
+  margin: 0.5em;
+
+  &:disabled {
+    background-color: #cccccc;
+    color: black;
+  }
+`;
+
+const ButtonLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 
 interface Props {
   authId: number;
@@ -13,34 +26,38 @@ interface Props {
 
 const WorkoutPage = ({ authId }: Props) => {
   const Navigate = useNavigate();
-  const location = useLocation();
-  const item = location.state;
-  const validAuthIdShow = authId != -10;
-
-  console.log(authId);
-
   useEffect(() => {
     if (authId == -10) {
-      Navigate("/main");
+      Navigate("/unauthorized");
     }
   });
 
-  return (
-    <>
-      {validAuthIdShow ? (
-        <>
-          <Link to="/main" state={item[0]}>
-            <BackToHomeButton>Home</BackToHomeButton>
-          </Link>
-          {item[1].map((item2: WorkoutItem) => (
-            <DayTable item={item2} id={item[2]} workoutNum={item[3]} />
-          ))}
-        </>
-      ) : (
-        <div></div>
-      )}
-    </>
-  );
+  const location = useLocation();
+  if (location.state !== null) {
+    const selectedWorkoutInformation = location.state;
+    return (
+      <>
+        <BackToHomeButton>
+          <ButtonLink
+            to="/main"
+            state={[
+              selectedWorkoutInformation[4],
+              selectedWorkoutInformation[0],
+            ]}
+          >
+            Home
+          </ButtonLink>
+        </BackToHomeButton>
+        <DayTable
+          exerciseItems={selectedWorkoutInformation[1]}
+          authId={selectedWorkoutInformation[2]}
+          workoutNum={selectedWorkoutInformation[3]}
+          week={selectedWorkoutInformation[4]}
+        />
+      </>
+    );
+  }
+  return <div></div>;
 };
 
 export default WorkoutPage;

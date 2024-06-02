@@ -1,45 +1,41 @@
 import styled from "styled-components";
+import {
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+} from "@chakra-ui/react";
 
 interface Props {
-  weeksFlag: boolean;
   sendDataToParent: (data: number) => void;
   current: number;
+  increment: number;
 }
 
 const AdjusterDiv = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
-const WeeksAdjusterDiv = styled.h2`
-  display: flex;
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 0.5em;
-`;
-
-const NumberAdjuster = ({ weeksFlag, sendDataToParent, current }: Props) => {
+const NumberAdjuster = ({ sendDataToParent, current, increment }: Props) => {
   return (
     <>
-      {weeksFlag ? (
-        <WeeksAdjusterDiv>
-          {current} Weeks
-          <ButtonDiv>
-            <button onClick={() => sendDataToParent(current + 1)}>▲</button>
-            <button onClick={() => sendDataToParent(current - 1)}>▼</button>
-          </ButtonDiv>
-        </WeeksAdjusterDiv>
-      ) : (
-        <AdjusterDiv>
-          {current}
-          <ButtonDiv>
-            <button onClick={() => sendDataToParent(current + 1)}>▲</button>
-            <button onClick={() => sendDataToParent(current - 1)}>▼</button>
-          </ButtonDiv>
-        </AdjusterDiv>
-      )}
+      <AdjusterDiv>
+        <NumberInput
+          onChange={(valueString) => sendDataToParent(Number(valueString))}
+          defaultValue={current}
+          step={increment}
+          min={1}
+          max={1000}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </AdjusterDiv>
     </>
   );
 };

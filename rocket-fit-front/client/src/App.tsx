@@ -3,22 +3,29 @@ import MainPage from "./pages/MainPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import WorkoutPage from "./pages/WorkoutPage";
 import AuthenticationPage from "./pages/AuthenticationPage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ChooseWorkoutPage from "./pages/ChooseWorkoutPage";
 import Navbar from "./components/Navbar";
 import styled from "styled-components";
-import WorkoutsPage from "./pages/WorkoutsPage";
+import WorkoutTemplatesPage from "./pages/WorkoutsTemplatesPage";
 import Base from "./components/Base";
 import CustomizeWorkout from "./pages/CustomizeWorkout";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import RegistrationPage from "./pages/RegistrationPage";
+import TrackProgressPage from "./pages/TrackProgressPage";
+import AccountPage from "./pages/AccountPage";
+import ContactSupport from "./pages/ContactSupport";
 
 const Border = styled.div`
-  padding: 1em;
+  padding-top: 1em;
+
+  @media (max-width: 768px) {
+    padding-bottom: 5em;
+  }
 `;
 
 function App() {
   const [trigger, setTrigger] = useState<boolean>(true);
-
-  useEffect(() => {}, [trigger]);
 
   const handleAuthData = (data: number) => {
     setTrigger(!trigger);
@@ -32,15 +39,31 @@ function App() {
 
   return (
     <>
-      <Border>
-        <Router>
-          <Navbar sendDataToParent={handleLogoutData} />
+      <Router>
+        <Navbar
+          authId={JSON.parse(localStorage.getItem("savedAuthId") || "{}")}
+          sendDataToParent={handleLogoutData}
+        />
+        <Border>
           <Routes>
             <Route path="/" Component={Base} />
             <Route
               path="/login"
               element={<AuthenticationPage sendDataToParent={handleAuthData} />}
             />
+            <Route
+              path="/account"
+              element={
+                <AccountPage
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                  sendDataToParent={handleLogoutData}
+                />
+              }
+            />
+            <Route path="/register" Component={RegistrationPage} />
+            <Route path="/progress" Component={TrackProgressPage} />
             <Route
               path="/myworkouts"
               element={
@@ -64,7 +87,7 @@ function App() {
             <Route
               path="/workouts"
               element={
-                <WorkoutsPage
+                <WorkoutTemplatesPage
                   authId={JSON.parse(
                     localStorage.getItem("savedAuthId") || "{}"
                   )}
@@ -91,9 +114,20 @@ function App() {
                 />
               }
             />
+            <Route
+              path="/support"
+              element={
+                <ContactSupport
+                  authId={JSON.parse(
+                    localStorage.getItem("savedAuthId") || "{}"
+                  )}
+                />
+              }
+            />
+            <Route path="/unauthorized" Component={UnauthorizedPage} />
           </Routes>
-        </Router>
-      </Border>
+        </Border>
+      </Router>
     </>
   );
 }

@@ -1,5 +1,6 @@
 from RFApp.mappers.rfAuthUserMapper import RfAuthUserMapper
 from RFApp.serializers import RfauthuserSerializer
+from ..dtos.RFAuthUserDTO import RfAuthUserDTO
 from ..repositories.rfAuthUserRepository import RfauthUserRepo
 
 class RfauthUserService:
@@ -11,6 +12,22 @@ class RfauthUserService:
 
     def get_all_auth_users(self):
         return list(map(lambda x : self._rfAuthMapper.map_to_dto(x), self._rfAuthRepo.get_all()))
+    
+    def get_user_by_id(self, id):
+        user = self._rfAuthRepo.get_user_by_id(id)
+        if user is None:
+            return None
+        return self._rfAuthMapper.map_to_dto(user)
+    
+    def change_user_password(self, id, password) -> RfAuthUserDTO:
+        try:
+            user = self._rfAuthRepo.get_user_by_id(id)
+            if (user is None):
+                raise Exception("User not found.")
+            self._rfAuthRepo.change_user_password(id, password)
+            return self._rfAuthMapper.map_to_dto()
+        except Exception as e:
+            raise Exception(e.args[0])
     
     """
         Method: Authenticate a user by checking if the loginKey 
@@ -26,6 +43,9 @@ class RfauthUserService:
             return -10
         else:
             return user.id
+        
+    def check_email_username_exists(self, email, username):
+        return self._rfAuthRepo.check_if_email_or_username_exists(email, username)
         
     """
         Method: Validates the potential user sent from the client side. 

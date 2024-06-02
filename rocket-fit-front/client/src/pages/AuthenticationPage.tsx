@@ -1,26 +1,42 @@
-import { KeyboardEvent, useEffect, useState } from "react";
-import authUserService from "../services/authUserService";
+import { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import AuthenticationInput from "../components/AuthenticationInput";
+import { Container, Box } from "@chakra-ui/react";
 
-const LoginHeader1 = styled.h1``;
-
-const LoginHeader2 = styled.h2`
-  margin: 1em 0em 0em 0em;
+const LoginHeader1 = styled.h1`
+  @media only screen and (min-width: 768px) {
+    font-size: 2em;
+  }
 `;
 
-const LoginInput = styled.input`
-  margin: 0em 0em 1em 0em;
+const ErrorMessage = styled.div<{ invalidlogin: string }>`
+  background: ${(props) =>
+    props.invalidlogin == "true" ? "red" : "transparent"};
+  height: 2em;
+  width: 100%;
+  text-align: center;
 `;
 
-const SubmitButton = styled.button`
-  margin: 1em 0em 0em 0em;
+const ContainerDiv = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const BoxDiv = styled(Box)`
   display: flex;
   flex-direction: column;
-`;
+  align-items: center;
+  width: max-content;
+  outline: 0.5px solid black;
+  padding: 2em;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 5px;
 
-const ErrorMessage = styled.div`
-  background-color: red;
+  @media only screen and (min-width: 1000px) and (min-height: 1200px) {
+    font-size: 2em;
+  }
 `;
 
 interface Props {
@@ -28,85 +44,33 @@ interface Props {
 }
 
 const AuthenticationPage = ({ sendDataToParent }: Props) => {
-  const navigate = useNavigate();
-  const [authId, setAuthId] = useState(0);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [invalidLogin, setInvalidLogin] = useState<boolean>(false);
 
-  useEffect(() => {
-    setSubmitted(false);
-    const { request } = authUserService.getAll(
-      "/login?loginKey=" + username + "&password=" + password
-    );
-    request
-      .then((response) => {
-        const returned_id: number = response.data as unknown as number;
-        if (returned_id === -10 && authId === -10) {
-          setInvalidLogin(true);
-          setAuthId(-10);
-        } else if (returned_id === -10 && authId === 0) {
-          setAuthId(-10);
-        } else {
-          setAuthId(returned_id);
-          sendDataToParent(returned_id);
-          navigate("/myworkouts");
-        }
-      })
-      .catch((err) => console.log(err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submitted]);
-
-  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setUsername(textValue);
-  };
-
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const textValue: string = (event.target as HTMLInputElement).value;
-    setPassword(textValue);
-  };
-
-  const HandleEnterDown = (event: KeyboardEvent) => {
-    //Checking if key works
-    if (event.key === "Enter") {
-      SubmitLogin();
+  const handleInputData = async (returned_id: number) => {
+    if (returned_id === -10) {
+      setInvalidLogin(true);
+      sendDataToParent(-10);
+    } else {
+      setInvalidLogin(false);
+      sendDataToParent(returned_id);
     }
   };
 
-  const SubmitLogin = () => {
-    setSubmitted(true);
-  };
   return (
     <>
-      <LoginHeader1>Login</LoginHeader1>
-      {invalidLogin ? (
-        <ErrorMessage>Incorrect Username / Password</ErrorMessage>
-      ) : (
-        <div></div>
-      )}
-      <LoginHeader2>Username or Email:</LoginHeader2>
-      <LoginInput
-        key={1}
-        type="text"
-        placeholder=""
-        value={username}
-        onChange={handleUsernameChange}
-        onKeyDown={HandleEnterDown}
-      />
-      <LoginHeader2>Password:</LoginHeader2>
-      <LoginInput
-        key={2}
-        type="password"
-        placeholder=""
-        value={password}
-        onChange={handlePasswordChange}
-        onKeyDown={HandleEnterDown}
-      />
-      <SubmitButton onClick={SubmitLogin} onKeyDown={HandleEnterDown}>
-        Submit
-      </SubmitButton>
+      <ContainerDiv>
+        <BoxDiv>
+          <LoginHeader1>RocketFit Login</LoginHeader1>
+          {invalidLogin ? (
+            <ErrorMessage invalidlogin={invalidLogin.toString()}>
+              Invalid Login. Try Again
+            </ErrorMessage>
+          ) : (
+            <ErrorMessage invalidlogin={invalidLogin.toString()}></ErrorMessage>
+          )}
+          <AuthenticationInput sendDataToPage={handleInputData} />
+        </BoxDiv>
+      </ContainerDiv>
     </>
   );
 };

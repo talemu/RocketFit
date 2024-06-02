@@ -13,6 +13,7 @@ class WorkoutTemplateViewSet(viewsets.ViewSet):
     """
 
     _wtService = WorkoutTemplateService()
+    _transformMapper = TransformRequestMapper()
 
     #GET /workoutTemplate/
     def list(self, request):
@@ -23,7 +24,7 @@ class WorkoutTemplateViewSet(viewsets.ViewSet):
     #POST /workoutTemplate/
     def create(self,request):
         try:
-            dto = TransformRequestMapper.to_wt_dto(request.data)
+            dto = self._transformMapper.to_wt_dto(request.data)
             wt = self._wtService.add_template(dto)
             response = wt.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

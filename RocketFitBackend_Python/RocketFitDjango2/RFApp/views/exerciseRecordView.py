@@ -14,6 +14,7 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
     """
 
     _erService = ExerciseRecordService()
+    _transformMapper = TransformRequestMapper()
 
     #GET /exerciseRecord/
     def list(self, request):
@@ -48,12 +49,31 @@ class ExerciseRecordViewSet(viewsets.ViewSet):
         id = request.query_params.get('auth', 0)
         response = self._erService.get_ExerciseRecord_average_based_on_name_id(name, id)
         return JsonResponse(response, safe=False)
+    
+    #GET /exerciseRecord/record?params
+    @action(detail=False, methods=['get'], url_path='record')
+    def retrieve_records_based_on_exerciseName_id_range(self, request):
+        exerciseName = request.query_params.get('exerciseName', '')
+        startDate = request.query_params.get('startDate', '')
+        endDate = request.query_params.get('endDate', '')
+        authId = request.query_params.get('authId', 0)
+        response_data = self._erService.get_exercise_record_by_name_startdate_enddate_id(exerciseName, startDate, endDate, authId)
+        response = list(map(lambda x: x.asdict(), response_data))
+        return JsonResponse(response, safe=False)
+    
+    #GET /exerciseRecord/uniqueERN/?params
+    @action(detail=False, methods=['get'], url_path='uniqueERN')
+    def retrieve_unique_subname(self, request):
+        subName = request.query_params.get('subName', '')
+        auth_id = request.query_params.get('authId', 0)
+        response = self._erService.get_exercise_Record_by_unique_exercise_record(subName, auth_id)
+        return JsonResponse(response, safe=False)
         
     #POST /exerciseRecord/
     @csrf_exempt 
     def create(self, request):
         try : 
-            dto = TransformRequestMapper.to_er_dto(request.data)
+            dto = self._transformMapper.to_er_dto(request.data)
             er = self._erService.exerciseRecord_track_workout(dto)
             response = er.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

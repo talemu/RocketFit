@@ -16,6 +16,7 @@ class ExerciseViewSet(viewsets.ViewSet):
     """
     
     _eService = ExerciseService()
+    _transformMapper = TransformRequestMapper()
 
     #GET /exercise/
     def list(self, request):
@@ -27,9 +28,21 @@ class ExerciseViewSet(viewsets.ViewSet):
     @action(detail = False, methods=['get'], url_path='item')
     def retrieve_exercise_given_id(self, request):
         id = request.GET.get('id', 0)
+        name = request.GET.get('name', "")
         try:
-            response_data = self._eService.get_exercise_by_id(id)
+            response_data = self._eService.get_exercise_by_id_or_name(id, name)
             response = response_data.asdict()
+            return JsonResponse(response, safe = False)
+        except Exception as e:
+            return JsonResponse({"error log" : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
+        
+    #get /exercise/query?name=""
+    @action(detail = False, methods=['get'], url_path='query')
+    def query_exercise_by_name_substring(self, request):
+        name = request.GET.get('name', "")
+        try:
+            response_data = self._eService.get_query_exercise_by_name_substring(name)
+            response = list(map(lambda x : x.asdict(), response_data))
             return JsonResponse(response, safe = False)
         except Exception as e:
             return JsonResponse({"error log" : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
@@ -38,7 +51,7 @@ class ExerciseViewSet(viewsets.ViewSet):
     @csrf_exempt
     def create(self, request):
         try:
-            dto = TransformRequestMapper.to_e_dto(request.data)
+            dto = self._transformMapper.to_e_dto(request.data)
             e = self._eService.add_exercise(dto)
             response = e.asdict()
             return JsonResponse(response, status=status.HTTP_201_CREATED, safe= False)

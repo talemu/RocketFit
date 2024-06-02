@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 
 from ..dtos.ExerciseDTO import ExerciseDTO
@@ -5,12 +6,14 @@ from ..dtos.ExerciseRecordDTO import ExerciseRecordDTO
 from ..dtos.RFAuthUserDTO import RfAuthUserDTO
 from ..dtos.WorkoutExerciseDTO import WorkoutExerciseDTO
 from ..dtos.WorkoutTemplateDTO import WorkoutTemplateDTO
+from ..dtos.MotivationalQuoteDTO import MotivationalQuoteDTO
 
 from ..services.exerciseRecordService import ExerciseRecordService
 from ..services.exerciseService import ExerciseService
 from ..services.rfAuthUserService import RfauthUserService
 from ..services.workoutExerciseService import WorkoutExerciseService
 from ..services.workoutTemplateService import WorkoutTemplateService
+from ..services.motivationalQuoteService import MotivationalQuoteService
 
 
 class ExerciseRecordsServiceTests(TestCase):
@@ -32,15 +35,32 @@ class ExerciseRecordsServiceTests(TestCase):
 
     def test_get_ExerciseRecord_average_based_on_name_id(self):
         average_weight = self._test_er_service.get_ExerciseRecord_average_based_on_name_id("Test Case", 1)
-        self.assertEqual(average_weight, 10)
+        self.assertEqual(average_weight, 10.25)
 
     def test_get_ExerciseRecord_average_based_on_name_id_no_records(self):
         average_weight = self._test_er_service.get_ExerciseRecord_average_based_on_name_id("Test Case", 0)
         self.assertEqual(average_weight, 0)
 
+    def test_get_exercise_record_by_name_startdate_enddate_id(self):
+        exercise_records = self._test_er_service.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 1)
+        self.assertEqual(exercise_records[0].exerciseName, "Test Case")
+        self.assertTrue(all(isinstance(item, ExerciseRecordDTO) for item in exercise_records))
+
+    def test_get_exercise_record_by_name_startdate_enddate_id_fault(self):
+        exercise_records = self._test_er_service.get_exercise_record_by_name_startdate_enddate_id("Test Case", "2024-05-02", "2024-05-03", 5)
+        self.assertEqual(len(exercise_records), 0)
+
+    def test_get_exercise_Record_by_unique_exercise_record(self):
+        exercise_records = self._test_er_service.get_exercise_Record_by_unique_exercise_record("Test", 1)
+        self.assertEqual(exercise_records[0], "Test Case")
+    
+    def test_get_exercise_Record_by_unique_exercise_record_empty(self):
+        exercise_records = self._test_er_service.get_exercise_Record_by_unique_exercise_record("Test", 5)
+        self.assertEqual(len(exercise_records), 0)
+
     def test_exerciseRecord_track_workout(self):
         pre_added_er = self._test_er_service.get_all_exercise_records()
-        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1)
+        er = ExerciseRecordDTO(exerciseName = "Test Case 2", sets = 1, reps = 1, weight = 20, authId = 2, day = 1, workoutNumber = 1, targetWeight = 0, createdDate = datetime.datetime.now())
         returned_dto = self._test_er_service.exerciseRecord_track_workout(er)
         post_added_er = self._test_er_service.get_all_exercise_records()
         #Check item added to repo
@@ -71,7 +91,7 @@ class ExerciseServiceTests(TestCase):
         self.assertTrue(all(isinstance(x, ExerciseDTO) for x in exercises))
 
     def test_get_exercise_by_id(self):
-        exercise = self._test_exercise_service.get_exercise_by_id(1)
+        exercise = self._test_exercise_service.get_exercise_by_id_or_name(1, "")
         self.assertEqual(exercise.exerciseName, "Barbell Bench Press")
         self.assertTrue(isinstance(exercise, ExerciseDTO))
 
@@ -79,7 +99,23 @@ class ExerciseServiceTests(TestCase):
         #id doesn't exist
         #should raise exception
         with self.assertRaises(Exception):
-            exercise = self._test_exercise_service.get_exercise_by_id(0)
+            exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "")
+
+    def test_get_exercise_by_name(self):
+        exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "Barbell Bench Press")
+        self.assertEqual(exercise.exerciseId, 1)
+        self.assertTrue(isinstance(exercise, ExerciseDTO))
+
+    def test_get_exercise_by_name_fault(self):
+        #name doesn't exist
+        #should raise exception
+        with self.assertRaises(Exception):
+            exercise = self._test_exercise_service.get_exercise_by_id_or_name(0, "Random Exercise")
+
+    def test_query_exercise_by_name_substring(self):
+        exercises = self._test_exercise_service.get_query_exercise_by_name_substring("Bench")
+        self.assertEqual(len(exercises), 4)
+        self.assertTrue(all(isinstance(exercise, ExerciseDTO) for exercise in exercises))
 
     def test_add_exercise(self):
         exercise = self._test_exercise_service.add_exercise(ExerciseDTO(exerciseName = "Test Exercise 2"))
@@ -122,6 +158,21 @@ class RFAuthUserServiceTest(TestCase):
         self.assertEqual(users[len(users) - 1].username, "TestUser")
         self.assertTrue(isinstance(new_user, RfAuthUserDTO))
 
+    def test_check_email_username_exists(self):
+        #user doesn't exist
+        check = self._test_rf_auth_service.check_email_username_exists("", "")
+        self.assertEqual(check, "Valid")
+
+    def test_check_email_username_exists_email_exists(self):
+        #email exists
+        check = self._test_rf_auth_service.check_email_username_exists("alemutabor@gmail.com", "")
+        self.assertEqual(check, "Email already exists.")
+
+    def test_check_email_username_exists_username_exists(self):
+        #username exists
+        check = self._test_rf_auth_service.check_email_username_exists("", "adminOne")
+        self.assertEqual(check, "Username already exists.")
+
     def test_add_user_fault(self):
         pre_attempted_users = self._test_rf_auth_service.get_all_auth_users()
         #missing password field
@@ -163,6 +214,16 @@ class WorkoutExerciseServiceTests(TestCase):
         workout_exercises = self._test_we_service.get_workoutexercise_by_auth_id(100001)
         self.assertEqual(len(workout_exercises), 0)
 
+    def test_get_workoutexercise_by_auth_id_workout_num(self):
+        workout_exercise = self._test_we_service.get_workoutexercise_by_auth_id_workout_num(100000, 1)
+        self.assertEqual(workout_exercise.workoutName, "Workout Name")
+        self.assertTrue(isinstance(workout_exercise, WorkoutExerciseDTO))
+    
+    def test_get_workoutexercise_by_auth_id_workout_num_fault(self):
+        #User has no workout with given workout number, should raise exception
+        with self.assertRaises(Exception):
+            self._test_we_service.get_workoutexercise_by_auth_id_workout_num(100000, 1000)
+
     def test_add_workout(self):
         new_workout_exercise = self._test_we_service.add_workout(WorkoutExerciseDTO(days = "1", exercises = "1", sets = "1", reps = "1", rest = "1", weeks = 1, authid = 1, workoutNumber = 1, workoutName = "Test Workout"))
         self._test_we_service.add_workout(new_workout_exercise)
@@ -201,3 +262,16 @@ class WorkoutTemplateServiceTests(TestCase):
             new_workout_template = self._test_wt_service.add_template(WorkoutTemplateDTO(exercises = "1", sets = "1", reps = "1", rest = "1", weeks = 1, workoutName = "Test Workout"))
         post_workout_templates = self._test_wt_service.get_all_workout_templates()
         self.assertEqual(len(pre_workout_templates), len(post_workout_templates))
+
+class MotivationalQuoteServiceTests(TestCase):
+
+    _test_mq_service = MotivationalQuoteService()
+
+    def test_get_all_motivational_quotes(self):
+        quotes = self._test_mq_service.get_all_motivational_quotes()
+        self.assertEqual(len(quotes), 1)
+        self.assertTrue(all(isinstance(quote, MotivationalQuoteDTO) for quote in quotes))
+
+    def test_get_motivational_quote(self):
+        quote = self._test_mq_service.get_random_motivational_quote()
+        self.assertTrue(isinstance(quote, MotivationalQuoteDTO))

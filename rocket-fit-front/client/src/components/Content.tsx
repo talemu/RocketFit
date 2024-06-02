@@ -30,7 +30,6 @@ const Content = ({
     );
     request
       .then((response) => {
-        console.log(response.data);
         setData(response.data);
         const b = [];
         for (let i = 0; i < response.data.length; i++) {
