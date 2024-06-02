@@ -189,13 +189,11 @@ const Timer = ({
       workoutNumber: workoutNum,
       targetWeight: targetWeight,
     };
-    console.log(exerciseRecord);
     setWorkoutComplete(true);
     sendDataToParent(parseFloat(avg.toFixed(1)), 0, false, index, 0);
     const { request } = exerciseRecordService.postItem("/", exerciseRecord);
     request
       .then((response) => {
-        console.log(response);
         console.log("POST request successful", response.data);
       })
       .catch((error) => {

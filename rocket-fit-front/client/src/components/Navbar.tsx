@@ -51,6 +51,8 @@ const ButtonLink = styled(Link)`
   color: white;
 `;
 
+const NavEmptyDiv = styled.div``;
+
 interface Props {
   authId: number;
   sendDataToParent: (data: number) => void;
@@ -78,18 +80,18 @@ const Navbar = ({ authId }: Props) => {
         <Nav>
           {authId !== -10 ? (
             <>
-              <NavButton active={location.pathname === "/myworkouts"}>
+              <NavButton data-active={location.pathname === "/myworkouts"}>
                 <ButtonLink to="/myworkouts" state={authId}>
                   My Workouts
                 </ButtonLink>
               </NavButton>
-              <NavButton active={location.pathname === "/progress"}>
+              <NavButton data-active={location.pathname === "/progress"}>
                 <ButtonLink to="/progress" state={authId}>
                   Track Progress
                 </ButtonLink>
               </NavButton>{" "}
               <NavButton
-                active={location.pathname === ""}
+                data-active={location.pathname === ""}
                 onClick={() => setModalOpen(!modalOpen)}
               >
                 Motivate Me
@@ -101,7 +103,7 @@ const Navbar = ({ authId }: Props) => {
                 }
               />
               <NavButton
-                active={
+                data-active={
                   location.pathname === "/account" ||
                   location.pathname === "/support"
                 }
@@ -113,11 +115,11 @@ const Navbar = ({ authId }: Props) => {
               </NavButton>
             </>
           ) : (
-            <div></div>
+            <NavEmptyDiv></NavEmptyDiv>
           )}
         </Nav>
       ) : (
-        <div></div>
+        <NavEmptyDiv></NavEmptyDiv>
       )}
     </>
   );

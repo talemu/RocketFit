@@ -150,8 +150,7 @@ const RegisterInputs = () => {
     const { request } = authUserService.postItem("/", newUser);
     request
       .then((response) => {
-        console.log(response.data);
-        console.log("Submitted");
+        response.data;
         Navigate("/login");
         setSpinner(false);
       })

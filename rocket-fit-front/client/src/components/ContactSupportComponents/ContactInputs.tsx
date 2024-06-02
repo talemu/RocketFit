@@ -109,7 +109,7 @@ const ContactInputs = ({ authId }: Props) => {
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
-      console.log("Enter key pressed");
+      validateInputs();
     }
   };
 
@@ -117,7 +117,7 @@ const ContactInputs = ({ authId }: Props) => {
     event: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (event.key === "Enter") {
-      console.log("Enter key pressed");
+      validateInputs();
     }
   };
 
@@ -148,11 +148,10 @@ const ContactInputs = ({ authId }: Props) => {
       subject: subject,
       description: description,
     };
-    console.log(emailData);
     const { request } = supportRequest.postItem("/sendemail/", emailData);
     request
       .then((response) => {
-        console.log(response);
+        response.data;
         setSpinner(false);
         setPageMessage(
           "Successfully sent email to support. We will reach out ASAP"

@@ -11,8 +11,8 @@ interface Props {
   sendToCustomize: (data: ExerciseData, show: boolean, index: number) => void;
 }
 
-const AddExercisePopUp = styled.div<{ isopen: boolean }>`
-  display: ${(props) => (props.isopen ? "flex" : "none")};
+const AddExercisePopUp = styled.div<{ isopen: string }>`
+  display: ${(props) => (props.isopen == "true" ? "flex" : "none")};
   position: fixed;
   z-index: 1;
   left: 0;
@@ -48,8 +48,8 @@ const NewWorkoutItemInput = styled.input`
   width: 100%;
 `;
 
-const DropdownExercisesDiv = styled.div<{ isopen: boolean }>`
-  display: ${(props) => (props.isopen ? "flex" : "none")};
+const DropdownExercisesDiv = styled.div<{ isopen: string }>`
+  display: ${(props) => (props.isopen == "true" ? "flex" : "none")};
   flex-direction: column;
   position: absolute;
   background-color: #f9f9f9;
@@ -138,7 +138,6 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     const { request } = exerciseService.getAll("/item?name=" + exerciseName);
     request
       .then((response) => {
-        console.log("hi");
         const exercise = response.data as unknown as Exercise;
         if (
           exerciseName != "" &&
@@ -180,7 +179,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
     });
     request
       .then((response) => {
-        console.log(response.data);
+        response.data;
         addExerciseToWorkout();
       })
       .catch((error) => console.log(error.response.data));
@@ -196,7 +195,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
 
   return (
     <>
-      <AddExercisePopUp isopen={showModal}>
+      <AddExercisePopUp isopen={showModal.toString()}>
         <ModalContent>
           Add Exercise{" "}
           <NewWorkoutItemDiv>
@@ -207,7 +206,7 @@ const AddExerciseModal = ({ index, showModal, sendToCustomize }: Props) => {
                 placeholder="Exercise Name"
                 onChange={(e) => handleInputChange(e, "exerciseName")}
               />
-              <DropdownExercisesDiv isopen={isopen}>
+              <DropdownExercisesDiv isopen={isopen.toString()}>
                 {dropdownExercises.map((exercise) => (
                   <ExerciseButton
                     key={exercise.exerciseId}

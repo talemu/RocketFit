@@ -17,8 +17,9 @@ const TableColumn = styled.td`
   text-wrap: nowrap;
 `;
 
-const TableRecord = styled.tr<{ isdifferentday: boolean }>`
-  border-top: ${(props) => (props.isdifferentday ? "1px solid black" : "none")};
+const TableRecord = styled.tr<{ isdifferentday: string }>`
+  border-top: ${(props) =>
+    props.isdifferentday == "true" ? "1px solid black" : "none"};
 `;
 
 const TableHead = styled.thead``;
@@ -58,7 +59,7 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
       <HeaderTwo>{item.weeks} Weeks</HeaderTwo>
       <StyledTable>
         <TableHead>
-          <TableRecord isdifferentday={false}>
+          <TableRecord isdifferentday={"false"}>
             <TableHeader>Day</TableHeader>
             <TableHeader>Exercise</TableHeader>
             <TableHeader>Sets</TableHeader>
@@ -70,7 +71,7 @@ const DropdownTable = ({ item, exercises, numberOfWorkouts }: Props) => {
           <TableBody key={count}>
             <TableRecord
               isdifferentday={
-                item.days[count] !== item.days[count - 1] ? true : false
+                item.days[count] !== item.days[count - 1] ? "true" : "false"
               }
             >
               {item.days[count] !== item.days[count - 1] ? (
