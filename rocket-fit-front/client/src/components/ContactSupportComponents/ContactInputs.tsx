@@ -144,9 +144,9 @@ const ContactInputs = ({ authId }: Props) => {
   const handleSubmit = () => {
     setSpinner(true);
     const emailData = {
-      email: email,
+      email: "alemutabor@gmail.com",
       subject: subject,
-      description: description,
+      description: "User Email: " + email + "\n" + description,
     };
     const { request } = supportRequest.postItem("/sendemail/", emailData);
     request
