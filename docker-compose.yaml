@@ -4,7 +4,7 @@ services:
     build: ./RocketFitBackend_Python/RocketFitDjango2
     container_name: api_rf
     ports:
-      - "8080:8000"
+      - "8000:8080"
     # command: python3 manage.py runserver 
   application:
     build: ./rocket-fit-front/client

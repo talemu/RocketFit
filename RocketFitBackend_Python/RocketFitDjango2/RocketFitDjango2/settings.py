@@ -102,8 +102,8 @@ DATABASES = {
         'NAME': 'rocketfitmariadb',
         'USER': 'RocketFitUser',
         'PASSWORD': 'RocketFitUser',
-        'HOST': 'rocketfitdb.c7c26iwqcw34.us-east-2.rds.amazonaws.com',
-        'PORT': '3306'  
+        'HOST': 'rocketfitdb-eastone.c7e6i0ya88yp.us-east-1.rds.amazonaws.com',
+        'PORT': '3306'
     }
 }
 
