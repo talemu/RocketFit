@@ -1,26 +1,13 @@
 import axios from "axios";
 
-//.NET endpoint
-// export default axios.create({
-//   baseURL: "http://localhost:7045/api",
-//   params: {},
-//   headers: {
-//     "Access-Control-Allow-Origin": "*",
-//   },
-// });
+const getAPI = () => {
+  console.log("hi");
+  console.log(import.meta.env.VITE_RF_API_BASE_URL);
+  return import.meta.env.VITE_RF_API_BASE_URL;
+};
 
-// //java api endpoint
-// export default axios.create({
-//   baseURL: "http://localhost:8080/api",
-//   params: {},
-//   headers: {
-//     "Access-Control-Allow-Origin": "*",
-//   },
-// });
-
-//python api endpoint
 export default axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: getAPI(),
   params: {},
   headers: {
     "Access-Control-Allow-Origin": "*",

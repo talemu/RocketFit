@@ -5,11 +5,23 @@ services:
     container_name: api_rf
     ports:
       - "8000:8080"
+    networks:
+      - backend
     # command: python3 manage.py runserver 
   application:
-    build: ./rocket-fit-front/client
+    build: 
+        context: ./rocket-fit-front/client
+        # args:
+        #   VITE_RF_API_BASE_URL: http://localhost:8000/api
     container_name: app_rf
     ports:
       - "3001:3000"
     stdin_open: true
     tty: true
+    depends_on:
+      - api
+    networks:
+      - backend
+
+networks:
+  backend:
