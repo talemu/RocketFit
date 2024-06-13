@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+*.env
+RocketFitBackend_Python/RocketFitDjango2/RocketFitDjango2/settings.py
