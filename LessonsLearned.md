@@ -18,6 +18,7 @@ Docker: platform designed to make it easier to develop, deploy, and run applicat
   - AWS ECS: fully managed container orchestration service provided by Amazon Web Services.
   - easily run, manage, and scale containerized applications using Docker containers
   - Built in the AWS console, connected to AWS Elastic Compute Cloud (EC2), and allocates hardware to host your app
+  - Place containers into separate task definitions, if there is interaction, pull environment variables from one container to the other
 
 # Frontend
 
