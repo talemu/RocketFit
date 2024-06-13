@@ -39,7 +39,7 @@ const NavButton = styled.button<{ active?: boolean }>`
       props.active &&
       css`
         color: white;
-        background-color: gray;
+        background-color: #761a06;
         border: none;
         border-radius: 0;
       `};
@@ -80,18 +80,18 @@ const Navbar = ({ authId }: Props) => {
         <Nav>
           {authId !== -10 ? (
             <>
-              <NavButton data-active={location.pathname === "/myworkouts"}>
+              <NavButton active={location.pathname === "/myworkouts"}>
                 <ButtonLink to="/myworkouts" state={authId}>
                   My Workouts
                 </ButtonLink>
               </NavButton>
-              <NavButton data-active={location.pathname === "/progress"}>
+              <NavButton active={location.pathname === "/progress"}>
                 <ButtonLink to="/progress" state={authId}>
                   Track Progress
                 </ButtonLink>
               </NavButton>{" "}
               <NavButton
-                data-active={location.pathname === ""}
+                active={location.pathname === ""}
                 onClick={() => setModalOpen(!modalOpen)}
               >
                 Motivate Me
@@ -103,7 +103,7 @@ const Navbar = ({ authId }: Props) => {
                 }
               />
               <NavButton
-                data-active={
+                active={
                   location.pathname === "/account" ||
                   location.pathname === "/support"
                 }
