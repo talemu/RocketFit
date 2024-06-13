@@ -3,3 +3,6 @@ __pycache__/
 
 *.env
 RocketFitBackend_Python/RocketFitDjango2/RocketFitDjango2/settings.py
+node_modules/
+
+rocket-fit-front/client/.env
