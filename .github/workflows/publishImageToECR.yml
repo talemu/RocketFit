@@ -34,7 +34,7 @@ jobs:
           docker tag $API_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Build, tag, and push API Docker Image
+      - name: Build, tag, and push APP Docker Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           APP_ECR_REPOSITORY: ${{ secrets.APP_REPO_NAME }}
