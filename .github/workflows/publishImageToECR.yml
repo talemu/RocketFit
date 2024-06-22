@@ -25,15 +25,13 @@ jobs:
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i6h8q9i5
 
       - name: Build, tag, and push API Docker Image
-        run: |
-          echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
-          echo "APP_ECR_REPOSITORY: $APP_ECR_REPOSITORY"
-          echo "ECR_REGISTRY: $ECR_REGISTRY"
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           API_ECR_REPOSITORY: ${{ secrets.API_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
+          echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
           docker build -t $API_ECR_REPOSITORY:$IMAGE_TAG -f RocketFitBackend_Python/RocketFitDjango2/Dockerfile RocketFitBackend_Python/RocketFitDjango2
           docker tag $API_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
