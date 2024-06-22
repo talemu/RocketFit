@@ -3,6 +3,10 @@ import styled from "styled-components";
 import AuthenticationInput from "../components/AuthenticationInput";
 import { Container, Box } from "@chakra-ui/react";
 
+const VersionTag = styled.div`
+  padding-top: 1em;
+`;
+
 const LoginHeader1 = styled.h1`
   @media only screen and (min-width: 768px) {
     font-size: 2em;
@@ -22,6 +26,7 @@ const ContainerDiv = styled(Container)`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  flex-direction: column;
 `;
 
 const BoxDiv = styled(Box)`
@@ -70,6 +75,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
           )}
           <AuthenticationInput sendDataToPage={handleInputData} />
         </BoxDiv>
+        <VersionTag>Beta V2.4</VersionTag>
       </ContainerDiv>
     </>
   );
