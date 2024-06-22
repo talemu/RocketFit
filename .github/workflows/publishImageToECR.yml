@@ -31,6 +31,7 @@ jobs:
           IMAGE_TAG: latest
         run: |
           echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
+          echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
           echo "ECR_REGISTRY: $ECR_REGISTRY"
           docker build -t $API_ECR_REPOSITORY:$IMAGE_TAG -f RocketFitBackend_Python/RocketFitDjango2/Dockerfile RocketFitBackend_Python/RocketFitDjango2
           docker tag $API_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
