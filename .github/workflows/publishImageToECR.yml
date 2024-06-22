@@ -33,7 +33,7 @@ jobs:
           echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
           echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
           echo "ECR_REGISTRY: $ECR_REGISTRY"
-          docker build -t $API_ECR_REPOSITORY:$IMAGE_TAG -f RocketFitBackend_Python/RocketFitDjango2/Dockerfile RocketFitBackend_Python/RocketFitDjango2
+          docker build -t $API_ECR_REPOSITORY -f RocketFitBackend_Python/RocketFitDjango2/Dockerfile RocketFitBackend_Python/RocketFitDjango2
           docker tag $API_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
 
@@ -43,6 +43,6 @@ jobs:
           APP_ECR_REPOSITORY: ${{ secrets.APP_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $APP_ECR_REPOSITORY:$IMAGE_TAG -f rocket-fit-front/client/Dockerfile rocket-fit-front/client
+          docker build -t $APP_ECR_REPOSITORY -f rocket-fit-front/client/Dockerfile rocket-fit-front/client
           docker tag $APP_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:$IMAGE_TAG
