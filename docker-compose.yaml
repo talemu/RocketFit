@@ -11,8 +11,8 @@ services:
   application:
     build: 
         context: ./rocket-fit-front/client
-        # args:
-        #   VITE_RF_API_BASE_URL: http://localhost:8000/api
+        args:
+          VITE_RF_API_BASE_URL: http://localhost:8000/api
     container_name: app_rf
     ports:
       - "3001:3000"

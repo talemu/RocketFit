@@ -14,9 +14,7 @@ FROM node:18.17.1
 #Copy contents of project
 #COPY . .
 
-#Retrieve url of backend API from environment variable
-# ARG VITE_RF_API_BASE_URL
-# ENV VITE_RF_API_BASE_URL=${VITE_RF_API_BASE_URL}
+
 #RUN npm run build
 
 #UI port number
@@ -33,6 +31,10 @@ RUN npm install
 
 #Copy contents of project
 COPY . .
+
+#Retrieve url of backend API from environment variable
+ARG VITE_RF_API_BASE_URL
+ENV VITE_RF_API_BASE_URL=${VITE_RF_API_BASE_URL}
 
 #Create start script
 RUN echo "npm run build && npm run serve -- --host 0.0.0.0 --port 3000" > start.sh
