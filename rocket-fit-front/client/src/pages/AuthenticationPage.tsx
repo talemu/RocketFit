@@ -75,7 +75,7 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
           )}
           <AuthenticationInput sendDataToPage={handleInputData} />
         </BoxDiv>
-        <VersionTag>Beta V2.4</VersionTag>
+        <VersionTag>Beta V2.4.1</VersionTag>
       </ContainerDiv>
     </>
   );
