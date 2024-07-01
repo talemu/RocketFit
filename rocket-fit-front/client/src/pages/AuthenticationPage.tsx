@@ -50,14 +50,26 @@ interface Props {
 
 const AuthenticationPage = ({ sendDataToParent }: Props) => {
   const [invalidLogin, setInvalidLogin] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleInputData = async (returned_id: number) => {
     if (returned_id === -10) {
       setInvalidLogin(true);
       sendDataToParent(-10);
+      setErrorMessage("Invalid Login, Try Again.");
     } else {
       setInvalidLogin(false);
       sendDataToParent(returned_id);
+    }
+  };
+
+  const handleInputMessage = async (errorMessage: string) => {
+    if (errorMessage !== "") {
+      setInvalidLogin(true);
+      sendDataToParent(-10);
+      setErrorMessage(errorMessage);
+    } else {
+      setInvalidLogin(false);
     }
   };
 
@@ -68,12 +80,15 @@ const AuthenticationPage = ({ sendDataToParent }: Props) => {
           <LoginHeader1>RocketFit Login</LoginHeader1>
           {invalidLogin ? (
             <ErrorMessage invalidlogin={invalidLogin.toString()}>
-              Invalid Login. Try Again
+              {errorMessage}
             </ErrorMessage>
           ) : (
             <ErrorMessage invalidlogin={invalidLogin.toString()}></ErrorMessage>
           )}
-          <AuthenticationInput sendDataToPage={handleInputData} />
+          <AuthenticationInput
+            sendDataToPage={handleInputData}
+            sendMessageToPage={handleInputMessage}
+          />
         </BoxDiv>
         <VersionTag>Beta V2.4.1</VersionTag>
       </ContainerDiv>
