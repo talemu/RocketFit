@@ -3,10 +3,11 @@ name: Build and Push Docker Image to AWS ECR
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
-  build-and-push:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +22,8 @@ jobs:
           aws-region: us-east-1
 
       - name: Login to Amazon ECR
-        run: |
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/i6h8q9i5
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push API Docker Image
         env:
@@ -30,16 +31,16 @@ jobs:
           API_ECR_REPOSITORY: ${{ secrets.API_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $API_ECR_REPOSITORY:$IMAGE_TAG ../../RocketFitBackend_Python/RocketFitDjango2/Dockerfile
-          docker tag $API_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
+          echo "API_ECR_REPOSITORY: $API_ECR_REPOSITORY"
+          echo "ECR_REGISTRY: $ECR_REGISTRY"
+          docker build -t $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG -f RocketFitBackend_Python/RocketFitDjango2/Dockerfile RocketFitBackend_Python/RocketFitDjango2
           docker push $ECR_REGISTRY/$API_ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: Build, tag, and push API Docker Image
+      - name: Build, tag, and push APP Docker Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           APP_ECR_REPOSITORY: ${{ secrets.APP_REPO_NAME }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $APP_ECR_REPOSITORY:$IMAGE_TAG ../../rocket-fit-front/client/Dockerfile
-          docker tag $APP_ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$APP_ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$APP_ECR_REPOSITORY:$IMAGE_TAG -f rocket-fit-front/client/Dockerfile rocket-fit-front/client
           docker push $ECR_REGISTRY/$APP_ECR_REPOSITORY:$IMAGE_TAG

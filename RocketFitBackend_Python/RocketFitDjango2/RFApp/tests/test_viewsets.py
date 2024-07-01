@@ -206,7 +206,7 @@ class RFAuthUserViewSetTests(TestCase):
         response = self.client.get(self.url + '/auth/login/?password=randomPassword')
         self.assertTrue(isinstance(response, JsonResponse))
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "LoginKey or Password is empty.")
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "LoginKey and/or Password is Empty")
 
     def test_check_email_username_exists(self):
         response = self.client.get(self.url + '/auth/checkEmailUsername/?email=alemutabo@gmail.com&username=adminOn')

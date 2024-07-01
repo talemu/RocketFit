@@ -71,9 +71,10 @@ const SpinnerSpan = styled.span``;
 
 interface Props {
   sendDataToPage: (authId: number) => void;
+  sendMessageToPage: (message: string) => void;
 }
 
-const AuthenticationInput = ({ sendDataToPage }: Props) => {
+const AuthenticationInput = ({ sendDataToPage, sendMessageToPage }: Props) => {
   const Navigate = useNavigate();
   const [authId, setAuthId] = useState(-10);
   const [username, setUsername] = useState<string>("");
@@ -119,7 +120,10 @@ const AuthenticationInput = ({ sendDataToPage }: Props) => {
           Navigate("/myworkouts");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        sendMessageToPage(err.response.data["error log"]);
+        setLoading(false);
+      });
   };
 
   return (

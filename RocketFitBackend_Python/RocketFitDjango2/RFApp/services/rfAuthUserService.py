@@ -37,7 +37,7 @@ class RfauthUserService:
     """
     def get_user_id(self, loginKey, password):
         if (loginKey == '' or password == ''):
-            raise Exception("LoginKey or Password is empty.")
+            raise Exception("LoginKey and/or Password is Empty")
         user = self._rfAuthRepo.authenticate_user(loginKey, password)
         if user is None:
             return -10
