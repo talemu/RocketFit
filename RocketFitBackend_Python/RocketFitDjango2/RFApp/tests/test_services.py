@@ -158,6 +158,23 @@ class RFAuthUserServiceTest(TestCase):
         self.assertEqual(users[len(users) - 1].username, "TestUser")
         self.assertTrue(isinstance(new_user, RfAuthUserDTO))
 
+    def test_get_user_by_id(self):
+        user = self._test_rf_auth_service.get_user_by_id(100000)
+        self.assertEqual(user.username, "adminOne")
+        self.assertTrue(isinstance(user, RfAuthUserDTO))
+    
+    def test_get_user_by_id_user_does_not_exist(self):
+        with self.assertRaises(Exception):
+            user = self._test_rf_auth_service.get_user_by_id(100010)
+
+    def test_change_user_password(self):
+        new_user_with_password = self._test_rf_auth_service.change_user_password(100000, "newPassword")
+        self.assertTrue(isinstance(new_user_with_password, RfAuthUserDTO))
+
+    def test_change_user_password_user_does_not_exist(self):
+        with self.assertRaises(Exception):
+            new_user_with_password = self._test_rf_auth_service.change_user_password(100010, "newPassword")
+
     def test_check_email_username_exists(self):
         #user doesn't exist
         check = self._test_rf_auth_service.check_email_username_exists("", "")

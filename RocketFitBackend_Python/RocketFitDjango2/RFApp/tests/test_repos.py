@@ -112,6 +112,23 @@ class RFAuthUserRepoTests(TestCase):
         users = self._test_rfauthuser_repo.get_all()
         self.assertEqual(len(users), 2)
 
+    def test_get_user_by_id(self):
+        user = self._test_rfauthuser_repo.get_user_by_id(100000)
+        self.assertEqual(user.username, "adminOne")
+
+    def test_get_user_by_id_fault(self):
+        user = self._test_rfauthuser_repo.get_user_by_id(1)
+        self.assertEqual(user, None)
+
+    def test_change_user_password(self):
+        self._test_rfauthuser_repo.change_user_password(100000, "newPassword")
+        user = self._test_rfauthuser_repo.get_user_by_id(100000)
+        self.assertEqual(user.password, "newPassword")
+
+    def test_change_user_password_fault(self):
+        user = self._test_rfauthuser_repo.change_user_password(1, "newPassword")
+        self.assertEqual(user, None)
+
     def test_authenticate_user(self):
         user = self._test_rfauthuser_repo.authenticate_user("adminOne", "admin123")
         self.assertEqual(int(user.id), 100000)
