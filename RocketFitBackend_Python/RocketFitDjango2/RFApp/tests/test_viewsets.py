@@ -188,6 +188,32 @@ class RFAuthUserViewSetTests(TestCase):
         self.assertTrue(isinstance(response, JsonResponse))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(json.loads(response.content.decode('utf-8'))), 2)
+
+    def test_retrieve_er(self):
+        response = self.client.get(self.url + '/auth/100000/')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('username'), "adminOne")
+
+    def test_retrieve_er_fault(self):
+        response = self.client.get(self.url + '/auth/100/')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #no user with auth id 100
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "User not found.")
+
+    def test_change_password(self):
+        response = self.client.put(self.url + '/auth/changePassword/?id=100000&password=admin123')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('username'), "adminOne")
+
+    def test_change_password_fault(self):
+        response = self.client.put(self.url + '/auth/changePassword/?id=100&password=admin123')
+        self.assertTrue(isinstance(response, JsonResponse))
+        self.assertEqual(response.status_code, 400)
+        #no user with auth id 100
+        self.assertEqual(json.loads(response.content.decode('utf-8')).get('error log'), "User not found.")
     
     def test_login(self):
         response = self.client.get(self.url + '/auth/login/?loginKey=adminOne&password=admin123')
