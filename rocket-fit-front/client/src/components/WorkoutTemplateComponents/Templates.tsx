@@ -28,7 +28,7 @@ const StyledAccordionButton = styled(AccordionButton)`
 `;
 
 const StyledAccordionPanel = styled(AccordionPanel)`
-  padding: 1em;
+  padding: 1em 0.5em;
   background-color: #ff6d6a;
   overflow-x: scroll;
   color: lightgrey;

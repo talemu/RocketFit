@@ -22,7 +22,13 @@ const HeaderDiv = styled.div`
   margin: 1em 1em;
 `;
 
-const PageHeader = styled.h1``;
+const PageHeader = styled.h2`
+  padding: 0.1em;
+  font-size: 2em;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  color: red;
+`;
 
 const SlideDiv = styled(Slide)`
   direction = left
