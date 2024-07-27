@@ -6,6 +6,14 @@ import Spinner from "../components/Spinner";
 import Templates from "../components/WorkoutTemplateComponents/Templates";
 import CreateFromScratch from "../components/WorkoutTemplateComponents/CreateFromScratch";
 
+const PageHeader = styled.h2`
+  padding: 0.1em;
+  font-size: 2em;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  color: red;
+`;
+
 const BackButton = styled.button`
   background-color: red;
   color: white;
@@ -56,6 +64,7 @@ const WorkoutTemplatesPage = ({ authId }: Props) => {
       <BackButton>
         <ButtonLink to="/myworkouts">Back</ButtonLink>
       </BackButton>
+      <PageHeader>Workout Templates</PageHeader>
       <Templates
         exercises={exercises}
         numberOfWorkouts={numberOfWorkouts}

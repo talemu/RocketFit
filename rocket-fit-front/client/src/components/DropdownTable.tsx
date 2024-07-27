@@ -9,7 +9,7 @@ const StyledTable = styled.table``;
 const TableBody = styled.tbody``;
 
 const TableHeader = styled.th`
-  padding: 1em 2em;
+  padding: 1em 0.5em;
 `;
 
 const TableColumn = styled.td`
@@ -22,7 +22,9 @@ const TableRecord = styled.tr<{ isdifferentday: string }>`
     props.isdifferentday == "true" ? "1px solid black" : "none"};
 `;
 
-const TableHead = styled.thead``;
+const TableHead = styled.thead`
+  align-items: center;
+`;
 
 const CustomizeButton = styled.button`
   background-color: red;

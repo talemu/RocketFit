@@ -18,11 +18,15 @@ const AdjusterDiv = styled.div`
   justify-content: center;
 `;
 
+const StyledNumberInput = styled(NumberInput)`
+  width: 3em;
+`;
+
 const NumberAdjuster = ({ sendDataToParent, current, increment }: Props) => {
   return (
     <>
       <AdjusterDiv>
-        <NumberInput
+        <StyledNumberInput
           onChange={(valueString) => sendDataToParent(Number(valueString))}
           defaultValue={current}
           step={increment}
@@ -34,7 +38,7 @@ const NumberAdjuster = ({ sendDataToParent, current, increment }: Props) => {
             <NumberIncrementStepper />
             <NumberDecrementStepper />
           </NumberInputStepper>
-        </NumberInput>
+        </StyledNumberInput>
       </AdjusterDiv>
     </>
   );

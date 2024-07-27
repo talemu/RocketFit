@@ -24,14 +24,13 @@ const StyledTable = styled.table``;
 const TableBody = styled.tbody``;
 
 const TableHeader = styled.th`
-  padding: 0em 2em;
+  padding: 0em 0em;
 `;
 
 const TableColumn = styled.td`
   text-wrap: nowrap;
-  text-align: center;
-  align-items: center;
   padding-top: 0.5em;
+  width: 5em;
 `;
 
 const TableRecord = styled.tr`
