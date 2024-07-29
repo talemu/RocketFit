@@ -6,6 +6,7 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 interface Props {
   sendDataToParent: (data: number) => void;
@@ -23,12 +24,16 @@ const StyledNumberInput = styled(NumberInput)`
 `;
 
 const NumberAdjuster = ({ sendDataToParent, current, increment }: Props) => {
+  const [value, setValue] = useState<number>(current);
+  useEffect(() => {
+    setValue(current);
+  }, [current]);
   return (
     <>
       <AdjusterDiv>
         <StyledNumberInput
           onChange={(valueString) => sendDataToParent(Number(valueString))}
-          defaultValue={current}
+          value={value}
           step={increment}
           min={1}
           max={1000}
