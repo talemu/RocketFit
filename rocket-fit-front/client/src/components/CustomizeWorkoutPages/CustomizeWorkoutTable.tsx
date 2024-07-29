@@ -112,12 +112,15 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   const [itemClickedIndex, setItemClickedIndex] = useState<number>(-1);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [workoutItems, setWorkoutItems] = useState<any>(workoutData);
 
   const UpdateCurrent = (data: number, count: number, array: number[]) => {
     if (count != -1) {
       array[count] = data;
     } else {
-      workoutData.weeks = data;
+      var workoutDataTemp = workoutItems;
+      workoutDataTemp.weeks = data;
+      setWorkoutItems(workoutDataTemp);
     }
     setChange(!change);
   };
@@ -137,14 +140,14 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
 
   const AddWorkoutToUser = () => {
     const proposedWorkout = {
-      days: workoutData.days.join(","),
-      exercises: workoutData.exercises.join(","),
-      sets: workoutData.sets.join(","),
-      reps: workoutData.reps.join(","),
-      rest: workoutData.rest.join(","),
-      weeks: workoutData.weeks,
+      days: workoutItems.days.join(","),
+      exercises: workoutItems.exercises.join(","),
+      sets: workoutItems.sets.join(","),
+      reps: workoutItems.reps.join(","),
+      rest: workoutItems.rest.join(","),
+      weeks: workoutItems.weeks,
       authid: authId,
-      workoutName: workoutData.workoutName,
+      workoutName: workoutItems.workoutName,
       workoutNumber: workoutNum,
     };
     const { request } = workoutExerciseService.postItem("/", proposedWorkout);
@@ -176,11 +179,13 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
       setAddExercisePopUpClicked(show);
       return;
     }
-    workoutData.days.splice(index + 1, 0, workoutData.days[index]);
-    workoutData.exercises.splice(index + 1, 0, exercise.exerciseId);
-    workoutData.sets.splice(index + 1, 0, exercise.sets);
-    workoutData.reps.splice(index + 1, 0, exercise.reps);
-    workoutData.rest.splice(index + 1, 0, exercise.rest);
+    var workoutDataTemp = workoutItems;
+    workoutDataTemp.days.splice(index + 1, 0, workoutDataTemp.days[index]);
+    workoutDataTemp.exercises.splice(index + 1, 0, exercise.exerciseId);
+    workoutDataTemp.sets.splice(index + 1, 0, exercise.sets);
+    workoutDataTemp.reps.splice(index + 1, 0, exercise.reps);
+    workoutDataTemp.rest.splice(index + 1, 0, exercise.rest);
+    setWorkoutItems(workoutDataTemp);
     setAddExercisePopUpClicked(show);
     setChange(!change);
   };
@@ -191,48 +196,54 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
   };
 
   const AddDay = () => {
-    if (workoutData.days.length === 0) {
-      workoutData.days.push(1);
+    var workoutDataTemp = workoutItems;
+    if (workoutItems.days.length === 0) {
+      workoutDataTemp.days.push(1);
     } else {
-      const day = workoutData.days[workoutData.days.length - 1] + 1;
-      workoutData.days.push(day);
+      const day = workoutDataTemp.days[workoutDataTemp.days.length - 1] + 1;
+      workoutDataTemp.days.push(day);
     }
-    workoutData.exercises.push(2);
-    workoutData.sets.push(3);
-    workoutData.reps.push(12);
-    workoutData.rest.push(120);
+    workoutDataTemp.exercises.push(2);
+    workoutDataTemp.sets.push(3);
+    workoutDataTemp.reps.push(12);
+    workoutDataTemp.rest.push(120);
+    setWorkoutItems(workoutDataTemp);
     setChange(!change);
   };
 
   const DeleteExercise = (count: number) => {
+    var workoutDataTemp = workoutItems;
     //removing record from workoutData
-    workoutData.exercises.splice(count, 1);
+    workoutDataTemp.exercises.splice(count, 1);
     //checks if the day is the last day, if it is, this if statement will be skipped
-    if (workoutData.days.length >= count + 1) {
+    if (workoutDataTemp.days.length >= count + 1) {
       //checks if the day matches exercise before and after
       if (
         count != 0 &&
-        workoutData.days[count] !== workoutData.days[count + 1] &&
-        workoutData.days[count] !== workoutData.days[count - 1]
+        workoutDataTemp.days[count] !== workoutDataTemp.days[count + 1] &&
+        workoutDataTemp.days[count] !== workoutDataTemp.days[count - 1]
       ) {
         {
-          let firstSlice = workoutData.days.slice(0, count + 1);
-          let secondSlice = workoutData.days.slice(count + 1);
+          let firstSlice = workoutDataTemp.days.slice(0, count + 1);
+          let secondSlice = workoutDataTemp.days.slice(count + 1);
           secondSlice = secondSlice.map((day: number) => day - 1);
-          workoutData.days = firstSlice.concat(secondSlice);
+          workoutDataTemp.days = firstSlice.concat(secondSlice);
         }
         //checks if the day matches the exercise after, when the first element is removed
       } else if (
         count == 0 &&
-        workoutData.days[count] !== workoutData.days[count + 1]
+        workoutDataTemp.days[count] !== workoutDataTemp.days[count + 1]
       ) {
-        workoutData.days = workoutData.days.map((day: number) => day - 1);
+        workoutDataTemp.days = workoutDataTemp.days.map(
+          (day: number) => day - 1
+        );
       }
     }
-    workoutData.days.splice(count, 1);
-    workoutData.sets.splice(count, 1);
-    workoutData.reps.splice(count, 1);
-    workoutData.rest.splice(count, 1);
+    workoutDataTemp.days.splice(count, 1);
+    workoutDataTemp.sets.splice(count, 1);
+    workoutDataTemp.reps.splice(count, 1);
+    workoutDataTemp.rest.splice(count, 1);
+    setWorkoutItems(workoutDataTemp);
     setChange(!change);
   };
 
@@ -244,9 +255,9 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
         <>
           {" "}
           <StyledTable>
-            {workoutData.days.map((day: number, count: number) => (
+            {workoutItems.days.map((day: number, count: number) => (
               <React.Fragment key={count}>
-                {workoutData.days[count] !== workoutData.days[count - 1] ? (
+                {workoutItems.days[count] !== workoutItems.days[count - 1] ? (
                   <>
                     <DayHeader>
                       <TableRecord>
@@ -272,7 +283,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                           exercises.find(
                             (element: Exercise) =>
                               element.exerciseId ===
-                              workoutData.exercises[count]
+                              workoutItems.exercises[count]
                           )?.exerciseName
                         }
                       </TableColumn>
@@ -281,9 +292,9 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                       <TableColumn>
                         <NumberAdjuster
                           sendDataToParent={(current) => {
-                            UpdateCurrent(current, count, workoutData.sets);
+                            UpdateCurrent(current, count, workoutItems.sets);
                           }}
-                          current={workoutData.sets[count]}
+                          current={workoutItems.sets[count]}
                           increment={1}
                         />{" "}
                       </TableColumn>
@@ -292,9 +303,9 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                       <TableColumn>
                         <NumberAdjuster
                           sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData.reps)
+                            UpdateCurrent(current, count, workoutItems.reps)
                           }
-                          current={workoutData.reps[count]}
+                          current={workoutItems.reps[count]}
                           increment={1}
                         />
                       </TableColumn>
@@ -303,9 +314,9 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                       {
                         <NumberAdjuster
                           sendDataToParent={(current) =>
-                            UpdateCurrent(current, count, workoutData.rest)
+                            UpdateCurrent(current, count, workoutItems.rest)
                           }
-                          current={workoutData.rest[count]}
+                          current={workoutItems.rest[count]}
                           increment={15}
                         />
                       }
@@ -318,7 +329,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
                       </DeleteExerciseButton>
                     </TableColumn>
                   </TableRecord>
-                  {workoutData.days[count] !== workoutData.days[count + 1] ? (
+                  {workoutItems.days[count] !== workoutItems.days[count + 1] ? (
                     <AddAndStart>
                       <TableItem>
                         <AddExerciseButton
@@ -342,7 +353,7 @@ const CustomizeWorkoutTable = ({ workoutData, authId, workoutNum }: Props) => {
               </React.Fragment>
             ))}
           </StyledTable>
-          {workoutData.days[workoutData.days.length - 1] !== 7 ? (
+          {workoutItems.days[workoutItems.days.length - 1] !== 7 ? (
             <AddDayButton onClick={AddDay}>Add Day</AddDayButton>
           ) : (
             <AddDayButton onClick={AddDay} disabled={true}>
