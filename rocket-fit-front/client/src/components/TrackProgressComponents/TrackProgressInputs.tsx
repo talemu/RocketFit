@@ -17,7 +17,13 @@ const RangeDiv = styled.div`
   align-items: center;
 `;
 
-const HeaderOne = styled.h1``;
+const HeaderOne = styled.h2`
+  padding: 0.1em;
+  font-size: 2em;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  color: red;
+`;
 
 const ExerciseNameDiv = styled.div`
   position: relative;

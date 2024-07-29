@@ -16,7 +16,7 @@ class RfauthUserService:
     def get_user_by_id(self, id):
         user = self._rfAuthRepo.get_user_by_id(id)
         if user is None:
-            return None
+            raise Exception("User not found.")
         return self._rfAuthMapper.map_to_dto(user)
     
     def change_user_password(self, id, password) -> RfAuthUserDTO:
@@ -25,7 +25,7 @@ class RfauthUserService:
             if (user is None):
                 raise Exception("User not found.")
             self._rfAuthRepo.change_user_password(id, password)
-            return self._rfAuthMapper.map_to_dto()
+            return self._rfAuthMapper.map_to_dto(user)
         except Exception as e:
             raise Exception(e.args[0])
     
@@ -37,7 +37,7 @@ class RfauthUserService:
     """
     def get_user_id(self, loginKey, password):
         if (loginKey == '' or password == ''):
-            raise Exception("LoginKey or Password is empty.")
+            raise Exception("LoginKey and/or Password is Empty")
         user = self._rfAuthRepo.authenticate_user(loginKey, password)
         if user is None:
             return -10
