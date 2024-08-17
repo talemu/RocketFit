@@ -8,6 +8,7 @@ from RFApp.views.rfAuthUserView import RFAuthUserViewSet
 from RFApp.views.exerciseView import ExerciseViewSet
 from RFApp.views.motivationalQuoteView import MotivationalQuoteViewSet
 from RFApp.views.contactSupportFormView import CustomerSupportFormViewSet
+from RFApp.views.stripePaymentView import StriptePaymentViewSet
 from rest_framework.routers import DefaultRouter
 
 """
@@ -25,6 +26,7 @@ router.register(r"auth",RFAuthUserViewSet, basename='rfauthuser' )
 router.register(r"exercise", ExerciseViewSet, basename='exercise')
 router.register(r"motivationalquote", MotivationalQuoteViewSet, basename='motivationalquote')
 router.register(r"emailfunction", CustomerSupportFormViewSet, basename='emailfunction')
+router.register(r"stripepayment", StriptePaymentViewSet, basename='stripepayment')
 
 
 urlpatterns = [

@@ -108,7 +108,9 @@ const RegisterInputs = () => {
       email.split("@")[1].split(".")[0].length == 0 ||
       (!email.includes(".com") &&
         !email.includes(".edu") &&
-        !email.includes(".org"))
+        !email.includes(".org")) && 
+        !email.includes(".net") &&
+        !email.includes(".gov")
     ) {
       handleError("Invalid Email Address");
       return;
@@ -135,28 +137,12 @@ const RegisterInputs = () => {
     request.then((response) => {
       const validity = response.data as unknown as string;
       if (validity == "Valid") {
-        SubmitRegistration();
+        Navigate("/register/2", {state : [email, username, password]});
       }
       handleError(validity);
+    }).catch((error) => {
+      console.log(error);
     });
-  };
-
-  const SubmitRegistration = () => {
-    const newUser = {
-      emailAddress: email,
-      username: username,
-      password: password,
-    };
-    const { request } = authUserService.postItem("/", newUser);
-    request
-      .then((response) => {
-        response.data;
-        Navigate("/login");
-        setSpinner(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const handleError = (message: string) => {
@@ -215,7 +201,7 @@ const RegisterInputs = () => {
         <Spinner />
       ) : (
         <ButtonDiv>
-          <SubmitButton onClick={ValidateRegistration}>Register</SubmitButton>
+          <SubmitButton onClick={ValidateRegistration}>Continue</SubmitButton>
           <LoginButton onClick={NavigateToLogin}>
             Already Have an Account? Login.
           </LoginButton>
