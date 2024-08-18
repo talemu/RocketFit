@@ -84,7 +84,7 @@ const StripePaymentPage = () => {
       amount: 0
     }
     const { request } = stripePaymentService.postItem("/", data)
-    request.then((response) => {window.location.href = response.data.message.url; console.log(response)}).catch((error) => {console.log(error)})
+    request.then((response) => {window.location.href = response.data.message.url}).catch((error) => {console.log(error)})
   }
   return (
     <ContainerDiv>

@@ -1,27 +1,34 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import stripePaymentService from '../services/stripePaymentService';
 
 const SuccessRedirect = () => {
     const Navigate = useNavigate();
     const params = new URLSearchParams(window.location.search);
 
     useEffect(() => {
-        const email = params.get('email');
-        const username = params.get('username');
-        const password = params.get('password');
-
-        if (email && username && password) {
+        const token = params.get('token');
+        if (token) {
             const data = {
-                email: email,
-                username: username,
-                password: password
-            };
-            console.log("Triggered")
-            Navigate('/register/3', { state: data });
-        } else {
+                token: token
+            }
+            const {request} = stripePaymentService.postItem("/getTokenInfo/", data);
+            request.then((response) => {
+                const data = response.data.data;
+                if (data) {
+                    Navigate('/register/3', {state: data});
+                } else {
+                    Navigate('/login');
+                }
+            }).catch((error) => {
+                console.log(error);
+                Navigate('/login');
+            });
+        }
+        else {
             Navigate('/login');
         }
-      }, [Navigate, params]);
+    }, [Navigate, params]);
 
   return (
     <div></div>
