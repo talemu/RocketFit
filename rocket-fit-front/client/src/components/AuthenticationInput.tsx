@@ -104,8 +104,12 @@ const AuthenticationInput = ({ sendDataToPage, sendMessageToPage }: Props) => {
 
   const SubmitLogin = () => {
     setLoading(true);
-    const { request } = authUserService.getAll(
-      "/login?loginKey=" + username + "&password=" + password
+    const data = {
+      loginKey: username,
+      password: password,
+    }
+    const { request } = authUserService.postItem(
+      "/login/", data
     );
     request
       .then((response) => {

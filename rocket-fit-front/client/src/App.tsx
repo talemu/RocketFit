@@ -15,6 +15,9 @@ import RegistrationPage from "./pages/RegistrationPage";
 import TrackProgressPage from "./pages/TrackProgressPage";
 import AccountPage from "./pages/AccountPage";
 import ContactSupport from "./pages/ContactSupport";
+import StripePaymentPage from "./pages/StripePaymentPage";
+import SuccessPaymentPage from "./pages/SuccessPaymentPage";
+import SuccessRedirect from "./pages/SuccessRedirect";
 
 const Border = styled.div`
   padding-top: 1em;
@@ -62,7 +65,12 @@ function App() {
                 />
               }
             />
+            {/* Registration Handling Pages*/}
             <Route path="/register" Component={RegistrationPage} />
+            <Route path="/register/2" Component={StripePaymentPage}/>
+            <Route path="/register/3" Component={SuccessPaymentPage}/>
+            <Route path="/success" Component={SuccessRedirect}/>
+            {/* Registration Handling Pages*/}
             <Route path="/progress" Component={TrackProgressPage} />
             <Route
               path="/myworkouts"

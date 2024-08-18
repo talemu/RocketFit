@@ -42,12 +42,12 @@ class RFAuthUserViewSet(viewsets.ViewSet):
         except Exception as e:
             return JsonResponse({'error log' : e.args[0]}, status = status.HTTP_400_BAD_REQUEST, safe = False)
 
-    #GET /auth/login?loginKey=1&password=1
-    @action(detail=False, methods=['get'], url_path='login')
+    #POST /auth/login
+    @action(detail=False, methods=['post'], url_path='login')
     def login(self, request):
-        try :
-            loginKey = request.GET.get('loginKey', '')
-            password = request.GET.get('password', '')
+        try:
+            loginKey = request.data.get('loginKey', '')
+            password = request.data.get('password', '')
             response = self._rfAuthService.get_user_id(loginKey, password)
             return JsonResponse(response, safe=False)
         except Exception as e:
