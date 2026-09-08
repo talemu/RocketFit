@@ -1,0 +1,53 @@
+name: Auto Approve Documentation PRs
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
+      - name: Check files
+        id: validate
+        run: |
+          APPROVE=true
+
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            if [[ ! "$file" =~ ^docs/.* ]] && \
+               [[ ! "$file" =~ \.md$ ]] && \
+               [[ "$file" != "README.md" ]]; then
+                  APPROVE=false
+                  break
+            fi
+          done
+
+          echo "approve=$APPROVE" >> $GITHUB_OUTPUT
+
+      - name: Create App Token
+        if: steps.validate.outputs.approve == 'true'
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
+      - name: Approve PR
+        if: steps.validate.outputs.approve == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr review \
+            ${{ github.event.pull_request.number }} \
+            --approve \
+            --body "Documentation-only changes detected."
