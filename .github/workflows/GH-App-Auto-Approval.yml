@@ -24,8 +24,7 @@ jobs:
           APPROVE=true
 
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            if [[ ! "$file" =~ ^docs/.* ]] && \
-               [[ ! "$file" =~ \.md$ ]] && \
+            if [[ ! "$file" =~ \.md$ ]] && \
                [[ "$file" != "README.md" ]]; then
                   APPROVE=false
                   break
