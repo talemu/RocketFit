@@ -17,22 +17,29 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v45
-
+        
       - name: Check files
         id: validate
         run: |
           APPROVE=true
-
+      
+          echo "Changed files:"
+          echo "${{ steps.changed-files.outputs.all_changed_files }}"
+      
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            if [[ ! "$file" =~ \.md$ ]] && \
-               [[ "$file" != "README.md" ]]; then
-                  APPROVE=false
-                  break
+            echo "Checking [$file]"
+      
+            if [[ ! "$file" =~ \.md$ ]]
+            then
+              echo "Non-doc file found: $file"
+              APPROVE=false
+              break
             fi
           done
-
+      
+          echo "APPROVE=$APPROVE"
           echo "approve=$APPROVE" >> $GITHUB_OUTPUT
-
+      
       - name: Create App Token
         if: steps.validate.outputs.approve == 'true'
         uses: actions/create-github-app-token@v1
