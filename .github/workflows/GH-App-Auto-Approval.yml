@@ -31,9 +31,9 @@ jobs:
       
             if [[ ! "$file" =~ \.md$ ]]
             then
-              echo "Non-doc file found: $file"
+              echo "ERROR: Non-documentation file found: $file"
               APPROVE=false
-              break
+              exit 1
             fi
           done
       
