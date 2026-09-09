@@ -58,12 +58,3 @@ jobs:
             --approve \
             --body "Documentation-only changes detected."
 
-      - name: Enable Auto Merge
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          gh pr merge \
-            ${{ github.event.pull_request.number }} \
-            --auto \
-            --squash
-
